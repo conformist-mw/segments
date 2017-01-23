@@ -20,7 +20,7 @@
 ```
 - клонируем этот репозиторий:
 ```
-(project) ~/project $ git clone git@github.com:conformist-mw/potolok.git
+(project) ~/project $ git clone https://github.com/conformist-mw/potolok.git
 ```
 - переходим в каталог с репозиторием и устанавливаем все необходимые зависимости:
 ```
