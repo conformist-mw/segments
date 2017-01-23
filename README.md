@@ -3,7 +3,7 @@
 Порядок установки:
 - установить зависимости:
 ```
-~ $ sudo apt-get install python3-pip python3-virtualenv nginx
+~ $ sudo apt-get install python3-pip python3-virtualenv nginx virtualenv
 ```
 - создать рабочий каталог и перейти в него:
 ```
