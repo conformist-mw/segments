@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <title>Отрезки!</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <style type="text/css">
+      /* Hide HTML5 Up and Down arrows. */
+      input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+    </style>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Отрезки</a>
+          <a class="navbar-brand" href="/admin">Admin</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-11">
+          <div class="row">
+            <div class="col-sm-4">
+              <form role="form" class="panel panel-default" method="POST" action="/search">
+                <div class="panel-body">
+                  <p><strong>Поиск</strong></p>
+                  <div class="form-group">
+                    <div class="col-sm-6">
+                      <select name="type" id="search" class="form-control">
+                        <option selected disabled>Категория</option>
+                        <option value="all" data-type='all'>все</option>
+                        <option value="Лак" data-type='varnish'>Лак</option>
+                        <option value="Сатин" data-type='sateen'>Сатин</option>
+                        <option value="Матовый" data-type='dull'>Матовый</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-6">
+                      <select name="color" id="search_colors" class="form-control"></select>
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                  </div>
+                  <p><strong>Размеры</strong></p>
+                  <div class="form-group ">
+                    <div class="input-group">
+                      <span class="input-group-addon">ширина</span>
+                      <input autocomplete="off" type="text" value="" name="width" class="form-control js-price-format" placeholder="любая">
+                      <span class="input-group-addon">см</span>
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <div class="input-group">
+                      <span class="input-group-addon">высота</span>
+                      <input autocomplete="off" type="text" value="" name="height" class="form-control js-price-format" placeholder="любая">
+                      <span class="input-group-addon">см</span>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-success">Показать</button>
+                </div>
+              </form>
+              <form role="form" class="panel panel-default" method="POST" action="/add">
+                <div class="panel-body">
+                  <p><strong>Добавить</strong></p>
+                  <div class="form-group">
+                    <div class="col-sm-6">
+                      <select name="type" id="add_segment" class="form-control">
+                        <option selected disabled>Категория</option>
+                        <option value="Лак" data-type='varnish'>Лак</option>
+                        <option value="Сатин" data-type='sateen'>Сатин</option>
+                        <option value="Матовый" data-type='dull'>Матовый</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-6">
+                      <select name="color" id="segment_color" class="form-control"></select>
+                    </div>
+                  </div>
+                  <p><strong>Размеры</strong></p>
+                  <div class="form-group ">
+                    <div class="input-group">
+                      <span class="input-group-addon">ширина</span>
+                      <input autocomplete="off" type="number" name="width" class="form-control js-price-format" placeholder="любая" required>
+                      <span class="input-group-addon">см</span>
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <div class="input-group">
+                      <span class="input-group-addon">высота</span>
+                      <input autocomplete="off" type="number" name="height" class="form-control js-price-format" placeholder="любая" required>
+                      <span class="input-group-addon">см</span>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-success">Добавить</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-sm-7">
+              <div class="panel panel-default">
+                {% for segment in segments.items %}
+                  <div class="panel-body parent" data-id="{{ segment.id }}">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div>
+                          <div class="row">
+                            <div class="col-sm-7">
+                              <p>Тип — <strong>{{ segment.type }}</strong>; Цвет — <strong>{{ segment.color }}</strong></p>
+                            </div>
+                            <div class="col-sm-5">
+                              <p class="text-right">Площадь: <strong class="label label-default">{{ segment.square }} м²</strong></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <p>
+                          <span class="label label-success">ширина: {{ segment.width }} см</span>
+                          <span class="label label-primary">высота: {{ segment.height }} см</span>
+                        </p>
+                      </div>
+                      <div class="col-sm-12">
+                    </div>
+                    <div class="col-sm-6">
+                      <p class="text-muted">Добавлено: {{ segment.created.strftime('%d %a %H:%M') }}</p>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                      <button class="btn btn-danger removeSegment">Удалить</button>
+                    </div>
+                      </div>
+                  </div>
+                  <hr>
+                {% endfor %}
+                <div class="panel-body">
+                  <div class="clearfix">
+                    <ul class="pagination pull-right">
+                    {% if segments.has_prev %}
+                      <li><a href="{{ url_for(request.endpoint, page=segments.prev_num) }}"><span>«</span></a></li>
+                    {% else %}
+                      <li class="disabled"><span>«</span></li>
+                    {% endif %}
+                    {% for page in segments.iter_pages() %}
+                      {% if page %}
+                        {% if page != segments.page %}
+                          <li><a href="{{ url_for(request.endpoint, page=page) }}">{{ page }}</a></li>
+                        {% else %}
+                          <li class="active"><span>{{ page }}</span></li>
+                        {% endif %}
+                      {% else %}
+                        <li><span class="ellipsis">...</span></li>
+                      {% endif %}
+                    {% endfor %}
+                    {% if segments.has_next %}
+                      <li><a href="{{ url_for(request.endpoint, page=segments.next_num) }}"><span>»</span></a></li>
+                    {% else %}
+                      <li class="disabled"><span>»</span></li>
+                    {% endif %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.container -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='colors.js') }}"></script>
+    <script>
+      $("#search").on('change', function(){
+        var category = $(this).find(':selected').data('type');
+        var options = '<option value="all">все</option>';
+        if (category == 'all'){
+          for (var key in colors){
+            $.each(colors[key], function(i, item){
+              options += '<option value="' + item + '">' + item + '</option>';
+            })
+          }
+        }
+        else {
+          $.each(colors[category], function(i, item){
+            options += '<option value="' + item + '">' + item + '</option>';
+          })
+        };
+        $('#search_colors').html(options);
+      });
+      $("#add_segment").on('change', function(){
+        var category = $(this).find(':selected').data('type');
+        options = '';
+        $.each(colors[category], function(i, item){
+          options += '<option value="' + item + '">' + item + '</option>';
+        });
+        $('#segment_color').html(options);
+      })
+      $('.removeSegment').click(function(){
+        var segment_id = $(this).parents('div.parent').data('id');
+        $.ajax({
+          url: '/remove',
+          data: {'id': segment_id},
+          type: 'post',
+          success: function(result){
+            $('div[data-id="' + segment_id + '"]').remove();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
