@@ -1,0 +1,13 @@
+server {
+	listen 80;
+	server_name default_server;
+
+	location / {
+		include proxy_params;
+		proxy_pass http://unix:/tmp/potolok.sock;
+	}
+	location /static {
+		alias /home/gp/project/potolok/static/;
+		autoindex on;
+	}
+}
