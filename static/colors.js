@@ -1,5 +1,6 @@
-var colors = {
-  varnish: ['тут', 'будут', 'цвета', 'some', 'colors'],
-  sateen: ['but', 'nobody', 'added', 'them', 'yet'],
-  dull: ['it', 'is', 'time', 'to', 'wait', 'there']
+﻿var colors = {
+  LAK: ['100 bas', '102 ciel', '104 nevee', '108 vito', '110 grif', '114 glasse', '120 pleiade', '140 cobalt', '156 ocean', '160 blue', '162 marine', '180 gleyt', '201 peche', '205 fiola', '223 mauve', '225 bushliac', '227 symbol', '229 trefle', '231 cowberry', '233 aubergine', '235 echo', '303 avers', '303-3 Classic', '305 agate', '307 mastic', '309 ise', '311 fog', '313 gray', '317 haze', '319 londres', '333 grayness', '347 noir', '400 ivoire', '402 azalea', '404 delicate', '406 sable', '408 boheme', '410 coral', '412 tenderness', '416 aurora', '420 оrange', '424 peachy', '442 рink', '444 rubis', '462 rose', '466 rouge', '474 bordin', '476 serise', '478 vin', '490 plum', '501 nice', '507 champagne', '511 light beige', '515 khaki', '519 cafe', '525 nut', '545 puma', '555 chocolate', '571 dark chocolate', '573 cacao', '577 black chocolate', '604 gall', '606 safari', '608 myosotis', '610 moss', '614 olive', '618 sweet', '624 poison', '628 alpine', '630 aquamarine', '632 aqua', '634 jungle', '640 lavender', '644 lupin', '652 lime', '664 demiel', '666 cypress', '674 forest', '682 vert', '684 green', '707 tilleul', '713 sirius', '717 citron', '721 lemon', '733 tourneso', '739 lambre', '751 sabse', '753 automne', '866 grenat'],
+  SATIN: ['S 114', 'S 229', 'S 303', 'S 303-3 Classic', 'S 402', 'S 501', 'S 507', 'S 511', 'S 652', 'S 717'],
+  MAT: ['M 114', 'M 229', 'M 303', 'M 303-3 Classic', 'М 307', 'M 319', 'М 347', 'M 501', 'M 507', 'M 511', 'M 652', 'M 717', 'M 311'],
+  EXCLUSIVE: ['Искра 100', 'Искра 114', 'Искра 160', 'Искра 180', 'Искра 225', 'Искра 303','Искра 347', 'Искра 402', 'Искра 406', 'Искра 462', 'Искра 478', 'Искра 511', 'Искра 571', 'Искра 652', 'Искра 733', 'Нити', 'Вода', 'Облака', 'Cosmos', 'Металлик 901', 'Металлик 904', 'Металлик 905', 'Металлик 906', 'Металлик 943', 'Металлик N320', 'Металлик ST-81', 'TRANSPARENT']
 };
