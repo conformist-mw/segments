@@ -76,6 +76,9 @@ input[type="number"] {
                       <span class="input-group-addon">см</span>
                     </div>
                   </div>
+                  <div class="form-group ">
+                    <label><input name="removed" value="True" type="checkbox"> Удалённые</label>
+                  </div>
                   <button type="submit" class="btn btn-success">Показать</button>
                 </div>
               </form>
@@ -143,9 +146,19 @@ input[type="number"] {
                     <div class="col-sm-6">
                       <p class="text-muted">Добавлено: {{ segment.created.strftime('%d %a %H:%M') }}</p>
                     </div>
+                    {% if removed %}
+                    <div class="col-sm-6">
+                      <p class="text-muted">Удалено: {{ segment.deleted.strftime('%d %a %H:%M') }}</p>
+                    </div>
+                    <div class="col-sm-6">
+                      <p class="text-muted">Номер заказа: {{ segment.order_number }}</p>
+                    </div>
+                    {% endif %}
+                    {% if not removed %}
                       <div class="col-sm-6 text-right">
                         <button class="btn btn-info remove-toggle">Удалить</button>
                       </div>
+                    {% endif %}
                       <div class="col-sm-10 col-sm-offset-1 remove-form" data-toggle="{{ segment.id }}" style="display: none">
                         <div class="panel panel-default">
                          <div class="panel-body">
