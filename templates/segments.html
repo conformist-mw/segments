@@ -240,6 +240,7 @@ input[type="number"] {
       })
       $('.remove-toggle').click(function(){
         var toggle_id = $(this).parents('div.parent').data('id');
+        $('div.remove-form').hide('fast');
         $('div[data-toggle="' + toggle_id + '"]').toggle('slow');
       });
       $('.removeSegment').click(function(){
