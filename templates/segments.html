@@ -19,6 +19,9 @@
 input[type="number"] {
     -moz-appearance: textfield;
 }
+.remove-form {
+  margin-top: 15px;
+}
     </style>
   </head>
 
@@ -81,7 +84,7 @@ input[type="number"] {
                   <p><strong>Добавить</strong></p>
                   <div class="form-group">
                     <div class="col-sm-6">
-                      <select name="type" id="add_segment" class="form-control">
+                      <select name="type" id="add_segment" class="form-control" required>
                         <option selected disabled>Фактура</option>
                         <option value="LAK" data-type='LAK'>LAK</option>
                         <option value="SATIN" data-type='SATIN'>SATIN</option>
@@ -140,12 +143,25 @@ input[type="number"] {
                     <div class="col-sm-6">
                       <p class="text-muted">Добавлено: {{ segment.created.strftime('%d %a %H:%M') }}</p>
                     </div>
-                    <div class="col-sm-6 text-right">
-                      <button class="btn btn-danger removeSegment">Удалить</button>
-                    </div>
+                      <div class="col-sm-6 text-right">
+                        <button class="btn btn-info remove-toggle">Удалить</button>
                       </div>
-                  </div>
+                      <div class="col-sm-10 col-sm-offset-1 remove-form" data-toggle="{{ segment.id }}" style="display: none">
+                        <div class="panel panel-default">
+                         <div class="panel-body">
+                          <p>Подтверждение:</p>
+                          <div class="form-group">
+                            <input autocomplete="off" type="text" class="form-control" data-id="{{ segment.id }}" placeholder="Введите номер заказа" required>
+                          </div>
+                          <div class="text-right">
+                            <button class="btn btn-default btn-danger removeSegment">Удалить</button>
+                          </div>
+                          </div>
+                        </div>
+                      </div> 
+                    </div>
                   <hr>
+                  </div>
                 {% endfor %}
                 <div class="panel-body">
                   <div class="clearfix">
@@ -209,16 +225,23 @@ input[type="number"] {
         });
         $('#segment_color').html(options);
       })
+      $('.remove-toggle').click(function(){
+        var toggle_id = $(this).parents('div.parent').data('id');
+        $('div[data-toggle="' + toggle_id + '"]').toggle('slow');
+      });
       $('.removeSegment').click(function(){
         var segment_id = $(this).parents('div.parent').data('id');
-        $.ajax({
-          url: '/remove',
-          data: {'id': segment_id},
-          type: 'post',
-          success: function(result){
-            $('div[data-id="' + segment_id + '"]').remove();
-          }
-        });
+        var input = $('input[data-id="' + segment_id + '"]').val();
+        if (input.length > 8){
+          $.ajax({
+            url: '/remove',
+            data: {'id': segment_id, 'order_num': input},
+            type: 'post',
+            success: function(result){
+              $('div[data-id="' + segment_id + '"]').remove();
+            }
+          });
+        };
       });
     </script>
   </body>
