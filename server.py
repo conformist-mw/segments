@@ -4,6 +4,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.base import MenuLink
 from werkzeug.exceptions import HTTPException
+from sqlalchemy import or_
 from models import db, Segment
 
 
@@ -71,10 +72,19 @@ def add():
 @app.route('/results/<int:page>', methods=['GET'])
 def results(page=1):
     filter_conditions = [
-        Segment.width >= session['width'],
-        Segment.height >= session['height']]
-    if session['type'] == session['color'] == 'all':
+        or_(Segment.width >= session['width'],
+            Segment.height >= session['height']),
+        or_(Segment.width >= session['height'],
+            Segment.height >= session['width'])]
+    if (session['type'] == session['color'] == 'all' and
+            session['width'] == session['height'] == 0):
         return redirect('/')
+    elif (session['type'] == session['color'] == 'all' and
+            session['width'] != 0 and session['height'] != 0):
+        segments = Segment.query.filter(
+            *filter_conditions).order_by(
+            Segment.square).paginate(page, per_page, False)
+        return render_template('segments.html', segments=segments)
     elif session['type'] == 'all':
         segments = Segment.query.filter(
             Segment.color == session['color'],
