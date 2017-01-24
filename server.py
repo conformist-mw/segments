@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, render_template, request, session
 from flask import Response, url_for, redirect
 from flask_admin import Admin
@@ -42,7 +43,8 @@ per_page = 10
 @app.route('/')
 @app.route('/<int:page>', methods=['GET'])
 def segments(page=1):
-    segments = Segment.query.order_by(Segment.square).paginate(page, per_page)
+    segments = Segment.query.filter(Segment.active.is_(True)).order_by(
+        Segment.square).paginate(page, per_page)
     return render_template('segments.html', segments=segments)
 
 
@@ -75,7 +77,8 @@ def results(page=1):
         or_(Segment.width >= session['width'],
             Segment.height >= session['height']),
         or_(Segment.width >= session['height'],
-            Segment.height >= session['width'])]
+            Segment.height >= session['width']),
+        Segment.active.is_(True)]
     if (session['type'] == session['color'] == 'all' and
             session['width'] == session['height'] == 0):
         return redirect('/')
@@ -109,7 +112,11 @@ def results(page=1):
 @app.route('/remove', methods=['POST'])
 def remove_segment():
     segment_id = request.form['id']
-    Segment.query.filter_by(id=segment_id).delete()
+    order_num = request.form['order_num']
+    segment = Segment.query.filter_by(id=segment_id).first()
+    segment.active = False
+    segment.deleted = datetime.now()
+    segment.order_number = order_num
     db.session.commit()
     return ('', 204)
 
