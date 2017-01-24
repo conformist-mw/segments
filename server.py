@@ -50,6 +50,7 @@ def segments(page=1):
 
 @app.route('/search', methods=['POST'])
 def search():
+    session['removed'] = request.form.get('removed', False, type=bool)
     session['type'] = request.form['type']
     session['color'] = request.form['color']
     session['width'] = request.form.get('width', 0, type=int)
@@ -74,20 +75,17 @@ def add():
 @app.route('/results/<int:page>', methods=['GET'])
 def results(page=1):
     filter_conditions = [
+        Segment.active.isnot(session['removed']),
         or_(Segment.width >= session['width'],
             Segment.height >= session['height']),
         or_(Segment.width >= session['height'],
-            Segment.height >= session['width']),
-        Segment.active.is_(True)]
-    if (session['type'] == session['color'] == 'all' and
-            session['width'] == session['height'] == 0):
-        return redirect('/')
-    elif (session['type'] == session['color'] == 'all' and
-            session['width'] != 0 and session['height'] != 0):
+            Segment.height >= session['width'])]
+    if session['type'] == session['color'] == 'all':
         segments = Segment.query.filter(
             *filter_conditions).order_by(
             Segment.square).paginate(page, per_page, False)
-        return render_template('segments.html', segments=segments)
+        return render_template('segments.html', segments=segments,
+                               removed=session['removed'])
     elif session['type'] == 'all':
         segments = Segment.query.filter(
             Segment.color == session['color'],
