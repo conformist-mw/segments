@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <title>Отрезки!</title>
+    <title>Отрезы!</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-theme.min.css') }}">
     <style type="text/css">
@@ -27,7 +27,7 @@ input[type="number"] {
     <nav class="navbar navbar-default">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/">Отрезки</a>
+          <a class="navbar-brand" href="/">Отрезы</a>
           <a class="navbar-brand" href="/admin">Admin</a>
         </div>
       </div>
@@ -44,12 +44,12 @@ input[type="number"] {
                   <div class="form-group">
                     <div class="col-sm-6">
                       <select name="type" id="search" class="form-control" required>
-                        <option selected disabled>Категория</option>
+                        <option selected disabled>Фактура</option>
                         <option value="all" data-type='all'>все</option>
-                        <option value="Лак" data-type='LAK'>Лак</option>
-                        <option value="Сатин" data-type='SATIN'>Сатин</option>
-                        <option value="Матовый" data-type='MAT'>Матовый</option>
-                        <option value="Эксклюзив" data-type='EXCLUSIVE'>Эксклюзив</option>
+                        <option value="LAK" data-type='LAK'>LAK</option>
+                        <option value="SATIN" data-type='SATIN'>SATIN</option>
+                        <option value="MAT" data-type='MAT'>MAT</option>
+                        <option value="EXCLUSIVE" data-type='EXCLUSIVE'>EXCLUSIVE</option>
                       </select>
                     </div>
                     <div class="col-sm-6">
@@ -62,14 +62,14 @@ input[type="number"] {
                   <div class="form-group ">
                     <div class="input-group">
                       <span class="input-group-addon">ширина</span>
-                      <input autocomplete="off" type="text" value="" name="width" class="form-control js-price-format" placeholder="любая">
+                      <input autocomplete="off" type="text" value="" name="width" class="form-control js-price-format" placeholder="введите значение">
                       <span class="input-group-addon">см</span>
                     </div>
                   </div>
                   <div class="form-group ">
                     <div class="input-group">
-                      <span class="input-group-addon">высота</span>
-                      <input autocomplete="off" type="text" value="" name="height" class="form-control js-price-format" placeholder="любая">
+                      <span class="input-group-addon">длина</span>
+                      <input autocomplete="off" type="text" value="" name="height" class="form-control js-price-format" placeholder="введите значение">
                       <span class="input-group-addon">см</span>
                     </div>
                   </div>
@@ -81,12 +81,12 @@ input[type="number"] {
                   <p><strong>Добавить</strong></p>
                   <div class="form-group">
                     <div class="col-sm-6">
-                      <select name="type" id="add_segment" class="form-control" required>
-                        <option selected disabled>Категория</option>
-                        <option value="Лак" data-type='LAK'>Лак</option>
-                        <option value="Сатин" data-type='SATIN'>Сатин</option>
-                        <option value="Матовый" data-type='MAT'>Матовый</option>
-                        <option value="Эксклюзив" data-type='EXCLUSIVE'>Эксклюзив</option>
+                      <select name="type" id="add_segment" class="form-control">
+                        <option selected disabled>Фактура</option>
+                        <option value="LAK" data-type='LAK'>LAK</option>
+                        <option value="SATIN" data-type='SATIN'>SATIN</option>
+                        <option value="MAT" data-type='MAT'>MAT</option>
+                        <option value="EXCLUSIVE" data-type='EXCLUSIVE'>EXCLUSIVE</option>
                       </select>
                     </div>
                     <div class="col-sm-6">
@@ -97,14 +97,14 @@ input[type="number"] {
                   <div class="form-group ">
                     <div class="input-group">
                       <span class="input-group-addon">ширина</span>
-                      <input autocomplete="off" type="number" name="width" class="form-control js-price-format" placeholder="любая" required>
+                      <input autocomplete="off" type="number" name="width" class="form-control js-price-format" placeholder="введите значение" required>
                       <span class="input-group-addon">см</span>
                     </div>
                   </div>
                   <div class="form-group ">
                     <div class="input-group">
-                      <span class="input-group-addon">высота</span>
-                      <input autocomplete="off" type="number" name="height" class="form-control js-price-format" placeholder="любая" required>
+                      <span class="input-group-addon">длина</span>
+                      <input autocomplete="off" type="number" name="height" class="form-control js-price-format" placeholder="введите значение" required>
                       <span class="input-group-addon">см</span>
                     </div>
                   </div>
@@ -121,7 +121,7 @@ input[type="number"] {
                         <div>
                           <div class="row">
                             <div class="col-sm-7">
-                              <p>Тип — <strong>{{ segment.type }}</strong>; Цвет — <strong>{{ segment.color }}</strong></p>
+                              <p>Фактура: <strong>{{ segment.type }}</strong>&nbsp;&nbsp;&nbsp;Цвет: <strong>{{ segment.color }}</strong></p>
                             </div>
                             <div class="col-sm-5">
                               <p class="text-right">Площадь: <strong class="label label-default">{{ segment.square }} м²</strong></p>
@@ -132,7 +132,7 @@ input[type="number"] {
                       <div class="col-sm-12">
                         <p>
                           <span class="label label-success">ширина: {{ segment.width }} см</span>
-                          <span class="label label-primary">высота: {{ segment.height }} см</span>
+                          <span class="label label-primary">длина: {{ segment.height }} см</span>
                         </p>
                       </div>
                       <div class="col-sm-12">
