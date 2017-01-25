@@ -41,7 +41,7 @@ input[type="number"] {
         <div class="col-md-11">
           <div class="row">
             <div class="col-sm-4">
-              <form role="form" class="panel panel-default" method="POST" action="/search">
+              <form id="search_form" class="panel panel-default" method="POST" action="/search">
                 <div class="panel-body">
                   <p><strong>Поиск</strong></p>
                   <div class="form-group">
@@ -77,7 +77,8 @@ input[type="number"] {
                     </div>
                   </div>
                   <div class="form-group ">
-                    <label><input name="removed" value="True" type="checkbox"> Удалённые</label>
+                    <label><input name="removed" value="True" id="removed" type="checkbox"> Удалённые</label>
+                    <p><input name="order_num" id="number" type="text" style="display: none;" placeholder="номер заказа"></p>
                   </div>
                   <button type="submit" class="btn btn-success">Показать</button>
                 </div>
@@ -213,6 +214,9 @@ input[type="number"] {
     <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='colors.js') }}"></script>
     <script>
+      $('#removed').click(function(){
+        $('#number')[this.checked ? 'show': 'hide']();
+      });
       $("#search").on('change', function(){
         var category = $(this).find(':selected').data('type');
         var options = '<option value="all">все</option>';
@@ -229,6 +233,11 @@ input[type="number"] {
           })
         };
         $('#search_colors').html(options);
+      });
+      $('#search_form').submit(function(){
+        if ($('#number').val() == ''){
+          $('#number').remove();
+        }
       });
       $("#add_segment").on('change', function(){
         var category = $(this).find(':selected').data('type');
