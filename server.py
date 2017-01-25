@@ -51,6 +51,7 @@ def segments(page=1):
 @app.route('/search', methods=['POST'])
 def search():
     session['removed'] = request.form.get('removed', False, type=bool)
+    session['order_number'] = request.form.get('order_num', '%', type=str)
     session['type'] = request.form['type']
     session['color'] = request.form['color']
     session['width'] = request.form.get('width', 0, type=int)
@@ -80,6 +81,9 @@ def results(page=1):
             Segment.height >= session['height']),
         or_(Segment.width >= session['height'],
             Segment.height >= session['width'])]
+    if session['removed']:
+        filter_conditions.append(
+            Segment.order_number.like(session['order_number']))
     if session['type'] == session['color'] == 'all':
         segments = Segment.query.filter(
             *filter_conditions).order_by(
@@ -91,20 +95,23 @@ def results(page=1):
             Segment.color == session['color'],
             *filter_conditions).order_by(
             Segment.square).paginate(page, per_page, False)
-        return render_template('segments.html', segments=segments)
+        return render_template('segments.html', segments=segments,
+                               removed=session['removed'])
     elif session['color'] == 'all':
         segments = Segment.query.filter(
             Segment.type == session['type'],
             *filter_conditions).order_by(
             Segment.square).paginate(page, per_page, False)
-        return render_template('segments.html', segments=segments)
+        return render_template('segments.html', segments=segments,
+                               removed=session['removed'])
     else:
         segments = Segment.query.filter(
             Segment.type == session['type'],
             Segment.color == session['color'],
             *filter_conditions).order_by(
             Segment.square).paginate(page, per_page, False)
-        return render_template('segments.html', segments=segments)
+        return render_template('segments.html', segments=segments,
+                               removed=session['removed'])
 
 
 @app.route('/remove', methods=['POST'])
