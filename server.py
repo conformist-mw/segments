@@ -5,7 +5,6 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.base import MenuLink
 from werkzeug.exceptions import HTTPException
-from sqlalchemy import or_
 from models import db, Segment
 
 
@@ -76,12 +75,11 @@ def add():
 @app.route('/results', methods=['GET'])
 @app.route('/results/<int:page>', methods=['GET'])
 def results(page=1):
+    min_side = min(session['width'], session['height'])
     filter_conditions = [
         Segment.active.isnot(session['removed']),
-        or_(Segment.width >= session['width'],
-            Segment.height >= session['height']),
-        or_(Segment.width >= session['height'],
-            Segment.height >= session['width'])]
+        Segment.width >= min_side,
+        Segment.height >= min_side]
     if session['removed']:
         filter_conditions.append(
             Segment.order_number.like(session['order_number']))
