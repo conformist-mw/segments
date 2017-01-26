@@ -139,7 +139,9 @@ input[type="number"] {
                           <div class="row">
                             <div class="col-sm-7">
                               <p>Фактура: <strong>{{ segment.type }}</strong>&nbsp;&nbsp;&nbsp;Цвет: <strong>{{ segment.color }}</strong></p>
+                              {% if not removed %}
                               <p>Расположение: <strong>{{ segment.rack }}</strong></p>
+                              {% endif %}
                             </div>
                             <div class="col-sm-5">
                               <p class="text-right">Площадь: <strong class="label label-default">{{ segment.square }} м²</strong></p>
@@ -163,7 +165,7 @@ input[type="number"] {
                       <p class="text-muted">Удалено: {{ segment.deleted.strftime('%d %a %H:%M') }}</p>
                     </div>
                     <div class="col-sm-6">
-                      <p class="text-muted">Номер заказа: {{ segment.order_number }}</p>
+                      <p class="text-muted">Номер заказа: <span style="color: red;"><b>{{ segment.order_number }}</b></span></p>
                     </div>
                     {% endif %}
                     {% if not removed %}
@@ -269,7 +271,7 @@ input[type="number"] {
       $('.removeSegment').click(function(){
         var segment_id = $(this).parents('div.parent').data('id');
         var input = $('input[data-id="' + segment_id + '"]').val();
-        if (input.length > 8){
+        if (input.length > 2){
           $.ajax({
             url: '/remove',
             data: {'id': segment_id, 'order_num': input},
