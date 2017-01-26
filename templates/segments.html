@@ -115,6 +115,16 @@ input[type="number"] {
                       <span class="input-group-addon">см</span>
                     </div>
                   </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <select name="rack" class="form-control" required>
+                        <option selected disabled>Расположение</option>
+                        <option value="Стеллаж 1">Стеллаж 1</option>
+                        <option value="Стеллаж 2">Стеллаж 2</option>
+                        <option value="Стол">Стол</option>
+                      </select>
+                    </div>
+                  </div>
                   <button type="submit" class="btn btn-success">Добавить</button>
                 </div>
               </form>
@@ -129,6 +139,7 @@ input[type="number"] {
                           <div class="row">
                             <div class="col-sm-7">
                               <p>Фактура: <strong>{{ segment.type }}</strong>&nbsp;&nbsp;&nbsp;Цвет: <strong>{{ segment.color }}</strong></p>
+                              <p>Расположение: <strong>{{ segment.rack }}</strong></p>
                             </div>
                             <div class="col-sm-5">
                               <p class="text-right">Площадь: <strong class="label label-default">{{ segment.square }} м²</strong></p>
