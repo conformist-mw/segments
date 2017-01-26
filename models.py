@@ -14,3 +14,4 @@ class Segment(db.Model):
     deleted = db.Column(db.DateTime)
     active = db.Column(db.Boolean, default=True)
     order_number = db.Column(db.String(15))
+    rack = db.Column(db.String(20))
