@@ -76,12 +76,12 @@ def add():
 @app.route('/results', methods=['GET'])
 @app.route('/results/<int:page>', methods=['GET'])
 def results(page=1):
-    min_side = min(session['width'], session['height'])
-    max_side = max(session['width'], session['height'])
     filter_conditions = [
         Segment.active.isnot(session['removed']),
-        or_(and_(Segment.width >= min_side, Segment.height >= max_side),
-            and_(Segment.height >= min_side, Segment.width >= max_side))]
+        or_(and_(Segment.width >= session['width'],
+                 Segment.height >= session['height']),
+            and_(Segment.height >= session['width'],
+                 Segment.width >= session['height']))]
     if session['removed']:
         filter_conditions.append(
             Segment.order_number.like(session['order_number']))
