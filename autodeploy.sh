@@ -4,7 +4,8 @@ user=$(env | grep SUDO_USER | cut -d= -f 2)
 if [[ -z $user ]] && [[ $UID -ne 0 ]]; then
 	echo 'The script needs to run as root' && exit 1
 fi
-# apt-get install python3-pip python3-virtualenv virtualenv nginx git
+
+apt-get install python3-pip python3-virtualenv virtualenv nginx git
 
 su - $user << commands
 cd /home/$user
