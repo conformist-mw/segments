@@ -1,49 +1,15 @@
-# Repo for potolok flask app
+# Segments accounting
 
-Порядок установки:
-- установить зависимости:
+This project allows you doing segments (rectangles) accounting by size, type or color. Removed segments doesn't remove from database just mark them as inactive. Also removed segments have order number. 
+
+## Installation
+
+In order to install this project you have to download [autodeploy.sh](https://raw.githubusercontent.com/conformist-mw/segments/master/autodeploy.sh) script and run it as sudo user. 
+
+It will create dir named `project` in your home directory and python virtualenv within it. Sudo writes needs to create systemd service file for `gunicorn` and `nginx` default server. 
+So you can run in terminal:
+
+```bash
+$ sudo bash autodeploy.sh
 ```
-~ $ sudo apt-get install python3-pip python3-virtualenv nginx virtualenv
-```
-- создать рабочий каталог и перейти в него:
-```
-~ $ mkdir project && cd $_
-```
-- создаём новое окружение:
-``` 
-~/project $ virtualenv -p python3 .
-```
-- активируем его:
-```
-~/project $ source bin/activate
-(project) ~/project $ 
-```
-- клонируем этот репозиторий:
-```
-(project) ~/project $ git clone https://github.com/conformist-mw/potolok.git
-```
-- переходим в каталог с репозиторием и устанавливаем все необходимые зависимости:
-```
-(project) ~/project $ cd potolok/
-(project) ~/project/potolok $ pip install -r requirements.txt
-```
-- проверяем работоспособность:
-```
-(project) ~/project/potolok $ python server.py
- * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
-```
-- выходим:
-```
-(project) ~/project/potolok $ deactivate
-```
-- копируем конфиги nginx и systemd в соответствующие каталоги, создаём ссылку, перезапускаем:
-```
-~/project/potolok $ sudo cp etc/nginx/sites-available/project /etc/nginx/sites-available/
-~/project/potolok $ sudo ln -s /etc/nginx/sites-available/project /etc/nginx/sites-enabled/
-~/project/potolok $ sudo cp etc/systemd/system/project.service /etc/systemd/system/
-~/project/potolok $ sudo systemctl daemon-reload
-~/project/potolok $ sudo systemctl start project.service
-~/project/potolok $ sudo systemctl enable project.service
-~/project/potolok $ sudo systemctl restart nginx.service
-```
-Теперь можно переходить по [ссылке](http://localhost), должно работать.
+After this your project avaiable [here](http://localhost).
