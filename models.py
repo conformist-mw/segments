@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
@@ -10,7 +9,7 @@ class Segment(db.Model):
     width = db.Column(db.Integer)
     height = db.Column(db.Integer)
     square = db.Column(db.Float)
-    created = db.Column(db.DateTime, default=datetime.now())
+    created = db.Column(db.DateTime)
     deleted = db.Column(db.DateTime)
     active = db.Column(db.Boolean, default=True)
     order_number = db.Column(db.String(15))
