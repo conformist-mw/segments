@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask import Flask, render_template, request, session
 from flask import Response, url_for, redirect
 from flask_admin import Admin
@@ -67,7 +66,6 @@ def add():
     segment.width = request.form.get('width', type=int)
     segment.height = request.form.get('height', type=int)
     segment.rack = request.form['rack']
-    segment.created = datetime.now()
     segment.square = (segment.width * segment.height) / 10000
     db.session.add(segment)
     db.session.commit()
@@ -122,7 +120,6 @@ def remove_segment():
     order_num = request.form['order_num']
     segment = Segment.query.filter_by(id=segment_id).first()
     segment.active = False
-    segment.deleted = datetime.now()
     segment.order_number = order_num
     db.session.commit()
     return ('', 204)
