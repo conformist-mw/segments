@@ -4,10 +4,10 @@ server {
 
 	location / {
 		include proxy_params;
-		proxy_pass http://unix:/tmp/potolok.sock;
+		proxy_pass http://unix:/tmp/segments.sock;
 	}
 	location /static {
-		alias /home/gp/project/potolok/static/;
+		alias /home/target_user/project/segments/static/;
 		autoindex on;
 	}
 }

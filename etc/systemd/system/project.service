@@ -3,11 +3,11 @@ Description=Gunicorn instance to serve myproject
 After=network.target
 
 [Service]
-User=gp
+User=target_user
 Group=www-data
-WorkingDirectory=/home/gp/project/potolok
-Environment="PATH=/home/gp/project/bin"
-ExecStart=/home/gp/project/bin/gunicorn --workers 3 --bind unix:/tmp/potolok.sock -m 007 wsgi:app
+WorkingDirectory=/home/target_user/project/segments
+Environment="PATH=/home/target_user/project/bin"
+ExecStart=/home/target_user/project/bin/gunicorn --workers 3 --bind unix:/tmp/segments.sock -m 007 wsgi:app
 
 [Install]
 WantedBy=multi-user.target
