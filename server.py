@@ -67,6 +67,7 @@ def add():
     segment.width = request.form.get('width', type=int)
     segment.height = request.form.get('height', type=int)
     segment.rack = request.form['rack']
+    segment.created = datetime.now()
     segment.square = (segment.width * segment.height) / 10000
     db.session.add(segment)
     db.session.commit()
