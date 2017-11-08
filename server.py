@@ -8,6 +8,14 @@ from sqlalchemy import and_, or_
 from models import db, Segment
 
 
+class SegmentModelView(ModelView):
+    def __init__(self, model, session, *args, **kwargs):
+        super(SegmentModelView, self).__init__(model, session, *args, **kwargs)
+        self.static_folder = 'static'
+        self.endpoint = 'admin'
+        self.name = 'Segments admin'
+
+
 class AuthException(HTTPException):
 
     def __init__(self, message):
@@ -32,9 +40,12 @@ class ModelView(ModelView):
 app = Flask(__name__)
 app.config.from_object('config')
 db.init_app(app)
-admin = Admin(app, name='Segments', url='/admin', template_mode='bootstrap3')
+admin = Admin(
+    app,
+    name='Segments',
+    template_mode='bootstrap3',
+    index_view=SegmentModelView(Segment, db.session, url='/admin'))
 admin.add_link(MenuLink(name='Отрезки', url='/'))
-admin.add_view(ModelView(Segment, db.session))
 
 per_page = 10
 
@@ -126,4 +137,4 @@ def remove_segment():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
