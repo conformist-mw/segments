@@ -41,6 +41,7 @@ input[type="number"] {
         <div class="col-md-11">
           <div class="row">
             <div class="col-sm-4">
+              <!-- SEARCH FORM -->
               <form id="search_form" class="panel panel-default" method="POST" action="/search">
                 <div class="panel-body">
                   <p><strong>Поиск</strong></p>
@@ -56,7 +57,8 @@ input[type="number"] {
                       </select>
                     </div>
                     <div class="col-sm-6">
-                      <select name="color" id="search_colors" class="form-control"></select>
+                      <input list="search_colors" name="color" id="search_input" class="form-control" autocomplete="off">
+                      <datalist name="color" id="search_colors"></datalist>
                     </div>
                   </div>
                   <div class="form-group ">
@@ -83,7 +85,9 @@ input[type="number"] {
                   <button type="submit" class="btn btn-success">Показать</button>
                 </div>
               </form>
-              <form role="form" class="panel panel-default" method="POST" action="/add">
+              <!-- END SEARCH FORM -->
+              <!-- ADD FORM -->
+              <form id="add_form" role="form" class="panel panel-default" method="POST" action="/add">
                 <div class="panel-body">
                   <p><strong>Добавить</strong></p>
                   <div class="form-group">
@@ -97,7 +101,8 @@ input[type="number"] {
                       </select>
                     </div>
                     <div class="col-sm-6">
-                      <select name="color" id="segment_color" class="form-control"></select>
+                      <input list="add_colors" name="color" id="add_input" class="form-control" autocomplete="off">
+                      <datalist id="add_colors"></datalist>
                     </div>
                   </div>
                   <p><strong>Размеры</strong></p>
@@ -128,6 +133,7 @@ input[type="number"] {
                   <button type="submit" class="btn btn-success">Добавить</button>
                 </div>
               </form>
+              <!-- END ADD FORM -->
             </div>
             <div class="col-sm-7">
               <div class="panel panel-default">
@@ -227,38 +233,79 @@ input[type="number"] {
     <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='colors.js') }}"></script>
     <script>
-      $('#removed').click(function(){
-        $('#number')[this.checked ? 'show': 'hide']();
-      });
-      $("#search").on('change', function(){
-        var category = $(this).find(':selected').data('type');
-        var options = '<option value="all">все</option>';
+      window.onload = function(){
+        category = localStorage.getItem('category');
+        color = localStorage.getItem('color');
+        if (category){
+          $('#search').val(category);
+          options = getOptions(category);
+          $('#search_colors').html(options);
+          $('#search_input').val(color);
+        };
+      }
+      function getOptions(category){
+        options = '<option value="все">'
         if (category == 'all'){
           for (var key in colors){
             $.each(colors[key], function(i, item){
-              options += '<option value="' + item + '">' + item + '</option>';
+              options += '<option value="' + item + '">';
             })
           }
         }
         else {
           $.each(colors[category], function(i, item){
-            options += '<option value="' + item + '">' + item + '</option>';
+            options += '<option value="' + item + '">';
           })
         };
+        return options
+      }
+      $('#removed').click(function(){
+        $('#number')[this.checked ? 'show': 'hide']();
+      });
+      $("#search").on('change', function(){
+        var category = $(this).find(':selected').data('type');
+        var options = getOptions(category);
         $('#search_colors').html(options);
+        $('#search_input').val('');
+        $('#search_input').focus();
       });
       $('#search_form').submit(function(){
+        var input = $('#search_input');
+        var color = input.val();
+        var obj = $('#search_colors').find('option[value="' + color + '"]');
+        if (obj.length == 0){
+          if (input.parent().hasClass('has-error')){
+            return false;
+          }
+          input.parent().addClass('has-error');
+          input.after('<span class="text-danger small">Такого цвета нет в списке</span>')
+          return false;
+        }
+        localStorage.setItem('category', $('#search').val());
+        localStorage.setItem('color', input.val());
         if ($('#number').val() == ''){
           $('#number').remove();
         }
       });
+      $('#add_form').submit(function(){
+        var input = $('#add_input');
+        var color = input.val();
+        var obj = $('#add_colors').find('option[value="' + color + '"]');
+        if (obj.length == 0){
+          if (input.parent().hasClass('has-error')){
+            return false;
+          }
+          input.parent().addClass('has-error');
+          input.after('<span class="text-danger small">Такого цвета нет в списке</span>')
+          return false;
+        }
+      });
       $("#add_segment").on('change', function(){
         var category = $(this).find(':selected').data('type');
-        options = '';
-        $.each(colors[category], function(i, item){
-          options += '<option value="' + item + '">' + item + '</option>';
-        });
-        $('#segment_color').html(options);
+        options = getOptions(category);
+        $('#add_colors').html(options);
+        $('#add_input').val('');
+        $('#add_input').focus();
       })
       $('.remove-toggle').click(function(){
         var toggle_id = $(this).parents('div.parent').data('id');
