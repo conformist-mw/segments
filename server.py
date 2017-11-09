@@ -146,5 +146,14 @@ def activate_segment():
     return ('', 204)
 
 
+@app.route('/replace', methods=['POST'])
+def replace():
+    segment_id = request.form['id']
+    segment = db.session.query(Segment).get(segment_id)
+    segment.rack = request.form['rack']
+    db.session.commit()
+    return ('', 204)
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
