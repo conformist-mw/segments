@@ -49,7 +49,7 @@ input[type="number"] {
                     <div class="col-sm-6">
                       <select name="type" id="search" class="form-control" required>
                         <option selected disabled>Фактура</option>
-                        <option value="all" data-type='all'>все</option>
+                        <option value="все" data-type='all'>все</option>
                         <option value="LAK" data-type='LAK'>LAK</option>
                         <option value="SATIN" data-type='SATIN'>SATIN</option>
                         <option value="MAT" data-type='MAT'>MAT</option>
@@ -173,6 +173,9 @@ input[type="number"] {
                     <div class="col-sm-6">
                       <p class="text-muted">Номер заказа: <span style="color: red;"><b>{{ segment.order_number }}</b></span></p>
                     </div>
+                    <div class="col-sm-6 text-right">
+                      <button class="btn btn-warning activate">Вернуть</button>  
+                    </div>
                     {% endif %}
                     {% if not removed %}
                       <div class="col-sm-6 text-right">
@@ -243,9 +246,13 @@ input[type="number"] {
           $('#search_input').val(color);
         };
       }
-      function getOptions(category){
-        options = '<option value="все">'
-        if (category == 'all'){
+      function getOptions(category, search=true){
+        if (search === true){
+          options = '<option value="все">'
+        } else {
+          options = ''
+        }
+        if (category == 'все'){
           for (var key in colors){
             $.each(colors[key], function(i, item){
               options += '<option value="' + item + '">';
@@ -271,6 +278,9 @@ input[type="number"] {
       });
       $('#search_form').submit(function(){
         var input = $('#search_input');
+        if (input.val() === ''){
+          input.val('все');
+        }
         var color = input.val();
         var obj = $('#search_colors').find('option[value="' + color + '"]');
         if (obj.length == 0){
@@ -302,7 +312,7 @@ input[type="number"] {
       });
       $("#add_segment").on('change', function(){
         var category = $(this).find(':selected').data('type');
-        options = getOptions(category);
+        options = getOptions(category, search=false);
         $('#add_colors').html(options);
         $('#add_input').val('');
         $('#add_input').focus();
@@ -315,6 +325,17 @@ input[type="number"] {
         });
         $('div[data-toggle="' + toggle_id + '"]').toggle('slow');
       });
+      $('.activate').click(function(){
+        var segment_id = $(this).parents('div.parent').data('id');
+        $.ajax({
+          url: '/activate',
+          data: {'id': segment_id},
+          type: 'post',
+          success: function(result){
+            $('div[data-id="' + segment_id + '"]').remove();  
+          }
+        })
+      })
       $('.removeSegment').click(function(){
         var segment_id = $(this).parents('div.parent').data('id');
         var input = $('input[data-id="' + segment_id + '"]').val();

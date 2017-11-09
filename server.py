@@ -95,20 +95,20 @@ def results(page=1):
     if session['removed']:
         filter_conditions.append(
             Segment.order_number.like(session['order_number']))
-    if session['type'] == session['color'] == 'all':
+    if session['type'] == session['color'] == 'все':
         segments = Segment.query.filter(
             *filter_conditions).order_by(
             Segment.square).paginate(page, per_page, False)
         return render_template('segments.html', segments=segments,
                                removed=session['removed'])
-    elif session['type'] == 'all':
+    elif session['type'] == 'все':
         segments = Segment.query.filter(
             Segment.color == session['color'],
             *filter_conditions).order_by(
             Segment.square).paginate(page, per_page, False)
         return render_template('segments.html', segments=segments,
                                removed=session['removed'])
-    elif session['color'] == 'all':
+    elif session['color'] == 'все':
         segments = Segment.query.filter(
             Segment.type == session['type'],
             *filter_conditions).order_by(
@@ -132,6 +132,16 @@ def remove_segment():
     segment = Segment.query.filter_by(id=segment_id).first()
     segment.active = False
     segment.order_number = order_num
+    db.session.commit()
+    return ('', 204)
+
+
+@app.route('/activate', methods=['POST'])
+def activate_segment():
+    segment_id = request.form['id']
+    segment = db.session.query(Segment).get(segment_id)
+    segment.active = True
+    segment.order_number = None
     db.session.commit()
     return ('', 204)
 
