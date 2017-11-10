@@ -15,3 +15,5 @@ class Segment(db.Model):
     active = db.Column(db.Boolean, default=True)
     order_number = db.Column(db.String(15))
     rack = db.Column(db.String(20))
+    defect = db.Column(db.Boolean)
+    description = db.Column(db.Text)
