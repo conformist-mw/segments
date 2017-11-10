@@ -192,7 +192,13 @@
                          <div class="panel-body">
                           <p>Подтверждение:</p>
                           <div class="form-group">
-                            <input autocomplete="off" type="text" class="form-control" data-id="{{ segment.id }}" placeholder="Введите номер заказа" required>
+                            <input autocomplete="off" type="text" class="form-control order" data-id="{{ segment.id }}" placeholder="Введите номер заказа" required>
+                          </div>
+                          <div class="checkbox">
+                            <label><input type="checkbox" name="defect" autocomplete="off"> Есть дефект?</label>
+                          </div>
+                          <div class="form-group">
+                            <input type="text" name="description" class="form-control" placeholder="Описание отреза">
                           </div>
                           <div class="text-right">
                             <button class="btn btn-default btn-danger removeSegment">Удалить</button>
@@ -369,15 +375,22 @@
         })
       })
       $('.removeSegment').click(function(){
-        var segment_id = $(this).parents('div.parent').data('id');
+        var parent = $(this).parents('div.parent');
+        var segment_id = parent.data('id');
+        var defect = parent.find('input[name="defect"]').prop('checked');
+        var description = parent.find('input[name="description"]').val();
         var input = $('input[data-id="' + segment_id + '"]').val();
         if (input.length > 2){
           $.ajax({
             url: '/remove',
-            data: {'id': segment_id, 'order_num': input},
+            data: {'id': segment_id, 'order_num': input, 'defect': defect, 'description': description},
             type: 'post',
             success: function(result){
               $('div[data-id="' + segment_id + '"]').remove();
+            },
+            error: function(){
+              input = parent.find('input.order')
+              input.after('<span class="text-danger small">Такой номер заказа уже есть в базе</span>')
             }
           });
         };
