@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, abort
 from flask import Response, url_for, redirect
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -98,21 +98,21 @@ def results(page=1):
     if session['type'] == session['color'] == 'все':
         segments = Segment.query.filter(
             *filter_conditions).order_by(
-            Segment.square).paginate(page, per_page, False)
+            Segment.deleted.desc()).paginate(page, per_page, False)
         return render_template('segments.html', segments=segments,
                                removed=session['removed'])
     elif session['type'] == 'все':
         segments = Segment.query.filter(
             Segment.color == session['color'],
             *filter_conditions).order_by(
-            Segment.square).paginate(page, per_page, False)
+            Segment.deleted.desc()).paginate(page, per_page, False)
         return render_template('segments.html', segments=segments,
                                removed=session['removed'])
     elif session['color'] == 'все':
         segments = Segment.query.filter(
             Segment.type == session['type'],
             *filter_conditions).order_by(
-            Segment.square).paginate(page, per_page, False)
+            Segment.deleted.desc()).paginate(page, per_page, False)
         return render_template('segments.html', segments=segments,
                                removed=session['removed'])
     else:
@@ -120,7 +120,7 @@ def results(page=1):
             Segment.type == session['type'],
             Segment.color == session['color'],
             *filter_conditions).order_by(
-            Segment.square).paginate(page, per_page, False)
+            Segment.deleted.desc()).paginate(page, per_page, False)
         return render_template('segments.html', segments=segments,
                                removed=session['removed'])
 
@@ -129,9 +129,18 @@ def results(page=1):
 def remove_segment():
     segment_id = request.form['id']
     order_num = request.form['order_num']
+    defect = request.form.get('defect', False, type=bool)
+    description = request.form.get('description', '')
+    db_order = db.session.query(Segment).filter(
+        Segment.order_number == order_num).first()
+    if db_order:
+        return abort(400)
     segment = Segment.query.filter_by(id=segment_id).first()
     segment.active = False
     segment.order_number = order_num
+    segment.defect = defect
+    segment.description = description
+    db.session.add(segment)
     db.session.commit()
     return ('', 204)
 
@@ -142,6 +151,7 @@ def activate_segment():
     segment = db.session.query(Segment).get(segment_id)
     segment.active = True
     segment.order_number = None
+    db.session.add(segment)
     db.session.commit()
     return ('', 204)
 
@@ -151,6 +161,7 @@ def replace():
     segment_id = request.form['id']
     segment = db.session.query(Segment).get(segment_id)
     segment.rack = request.form['rack']
+    db.session.add(segment)
     db.session.commit()
     return ('', 204)
 
