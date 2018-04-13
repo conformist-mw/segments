@@ -6,6 +6,8 @@ from flask_admin.base import MenuLink
 from werkzeug.exceptions import HTTPException
 from sqlalchemy import and_, or_
 from models import db, Segment
+import locale
+locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
 
 
 class SegmentModelView(ModelView):
@@ -164,6 +166,18 @@ def replace():
     db.session.add(segment)
     db.session.commit()
     return ('', 204)
+
+
+@app.route('/print_segments', methods=['POST'])
+def print_segments():
+    rack = request.form['rack']
+    if rack == 'Все':
+        segments = db.session.query(Segment).filter(
+            Segment.active.is_(True)).all()
+    else:
+        segments = db.session.query(Segment).filter(
+            and_(Segment.active.is_(True), Segment.rack.is_(rack))).all()
+    return render_template('table.html', segments=segments)
 
 
 if __name__ == "__main__":
