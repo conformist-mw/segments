@@ -29,6 +29,22 @@
         background: none;
         padding: none;
       }
+      .print {
+        color: #777;
+        text-decoration: none;
+      }
+      .print:hover {
+        text-decoration: none;
+        color: #c5c5c5;
+      }
+      .print-form {
+        display: none;
+        position: absolute;
+        top: 71px;
+        right: 100px;
+        z-index: 1000;
+        width: 170px;
+      }
     </style>
   </head>
 
@@ -39,6 +55,26 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="/">Отрезы</a>
           <a class="navbar-brand" href="/admin">Admin</a>
+        </div>
+        <div class="navbar-brand navbar-right">
+          <a class="print" href="#">Печать</a>
+          <div class="print-form well">
+            <form class="form">
+              <div class="radio">
+                <label><input type="radio" name="rack" id="rack1" value="Стеллаж 1" checked>Стеллаж 1</label>
+              </div>
+              <div class="radio">
+                <label><input type="radio" name="rack" id="rack2" value="Стеллаж 2">Стеллаж 2</label>
+              </div>
+              <div class="radio">
+                <label><input type="radio" name="rack" id="rack3" value="Стол">Стол</label>
+              </div>
+              <div class="radio">
+                <label><input type="radio" name="rack" id="rack4" value="Все">Все</label>
+              </div>
+              <button type="submit" class="btn btn-info pull-right">Печать</button>
+            </form>
+          </div>
         </div>
       </div>
     </nav>
@@ -284,6 +320,22 @@
       $('#removed').click(function(){
         $('#number')[this.checked ? 'show': 'hide']();
       });
+      $('a.print').on('click', function() {
+        $('div.print-form').toggle('slow');
+      });
+      $('div.print-form').on('submit', function(e) {
+        e.preventDefault();
+        var rack = $('input[name=rack]:checked').val();
+        $.ajax({
+            url: '/print_segments',
+            data: {rack: rack},
+            type: 'post',
+            success: function(result){
+              new_window = window.open('', 'new_window', 'status=1');
+              new_window.document.write(result);
+            }
+          })
+      })
       $("#search").on('change', function(){
         var category = $(this).find(':selected').data('type');
         var options = getOptions(category);

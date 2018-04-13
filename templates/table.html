@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Segments</title>
+<style type="text/css">
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    tr:nth-of-type(odd) {
+        background: #eee;
+    }
+    th {
+        background: #333;
+        color: white;
+        font-weight: bold;
+    }
+    td, th {
+        padding: 6px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+<table>
+    <tr>
+        <th>Тип</th>
+        <th>Цвет</th>
+        <th>Ширина</th>
+        <th>Высота</th>
+        <th>Площадь</th>
+        <th>Расположение</th>
+    </tr>
+    {% for segment in segments %}
+    <tr>
+        <td>{{ segment.type }}</td>
+        <td>{{ segment.color }}</td>
+        <td>{{ segment.width }}</td>
+        <td>{{ segment.height }}</td>
+        <td>{{ segment.square }}</td>
+        <td>{{ segment.rack }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
