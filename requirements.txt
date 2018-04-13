@@ -1,4 +1,12 @@
-Flask==0.12.2
-Flask-Admin==1.5.0
-Flask-SQLAlchemy==2.3.2
+certifi==2018.1.18
+click==6.7
+flask-admin==1.5.1
+flask-sqlalchemy==2.3.2
+flask==0.12.2
 gunicorn==19.7.1
+itsdangerous==0.24
+jinja2==2.10
+markupsafe==1.0
+sqlalchemy==1.2.6
+werkzeug==0.14.1
+wtforms==2.1
