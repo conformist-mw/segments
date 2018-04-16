@@ -20,9 +20,21 @@
         border: 1px solid #ccc;
         text-align: center;
     }
+    a#print {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        font-size: 3em;
+        color: red;
+        text-decoration: none;
+    }
+    a#print:hover {
+        text-decoration: none;
+    }
 </style>
 </head>
 <body>
+    <a href="#" id="print" onclick="printPage()">&#x270F;</a>
 <table>
     <tr>
         <th>Тип</th>
@@ -44,4 +56,12 @@
     {% endfor %}
 </table>
 </body>
+<script>
+    function printPage() {
+        var printBtn = document.getElementById('print');
+        printBtn.style.visibility = 'hidden';
+        window.print();
+        printBtn.style.visibility = 'visible';
+    }
+</script>
 </html>
