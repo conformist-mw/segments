@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, abort
+from flask import Flask, render_template, request, session, jsonify
 from flask import Response, url_for, redirect
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -50,6 +50,12 @@ admin = Admin(
 admin.add_link(MenuLink(name='Отрезки', url='/'))
 
 per_page = 10
+
+
+def bad_request(message, input_field):
+    response = jsonify({'message': message, 'field': input_field})
+    response.status_code = 400
+    return response
 
 
 @app.route('/')
@@ -133,10 +139,15 @@ def remove_segment():
     order_num = request.form['order_num']
     defect = request.form.get('defect', False, type=bool)
     description = request.form.get('description', '')
+    if not order_num:
+        if not (defect and description):
+            return bad_request(
+                'Это обязательное поле для дефекта', 'input.description'
+            )
     db_order = db.session.query(Segment).filter(
         Segment.order_number == order_num).first()
     if db_order:
-        return abort(400)
+        return bad_request('Такой номер заказа уже есть в базе', 'input.order')
     segment = Segment.query.filter_by(id=segment_id).first()
     segment.active = False
     segment.order_number = order_num
