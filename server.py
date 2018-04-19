@@ -144,10 +144,12 @@ def remove_segment():
             return bad_request(
                 'Это обязательное поле для дефекта', 'input.description'
             )
-    db_order = db.session.query(Segment).filter(
-        Segment.order_number == order_num).first()
-    if db_order:
-        return bad_request('Такой номер заказа уже есть в базе', 'input.order')
+    if order_num:
+        db_order = db.session.query(Segment).filter(
+            Segment.order_number == order_num).first()
+        if db_order:
+            return bad_request(
+                'Такой номер заказа уже есть в базе', 'input.order')
     segment = Segment.query.filter_by(id=segment_id).first()
     segment.active = False
     segment.order_number = order_num
