@@ -67,6 +67,12 @@
                 <label><input type="radio" name="rack" id="rack2" value="Стеллаж 2">Стеллаж 2</label>
               </div>
               <div class="radio">
+                <label><input type="radio" name="rack" id="rack3" value="Стеллаж 3">Стеллаж 3</label>
+              </div>
+              <div class="radio">
+                <label><input type="radio" name="rack" id="rack4" value="Стеллаж 4">Стеллаж 4</label>
+              </div>
+              <div class="radio">
                 <label><input type="radio" name="rack" id="rack3" value="Стол">Стол</label>
               </div>
               <div class="radio">
@@ -169,6 +175,8 @@
                         <option selected disabled>Расположение</option>
                         <option value="Стеллаж 1">Стеллаж 1</option>
                         <option value="Стеллаж 2">Стеллаж 2</option>
+                        <option value="Стеллаж 3">Стеллаж 3</option>
+                        <option value="Стеллаж 4">Стеллаж 4</option>
                         <option value="Стол">Стол</option>
                       </select>
                     </div>
@@ -205,11 +213,11 @@
                       <div class="col-sm-12">
                     </div>
                     <div class="col-sm-6">
-                      <p class="text-muted">Добавлено: {{ segment.created.strftime('%d %a %H:%M') }}</p>
+                      <p class="text-muted">Добавлено: {{ segment.created.strftime('%d.%m.%y | %H:%M') }}</p>
                     </div>
                     {% if removed %}
                     <div class="col-sm-6">
-                      <p class="text-muted">Удалено: {{ segment.deleted.strftime('%d %a %H:%M') }}</p>
+                      <p class="text-muted">Удалено: {{ segment.deleted.strftime('%d.%m.%y | %H:%M') }}</p>
                     </div>
                     <div class="col-sm-6">
                       <p class="text-muted">Номер заказа: <span style="color: red;"><b>{{ segment.order_number }}</b></span></p>
@@ -285,6 +293,8 @@
     <script>
       change_rack = '<div class="radio"><label><input type="radio" name="rack" value="Стеллаж 1">Стеллаж 1</label></div>'
       change_rack += '<div class="radio"><label><input type="radio" name="rack" value="Стеллаж 2">Стеллаж 2</label></div>'
+      change_rack += '<div class="radio"><label><input type="radio" name="rack" value="Стеллаж 3">Стеллаж 3</label></div>'
+      change_rack += '<div class="radio"><label><input type="radio" name="rack" value="Стеллаж 4">Стеллаж 4</label></div>'
       change_rack += '<div class="radio"><label><input type="radio" name="rack" value="Стол">Стол</label></div>'
       // change_rack += '<div><button class="change_rack">Переместить</button></div>'
       window.onload = function(){
