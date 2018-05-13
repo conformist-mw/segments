@@ -1,13 +1,13 @@
 server {
-	listen 80;
-	server_name default_server;
+    listen 80;
+    server_name default_server;
 
-	location / {
-		include proxy_params;
-		proxy_pass http://unix:/tmp/segments.sock;
-	}
-	location /static {
-		alias /home/target_user/project/segments/static/;
-		autoindex on;
-	}
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/tmp/segments.sock;
+    }
+    location /static {
+        alias /home/target_user/project/segments/static/;
+        autoindex on;
+    }
 }
