@@ -155,7 +155,7 @@ def remove_segment():
     segment.order_number = order_num
     segment.defect = defect
     segment.description = description
-    db.session.appdd(segment)
+    db.session.add(segment)
     db.session.commit()
     return ('', 204)
 
