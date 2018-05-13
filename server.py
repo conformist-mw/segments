@@ -187,11 +187,11 @@ def print_segments():
     if rack == 'Все':
         segments = db.session.query(Segment).filter(
             Segment.active.is_(True)).order_by(
-                Segment.type, Segment.color).all()
+                Segment.type, Segment.color, Segment.width).all()
     else:
         segments = db.session.query(Segment).filter(
             and_(Segment.active.is_(True), Segment.rack.is_(rack))).order_by(
-                Segment.type, Segment.color).all()
+                Segment.type, Segment.color, Segment.width).all()
     return render_template('table.html', segments=segments)
 
 
