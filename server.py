@@ -106,21 +106,21 @@ def results(page=1):
     if session['type'] == session['color'] == 'все':
         segments = Segment.query.filter(
             *filter_conditions).order_by(
-            Segment.deleted.desc()).paginate(page, per_page, False)
+            Segment.square).paginate(page, per_page, False)
         return render_template('segments.html', segments=segments,
                                removed=session['removed'])
     elif session['type'] == 'все':
         segments = Segment.query.filter(
             Segment.color == session['color'],
             *filter_conditions).order_by(
-            Segment.deleted.desc()).paginate(page, per_page, False)
+            Segment.square).paginate(page, per_page, False)
         return render_template('segments.html', segments=segments,
                                removed=session['removed'])
     elif session['color'] == 'все':
         segments = Segment.query.filter(
             Segment.type == session['type'],
             *filter_conditions).order_by(
-            Segment.deleted.desc()).paginate(page, per_page, False)
+            Segment.square).paginate(page, per_page, False)
         return render_template('segments.html', segments=segments,
                                removed=session['removed'])
     else:
@@ -128,7 +128,7 @@ def results(page=1):
             Segment.type == session['type'],
             Segment.color == session['color'],
             *filter_conditions).order_by(
-            Segment.deleted.desc()).paginate(page, per_page, False)
+            Segment.square).paginate(page, per_page, False)
         return render_template('segments.html', segments=segments,
                                removed=session['removed'])
 
@@ -155,7 +155,7 @@ def remove_segment():
     segment.order_number = order_num
     segment.defect = defect
     segment.description = description
-    db.session.add(segment)
+    db.session.appdd(segment)
     db.session.commit()
     return ('', 204)
 
