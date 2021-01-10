@@ -10,3 +10,13 @@ markupsafe==1.0
 sqlalchemy==1.2.6
 werkzeug==0.14.1
 wtforms==2.1
+Django==3.1.5
+django-debug-toolbar==3.2
+django-environ==0.4.5
+flake8==3.8.4
+flake8-builtins==1.5.3
+flake8-commas==2.0.0
+flake8-django==1.1.1
+flake8-print==4.0.0
+flake8-quotes==3.2.0
+flake8-isort==4.0.0

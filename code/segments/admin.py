@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Segment, Color, ColorType, OrderNumber
+from .models import Color, ColorType, OrderNumber, Segment
 
 
 @admin.register(Segment)

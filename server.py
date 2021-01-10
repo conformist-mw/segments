@@ -1,12 +1,23 @@
-from flask import Flask, render_template, request, session, jsonify
-from flask import Response, url_for, redirect
-from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
-from flask_admin.base import MenuLink
-from werkzeug.exceptions import HTTPException
-from sqlalchemy import and_, or_
-from models import db, Segment
 import locale
+
+from flask import (
+    Flask,
+    Response,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
+from flask_admin import Admin
+from flask_admin.base import MenuLink
+from flask_admin.contrib.sqla import ModelView
+from sqlalchemy import and_, or_
+from werkzeug.exceptions import HTTPException
+
+from models import Segment, db
+
 locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
 
 
@@ -22,8 +33,8 @@ class AuthException(HTTPException):
 
     def __init__(self, message):
         super().__init__(message, Response(
-            "You could not be authenticated. Please refresh the page.", 401,
-            {'WWW-Authenticate': 'Basic realm="Login Required"'}
+            'You could not be authenticated. Please refresh the page.', 401,
+            {'WWW-Authenticate': 'Basic realm="Login Required"'},
         ))
 
 
@@ -142,7 +153,7 @@ def remove_segment():
     if not order_num:
         if not (defect and description):
             return bad_request(
-                'Это обязательное поле для дефекта', 'input.description'
+                'Это обязательное поле для дефекта', 'input.description',
             )
     if order_num:
         db_order = db.session.query(Segment).filter(
@@ -195,5 +206,5 @@ def print_segments():
     return render_template('table.html', segments=segments)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
