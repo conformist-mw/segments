@@ -18,7 +18,7 @@ from werkzeug.exceptions import HTTPException
 
 from models import Segment, db
 
-locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
+locale.setlocale(locale.LC_TIME, 'ru_UA.UTF-8')
 
 
 class SegmentModelView(ModelView):
