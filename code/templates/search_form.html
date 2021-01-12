@@ -1,0 +1,43 @@
+<form id="search_form" class="panel panel-default" method="POST" action="/search">
+  <div class="panel-body">
+    <p><strong>Поиск</strong></p>
+    <div class="form-group">
+      <div class="col-sm-6">
+        <select name="type" id="search" class="form-control" required>
+          <option selected disabled>Фактура</option>
+          <option value="все" data-type='all'>все</option>
+          <option value="LAK" data-type='LAK'>LAK</option>
+          <option value="SATIN" data-type='SATIN'>SATIN</option>
+          <option value="MAT" data-type='MAT'>MAT</option>
+          <option value="EXCLUSIVE" data-type='EXCLUSIVE'>EXCLUSIVE</option>
+        </select>
+      </div>
+      <div class="col-sm-6">
+        <input list="search_colors" name="color" id="search_input" class="form-control" autocomplete="off">
+        <datalist name="color" id="search_colors"></datalist>
+      </div>
+    </div>
+    <div class="form-group ">
+    </div>
+    <p><strong>Размеры</strong></p>
+    <div class="form-group ">
+      <div class="input-group">
+        <span class="input-group-addon">ширина</span>
+        <input autocomplete="off" type="text" value="" name="width" class="form-control js-price-format" placeholder="введите значение">
+        <span class="input-group-addon">см</span>
+      </div>
+    </div>
+    <div class="form-group ">
+      <div class="input-group">
+        <span class="input-group-addon">длина</span>
+        <input autocomplete="off" type="text" value="" name="height" class="form-control js-price-format" placeholder="введите значение">
+        <span class="input-group-addon">см</span>
+      </div>
+    </div>
+    <div class="form-group ">
+      <label><input name="removed" value="True" id="removed" type="checkbox"> Удалённые</label>
+      <p><input name="order_num" id="number" type="text" style="display: none;" placeholder="номер заказа"></p>
+    </div>
+    <button type="submit" class="btn btn-success">Показать</button>
+  </div>
+</form>
