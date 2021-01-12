@@ -40,14 +40,15 @@ class RackAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return (
             super().get_queryset(request)
-                .annotate(segments_count=Count('segments'))
-                .order_by('name')
+            .annotate(segments_count=Count('segments'))
+            .order_by('name')
         )
 
     def segments_count(self, obj):
         return obj.segments_count
 
     segments_count.short_description = 'Количество отрезков'
+
 
 @admin.register(OrderNumber)
 class OrderNumberAdmin(admin.ModelAdmin):
