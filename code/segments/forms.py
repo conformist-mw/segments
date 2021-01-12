@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Color, ColorType, Segment
+from .models import Color, ColorType, Rack, Segment
 
 
 class SegmentCreateForm(forms.ModelForm):
@@ -17,3 +17,12 @@ class SegmentCreateForm(forms.ModelForm):
     class Meta:
         model = Segment
         fields = ['color', 'width', 'height', 'rack', 'color_type']
+
+
+class PrintSegmentsForm(forms.Form):
+    print_rack = forms.ModelChoiceField(
+        label='Расположение',
+        queryset=Rack.objects.all(),
+        empty_label='Все',
+        required=False,
+    )
