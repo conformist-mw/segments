@@ -26,3 +26,19 @@ class PrintSegmentsForm(forms.Form):
         empty_label='Все',
         required=False,
     )
+
+
+class SearchSegmentsForm(forms.Form):
+
+    color_type = forms.ChoiceField(
+        choices=[('0', 'Все')] + [(ct.id, ct.name) for ct in ColorType.objects.all()],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    color = forms.ChoiceField(
+        choices=[('0', 'Все')] + [(c.id, c.name) for c in Color.objects.all()],
+        required=False,
+    )
+    width = forms.IntegerField(required=False)
+    height = forms.IntegerField(required=False)
+    deleted = forms.BooleanField(required=False)

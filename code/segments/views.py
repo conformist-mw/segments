@@ -1,9 +1,10 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView, View
-
-from .forms import PrintSegmentsForm, SegmentCreateForm
-from .models import ColorType, Rack, Segment
+from django.views.generic.edit import FormMixin
+from django.shortcuts import redirect
+from .forms import PrintSegmentsForm, SegmentCreateForm, SearchSegmentsForm
+from .models import ColorType, Rack, Segment, OrderNumber
 
 
 class SegmentsListView(ListView):
@@ -25,6 +26,18 @@ class SegmentsListView(ListView):
             'racks': {r.name: r.id for r in Rack.objects.order_by('name')},
         })
         return context
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        if 'search' in self.request.GET:
+            form = SearchSegmentsForm(self.request.GET)
+            if not form.is_valid():
+                return redirect('/')
+            print(form.cleaned_data)
+        else:
+            form = SearchSegmentsForm()
+        context = self.get_context_data(object_list=self.object_list, search_form=form)
+        return self.render_to_response(context)
 
 
 class SegmentCreateView(CreateView):

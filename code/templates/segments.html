@@ -3,6 +3,10 @@
   <div class="col-md-11">
     <div class="row">
       <div class="col-sm-4">
+        <form action="/" type="GET">
+          {{ search_form }}
+          <button type="submit" name="search">Search</button>
+        </form>
         {% include 'search_form.html' %}
         {% include 'add_form.html' %}
       </div>
@@ -23,50 +27,8 @@
   <script>
     // rewritten
     const colors = {{ colors|safe }};
-    const csrfToken = '{{ csrf_token|safe }}';
 
-    $('#add').submit(function(event) {
-      event.preventDefault();
-      form.find('.text-danger').remove();
-      var form = $(this);
-      $.ajax({
-        headers: { 'X-CSRFToken': csrfToken },ff
-        type: 'POST',
-        url: '/add/',
-        data: form.serialize(),
-        success: function() {
-          location.reload();
-        },
-        error: function(data) {
-          var errors = JSON.parse(data.responseJSON.error);
-          $.each(errors, function(field, error) {
-            var small = $('<small />').attr('class', 'text-danger').html(error[0].message);
-            $(`#id_${field}`).parent().append(small);
-          })
-        }
-      })
-    })
-    $('button.edit').click(function() {
-      $(this).parents('div').next().show();
-    })
-    $('button.move').click(function(e) {
-      e.preventDefault();
-      var segment_id = $(this).val();
-      var form = $(this).parent();
-      var rack = $(this).parent().prev().find('.rack').show();
-      $.ajax({
-        headers: { 'X-CSRFToken': csrfToken },
-        url: `/move/${segment_id}/`,
-        data: form.serialize(),
-        type: 'POST',
-        success: function(result){
-          rack.find('strong').text(result.rack);
-        },
-        complete: function() {
-          form.hide();
-        }
-      })
-    })
+
   </script>
 
   <script>
@@ -100,29 +62,8 @@
       };
       return options
     }
-    $('#removed').click(function(){
-      $('#number')[this.checked ? 'show': 'hide']();
-    });
-    $('a.print').on('click', function() {
-      $('div.print-form').toggle('slow');
-    });
-    $('#print-form').on('submit', function(e) {
-      e.preventDefault();
-      var form = $(this);
-      $.ajax({
-          headers: { 'X-CSRFToken': csrfToken },
-          type: 'POST',
-          url: '/print/',
-          data: form.serialize(),
-          success: function(result){
-            new_window = window.open('', 'new_window', 'status=1');
-            new_window.document.write(result);
-          },
-          error: function(error) {
-            console.log(error);
-          }
-        })
-    })
+
+
     $("#search").on('change', function(){
       var category = $(this).find(':selected').data('type');
       var options = getOptions(category);
@@ -159,14 +100,13 @@
       $('#add_input').focus();
     })
 
-    $('.remove-toggle').click(function(){
-      var toggle_id = $(this).parents('div.parent').data('id');
-      var this_el = $('div[data-toggle="' + toggle_id + '"]');
-      $('div.remove-form').not(this_el).each(function(){
-        $(this).hide('fast');
-      });
-      $('div[data-toggle="' + toggle_id + '"]').toggle('slow');
+    // search form action
+    $('#removed').click(function(){
+        $('#number')[this.checked ? 'show': 'hide']();
     });
+
+
+
     $('.activate').click(function(){
       var segment_id = $(this).parents('div.parent').data('id');
       $.ajax({
@@ -178,29 +118,5 @@
         }
       })
     })
-    $('.removeSegment').click(function(){
-      var parent = $(this).parents('div.parent');
-      var segment_id = parent.data('id');
-      var defect = parent.find('input[name="defect"]').prop('checked');
-      var description = parent.find('input[name="description"]').val();
-      var input = $('input[data-id="' + segment_id + '"]').val();
-      if (input.length > 2 || defect){
-        $.ajax({
-          url: '/remove',
-          data: {'id': segment_id, 'order_num': input, 'defect': defect, 'description': description},
-          type: 'post',
-          success: function(result){
-            $('div[data-id="' + segment_id + '"]').remove();
-          },
-          error: function(error){
-            var data = error.responseJSON;
-            var input = parent.find(data.field);
-            if (!input.next('span').length) {
-              input.after('<span class="text-danger small">' + data.message + '</span>');
-            }
-          }
-        });
-      };
-    });
   </script>
 {% endblock %}
