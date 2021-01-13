@@ -56,33 +56,35 @@
       {% endif %}
       {% if not removed %}
         <div class="col-sm-6 text-right">
-          <button class="btn btn-info remove-toggle">Удалить</button>
+          <button class="btn btn-info remove-toggle" value="{{ segment.id }}">Удалить</button>
         </div>
       {% endif %}
 
       <div class="col-sm-10 col-sm-offset-1 remove-form" data-toggle="{{ segment.id }}" style="display: none">
         <div class="panel panel-default">
           <div class="panel-body">
-            <p>Подтверждение:</p>
-            <div class="form-group">
-              <input
-                autocomplete="off"
-                type="text"
-                class="form-control order"
-                data-id="{{ segment.id }}"
-                placeholder="Введите номер заказа"
-                required
-              >
-            </div>
-            <div class="checkbox">
-              <label><input type="checkbox" name="defect" autocomplete="off"> Есть дефект?</label>
-            </div>
-            <div class="form-group">
-              <input type="text" name="description" class="form-control description" placeholder="Описание отреза">
-            </div>
-            <div class="text-right">
-              <button class="btn btn-default btn-danger removeSegment">Удалить</button>
-            </div>
+            <form class="form">
+              <p>Подтверждение:</p>
+              <div class="form-group">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  class="form-control order"
+                  name="order_number"
+                  placeholder="Введите номер заказа"
+                >
+              </div>
+              <div class="checkbox">
+                <label><input type="checkbox" name="defect" autocomplete="off"> Есть дефект?</label>
+              </div>
+              <div class="form-group">
+                <input type="text" name="description" class="form-control description" placeholder="Описание отреза">
+              </div>
+              <small class="text-danger"></small>
+              <div class="text-right">
+                <button class="btn btn-default btn-danger removeSegment" value="{{ segment.id }}">Удалить</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
