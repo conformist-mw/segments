@@ -6,9 +6,10 @@ from .models import Color, ColorType, OrderNumber, Rack, Segment
 
 @admin.register(Segment)
 class SegmentAdmin(admin.ModelAdmin):
-    list_display = ['width', 'height', 'square', 'color', 'rack']
-    list_select_related = ['rack', 'color', 'color__type']
-    list_filter = ['rack', 'color__type']
+    list_display = ['width', 'height', 'square', 'color', 'rack', 'order_number', 'active']
+    list_select_related = ['rack', 'color', 'color__type', 'order_number']
+    list_filter = ['active', 'rack', 'color__type']
+    readonly_fields = ['order_number']
 
 
 @admin.register(Color)

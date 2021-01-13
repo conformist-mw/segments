@@ -98,6 +98,11 @@ class ColorType(models.Model):
         return self.name
 
 
+class ColorManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().select_related('type')
+
+
 class Color(models.Model):
     name = models.CharField('Цвет', max_length=30)
     type = models.ForeignKey(
@@ -105,6 +110,8 @@ class Color(models.Model):
         on_delete=models.CASCADE,
         related_name='colors',
     )
+
+    objects = ColorManager()
 
     class Meta:
         verbose_name = 'Цвет'
