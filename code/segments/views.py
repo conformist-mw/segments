@@ -65,3 +65,35 @@ class MoveSegmentView(UpdateView):
 
     def form_invalid(self, form):
         return JsonResponse({}, status=400)
+
+
+class RemoveSegmentView(UpdateView):
+    model = Segment
+    fields = ['defect', 'description']
+
+    def form_valid(self, form):
+        error_msg = None
+        is_defected = 'defect' in self.request.POST
+        order_number = self.request.POST.get('order_number')
+        description = form.cleaned_data.get('description')
+        if not any([is_defected, order_number, description]):
+            error_msg = (
+                'Для удаления отрезка нужно указать или номер заказа'
+                ' или указать дефект и его описание'
+            )
+        elif not order_number:
+            if not (is_defected and description):
+                error_msg = 'При указании дефекта нужно указать описание'
+        elif order_number and OrderNumber.objects.filter(name=order_number).exists():
+            error_msg = 'Такой номер заказа уже есть в базе'
+        if error_msg:
+            return JsonResponse({'message': error_msg}, status=400)
+        segment = form.save(commit=False)
+        if order_number:
+            order_number = OrderNumber.objects.create(name=order_number)
+        segment.active = False
+        segment.order_number = order_number or None
+        segment.defect = bool(is_defected)
+        segment.description = description
+        segment.save()
+        return JsonResponse({}, status=200)

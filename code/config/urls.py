@@ -6,15 +6,19 @@ from django.urls import include, path
 from segments.views import (
     MoveSegmentView,
     PrintSegmentsView,
+    RemoveSegmentView,
     SegmentCreateView,
     SegmentsListView,
 )
+
+admin.site.site_header = 'Отрезки'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('add/', SegmentCreateView.as_view()),
     path('print/', PrintSegmentsView.as_view()),
     path('move/<int:pk>/', MoveSegmentView.as_view()),
+    path('remove/<int:pk>/', RemoveSegmentView.as_view()),
     path('', SegmentsListView.as_view()),
 ]
 
