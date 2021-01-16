@@ -1,7 +1,6 @@
 from django import forms
 
 from .models import Color, ColorType, Rack, Segment
-from django.forms import renderers
 
 
 class ColorSelect(forms.Select):
@@ -64,12 +63,16 @@ class PrintSegmentsForm(forms.Form):
 class SearchSegmentsForm(forms.Form):
 
     color_type = forms.ChoiceField(
-        choices=[('', 'Все')] + [(ct.name, ct.name) for ct in ColorType.objects.all()],
+        choices=[('', 'Все')] + [
+            (ct.name, ct.name) for ct in ColorType.objects.all()
+        ],
         required=False,
         widget=forms.Select(),
     )
     color = forms.ChoiceField(
-        choices=[('', 'Все')] + [(c.name, str(c)) for c in Color.objects.all()],
+        choices=[('', 'Все')] + [
+            (c.name, str(c)) for c in Color.objects.all()
+        ],
         required=False,
         widget=ColorSelect(),
     )

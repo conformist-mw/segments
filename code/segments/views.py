@@ -1,17 +1,17 @@
-from django.http import JsonResponse
-from django.shortcuts import render
 from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
 from django.views.generic import CreateView, ListView, UpdateView, View
-from django.views.generic.edit import FormMixin
-from django.shortcuts import redirect
-from .forms import PrintSegmentsForm, SegmentCreateForm, SearchSegmentsForm
-from .models import ColorType, Rack, Segment, OrderNumber
+
+from .forms import PrintSegmentsForm, SearchSegmentsForm, SegmentCreateForm
+from .models import ColorType, OrderNumber, Rack, Segment
 
 
 class SegmentsListView(ListView):
     model = Segment
     template_name = 'segments.html'
     context_object_name = 'segments'
+    paginate_by = 10
     queryset = Segment.objects.select_related('color', 'rack', 'color__type')
 
     def get_context_data(self, **kwargs):
@@ -40,9 +40,9 @@ class SegmentsListView(ListView):
             if color := fields['color']:
                 qs = qs.filter(color__name=color)
             if width := fields['width']:
-                qs = qs.filter(Q(width__gte=width)|Q(height__gte=width))
+                qs = qs.filter(Q(width__gte=width) | Q(height__gte=width))
             if height := fields['height']:
-                qs = qs.filter(Q(width__gte=height)|Q(height__gte=height))
+                qs = qs.filter(Q(width__gte=height) | Q(height__gte=height))
             active = not fields.get('deleted', False)
             qs = qs.filter(active=active)
             if not active and (order_number := fields.get('order_number')):
@@ -51,7 +51,10 @@ class SegmentsListView(ListView):
             form = SearchSegmentsForm()
             qs = qs.filter(active=True)
         self.object_list = qs
-        context = self.get_context_data(object_list=self.object_list, search_form=form)
+        context = self.get_context_data(
+            object_list=self.object_list,
+            search_form=form,
+        )
         return self.render_to_response(context)
 
 
@@ -125,7 +128,8 @@ class RemoveSegmentView(UpdateView):
         elif not order_number:
             if not (is_defected and description):
                 error_msg = 'При указании дефекта нужно указать описание'
-        elif order_number and OrderNumber.objects.filter(name=order_number).exists():
+        elif order_number and \
+                OrderNumber.objects.filter(name=order_number).exists():
             error_msg = 'Такой номер заказа уже есть в базе'
         if error_msg:
             return JsonResponse({'message': error_msg}, status=400)
