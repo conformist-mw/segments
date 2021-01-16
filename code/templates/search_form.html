@@ -1,20 +1,16 @@
+{% load widget_tweaks %}
+
 <form class="panel panel-default" method="GET" action="/">
   <div class="panel-body">
     <p><strong>Поиск</strong></p>
-    <div class="form-group">
-      <div class="col-sm-6">
-        <select name="type" id="search" class="form-control" required>
-          <option selected disabled>Фактура</option>
-          <option value="все" data-type='all'>все</option>
-          <option value="LAK" data-type='LAK'>LAK</option>
-          <option value="SATIN" data-type='SATIN'>SATIN</option>
-          <option value="MAT" data-type='MAT'>MAT</option>
-          <option value="EXCLUSIVE" data-type='EXCLUSIVE'>EXCLUSIVE</option>
-        </select>
+    <div class="form-group colors">
+      <div class="col-lg-6">
+        <p><strong>Фактура:</strong></p>
+        {% render_field search_form.color_type class="form-control" %}
       </div>
-      <div class="col-sm-6">
-        <input list="search_colors" name="color" id="search_input" class="form-control" autocomplete="off">
-        <datalist name="color" id="search_colors"></datalist>
+      <div class="col-lg-6">
+        <p><strong>Цвет:</strong></p>
+        {% render_field search_form.color label=search_form.color.name class="form-control" %}
       </div>
     </div>
     <div class="form-group ">
@@ -23,21 +19,25 @@
     <div class="form-group ">
       <div class="input-group">
         <span class="input-group-addon">ширина</span>
-        <input autocomplete="off" type="text" value="" name="width" class="form-control js-price-format" placeholder="введите значение">
+        {% render_field search_form.width autocomplete="off" class="form-control js-price-format" placeholder="введите значение" %}
         <span class="input-group-addon">см</span>
       </div>
     </div>
     <div class="form-group ">
       <div class="input-group">
         <span class="input-group-addon">длина</span>
-        <input autocomplete="off" type="text" value="" name="height" class="form-control js-price-format" placeholder="введите значение">
+        {% render_field search_form.height autocomplete="off" class="form-control js-price-format" placeholder="введите значение" %}
         <span class="input-group-addon">см</span>
       </div>
     </div>
     <div class="form-group ">
-      <label><input name="removed" value="True" id="removed" type="checkbox"> Удалённые</label>
-      <p><input name="order_num" id="number" type="text" style="display: none;" placeholder="номер заказа"></p>
+      <label for="{{ search_form.deleted.id_for_label }}">
+        {% render_field search_form.deleted %}
+        {{ search_form.deleted.label }}
+      </label>
+      <p>{% render_field search_form.order_number placeholder="номер заказа" style="display: none;" %}</p>
     </div>
-    <button type="submit" class="btn btn-success">Показать</button>
+    <button type="submit" class="btn btn-success" name="search">Показать</button>
+    <a href="#" id="reset-form" class="btn btn-danger pull-right">Сбросить</a>
   </div>
 </form>

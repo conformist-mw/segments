@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.db.models import Q
 from django.views.generic import CreateView, ListView, UpdateView, View
 from django.views.generic.edit import FormMixin
 from django.shortcuts import redirect
@@ -20,7 +21,7 @@ class SegmentsListView(ListView):
             for ct in ColorType.objects.prefetch_related('colors').all()
         }
         context.update({
-            'form': SegmentCreateForm(),
+            'form': SegmentCreateForm(prefix='create'),
             'print_form': PrintSegmentsForm(),
             'colors': colors,
             'racks': {r.name: r.id for r in Rack.objects.order_by('name')},
@@ -28,20 +29,35 @@ class SegmentsListView(ListView):
         return context
 
     def get(self, request, *args, **kwargs):
-        self.object_list = self.get_queryset()
+        qs = self.get_queryset()
         if 'search' in self.request.GET:
             form = SearchSegmentsForm(self.request.GET)
             if not form.is_valid():
                 return redirect('/')
-            print(form.cleaned_data)
+            fields = form.cleaned_data
+            if color_type := fields['color_type']:
+                qs = qs.filter(color__type__name=color_type)
+            if color := fields['color']:
+                qs = qs.filter(color__name=color)
+            if width := fields['width']:
+                qs = qs.filter(Q(width__gte=width)|Q(height__gte=width))
+            if height := fields['height']:
+                qs = qs.filter(Q(width__gte=height)|Q(height__gte=height))
+            active = not fields.get('deleted', False)
+            qs = qs.filter(active=active)
+            if not active and (order_number := fields.get('order_number')):
+                qs = qs.filter(order_number__name=order_number)
         else:
             form = SearchSegmentsForm()
+            qs = qs.filter(active=True)
+        self.object_list = qs
         context = self.get_context_data(object_list=self.object_list, search_form=form)
         return self.render_to_response(context)
 
 
 class SegmentCreateView(CreateView):
     form_class = SegmentCreateForm
+    prefix = 'create'
 
     def form_valid(self, form):
         form.save()
