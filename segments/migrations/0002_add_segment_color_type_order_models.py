@@ -2,9 +2,12 @@
 
 import django.db.models.deletion
 from django.db import migrations, models
+from django.conf import settings
 
 
 def add_colors_and_types(apps, schema_editor):
+    if settings.IS_HEROKU:
+        return
     Color = apps.get_model('segments', 'Color')
     ColorType = apps.get_model('segments', 'ColorType')
     Rack = apps.get_model('segments', 'Rack')
@@ -71,6 +74,8 @@ def add_colors_and_types(apps, schema_editor):
 
 
 def fill_segment_table(apps, schema_editor):
+    if settings.IS_HEROKU:
+        return
     Rack = apps.get_model('segments', 'Rack')
     Color = apps.get_model('segments', 'Color')
     Segment = apps.get_model('segments', 'Segment')
