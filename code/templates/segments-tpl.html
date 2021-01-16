@@ -43,18 +43,18 @@
       <div class="col-sm-6">
         <p class="text-muted">Добавлено: {{ segment.created|date:'d.m.y | H:s' }}</p>
       </div>
-      {% if removed %}
+      {% if not segment.active %}
         <div class="col-sm-6">
           <p class="text-muted">Удалено: {{ segment.deleted|date:'d.m.y | H:s' }}</p>
         </div>
         <div class="col-sm-6">
-          <p class="text-muted">Номер заказа: <span style="color: red;"><b>{{ segment.order_number }}</b></span></p>
+          <p class="text-muted">Номер заказа: <span style="color: red;"><b>{{ segment.order_number|default:'—' }}</b></span></p>
         </div>
         <div class="col-sm-6 text-right">
           <button class="btn btn-warning activate">Вернуть</button>
         </div>
       {% endif %}
-      {% if not removed %}
+      {% if segment.active %}
         <div class="col-sm-6 text-right">
           <button class="btn btn-info remove-toggle" value="{{ segment.id }}">Удалить</button>
         </div>
