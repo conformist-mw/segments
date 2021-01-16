@@ -15,7 +15,9 @@
           {% endif %}
           <div class="panel-body">
             <div class="clearfix">
-{#              {% include 'pagination.html' %}#}
+              {% if segments %}
+                {% include 'pagination.html' %}
+              {% endif %}
             </div>
           </div>
         </div>
