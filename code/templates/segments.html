@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% block container %}
-  <div class="col-md-11">
+  <div class="col-lg-12">
     <div class="row">
-      <div class="col-sm-4">
-        <form action="/" type="GET">
-          {{ search_form }}
-          <button type="submit" name="search">Search</button>
-        </form>
+      <div class="col-lg-4">
         {% include 'search_form.html' %}
         {% include 'add_form.html' %}
       </div>
-      <div class="col-sm-7">
+      <div class="col-lg-8">
         <div class="panel panel-default">
-          {% include 'segments-tpl.html' %}
+          {% if segments %}
+            {% include 'segments-tpl.html' %}
+          {% else %}
+            <h3 class="text-center">Таких отрезков нет</h3>
+          {% endif %}
           <div class="panel-body">
             <div class="clearfix">
 {#              {% include 'pagination.html' %}#}
@@ -25,87 +25,17 @@
 {% endblock %}
 {% block extra_js %}
   <script>
-    // rewritten
-    const colors = {{ colors|safe }};
-
-
-  </script>
-
-  <script>
     window.onload = function(){
-      category = localStorage.getItem('category');
-      color = localStorage.getItem('color');
-      if (category){
-        $('#search').val(category);
-        options = getOptions(category);
-        $('#search_colors').html(options);
-        $('#search_input').val(color);
-      };
+      if ($('#{{ search_form.deleted.id_for_label }}').is(':checked')) {
+        $('#{{ search_form.order_number.id_for_label }}').show();
+      }
     }
-    function getOptions(category, search=true){
-      if (search === true){
-        options = '<option value="все">'
-      } else {
-        options = ''
-      }
-      if (category == 'все'){
-        for (var key in colors){
-          $.each(colors[key], function(i, item){
-            options += '<option value="' + item + '">';
-          })
-        }
-      }
-      else {
-        $.each(colors[category], function(i, item){
-          options += '<option value="' + item + '">';
-        })
-      };
-      return options
-    }
+    $('#{{ form.color_type.id_for_label }}, #{{ search_form.color_type.id_for_label }}').on('change', filterColors);
+    $('#{{ form.color.id_for_label }}, #{{ search_form.color.id_for_label }}').on('change', setColorType);
 
-
-    $("#search").on('change', function(){
-      var category = $(this).find(':selected').data('type');
-      var options = getOptions(category);
-      $('#search_colors').html(options);
-      $('#search_input').val('');
-      $('#search_input').focus();
+    $('#{{ search_form.deleted.id_for_label }}').click(function(){
+      $('#{{ search_form.order_number.id_for_label }}')[this.checked ? 'show': 'hide']();
     });
-    $('#search_form').submit(function(){
-      var input = $('#search_input');
-      if (input.val() === ''){
-        input.val('все');
-      }
-      var color = input.val();
-      var obj = $('#search_colors').find('option[value="' + color + '"]');
-      if (obj.length == 0){
-        if (input.parent().hasClass('has-error')){
-          return false;
-        }
-        input.parent().addClass('has-error');
-        input.after('<span class="text-danger small">Такого цвета нет в списке</span>')
-        return false;
-      }
-      localStorage.setItem('category', $('#search').val());
-      localStorage.setItem('color', input.val());
-      if ($('#number').val() == ''){
-        $('#number').remove();
-      }
-    });
-    $("#id_color_type").on('change', function(){
-      var category = $(this).find(':selected').data('type');
-      options = getOptions(category, search=false);
-      $('#add_colors').html(options);
-      $('#add_input').val('');
-      $('#add_input').focus();
-    })
-
-    // search form action
-    $('#removed').click(function(){
-        $('#number')[this.checked ? 'show': 'hide']();
-    });
-
-
 
     $('.activate').click(function(){
       var segment_id = $(this).parents('div.parent').data('id');
