@@ -1,6 +1,32 @@
 from django import forms
 
 from .models import Color, ColorType, Rack, Segment
+from django.forms import renderers
+
+
+class ColorSelect(forms.Select):
+    option_template_name = 'forms/widgets/select_option.html'
+
+    def create_option(
+            self,
+            name,
+            value,
+            label,
+            selected,
+            index,
+            subindex=None,
+            attrs=None,
+    ):
+        option = super().create_option(
+            name, value, label, selected, index, subindex, attrs,
+        )
+        if value:
+            color_type = label.split()[0]
+            option.update({
+                'color_type': color_type,
+                'label': value,
+            })
+        return option
 
 
 class SegmentCreateForm(forms.ModelForm):
@@ -8,10 +34,17 @@ class SegmentCreateForm(forms.ModelForm):
     color_type = forms.ModelChoiceField(
         queryset=ColorType.objects.all(),
         to_field_name='name',
+        empty_label='Фактура',
     )
     color = forms.ModelChoiceField(
         queryset=Color.objects.all(),
         to_field_name='name',
+        empty_label='Выберите цвет',
+        widget=ColorSelect(),
+    )
+    rack = forms.ModelChoiceField(
+        queryset=Rack.objects.all(),
+        empty_label='Расположение',
     )
 
     class Meta:
@@ -31,14 +64,16 @@ class PrintSegmentsForm(forms.Form):
 class SearchSegmentsForm(forms.Form):
 
     color_type = forms.ChoiceField(
-        choices=[('0', 'Все')] + [(ct.id, ct.name) for ct in ColorType.objects.all()],
+        choices=[('', 'Все')] + [(ct.name, ct.name) for ct in ColorType.objects.all()],
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(),
     )
     color = forms.ChoiceField(
-        choices=[('0', 'Все')] + [(c.id, c.name) for c in Color.objects.all()],
+        choices=[('', 'Все')] + [(c.name, str(c)) for c in Color.objects.all()],
         required=False,
+        widget=ColorSelect(),
     )
     width = forms.IntegerField(required=False)
     height = forms.IntegerField(required=False)
-    deleted = forms.BooleanField(required=False)
+    deleted = forms.BooleanField(required=False, label='Удалённые')
+    order_number = forms.CharField(required=False)
