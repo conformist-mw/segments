@@ -2,12 +2,13 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.generic import CreateView, ListView, UpdateView, View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import PrintSegmentsForm, SearchSegmentsForm, SegmentCreateForm
 from .models import ColorType, OrderNumber, Rack, Segment
 
 
-class SegmentsListView(ListView):
+class SegmentsListView(LoginRequiredMixin, ListView):
     model = Segment
     template_name = 'segments.html'
     context_object_name = 'segments'
@@ -58,7 +59,7 @@ class SegmentsListView(ListView):
         return self.render_to_response(context)
 
 
-class SegmentCreateView(CreateView):
+class SegmentCreateView(LoginRequiredMixin, CreateView):
     form_class = SegmentCreateForm
     prefix = 'create'
 
@@ -72,7 +73,7 @@ class SegmentCreateView(CreateView):
         )
 
 
-class PrintSegmentsView(View):
+class PrintSegmentsView(LoginRequiredMixin, View):
     template_name = 'table.html'
     form_class = PrintSegmentsForm
 
@@ -87,7 +88,7 @@ class PrintSegmentsView(View):
         return render(request, self.template_name, {'segments': qs})
 
 
-class MoveSegmentView(UpdateView):
+class MoveSegmentView(LoginRequiredMixin, UpdateView):
     model = Segment
     fields = ['rack']
 
@@ -99,7 +100,7 @@ class MoveSegmentView(UpdateView):
         return JsonResponse({}, status=400)
 
 
-class ActivateSegmentView(UpdateView):
+class ActivateSegmentView(LoginRequiredMixin, UpdateView):
     model = Segment
     fields = ['active']
 
@@ -111,7 +112,7 @@ class ActivateSegmentView(UpdateView):
         return JsonResponse({}, status=200)
 
 
-class RemoveSegmentView(UpdateView):
+class RemoveSegmentView(LoginRequiredMixin, UpdateView):
     model = Segment
     fields = ['defect', 'description']
 

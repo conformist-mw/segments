@@ -10,6 +10,7 @@ environ.Env.read_env('.env')
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
+IS_HEROKU = env('IS_HEROKU', default=False)
 
 ALLOWED_HOSTS = []
 
@@ -37,6 +38,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if IS_HEROKU:
+    MIDDLEWARE.insert(0, 'whitenoise.middleware.WhiteNoiseMiddleware')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 if DEBUG:
     INSTALLED_APPS += ['debug_toolbar']
@@ -90,3 +95,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+LOGIN_URL = '/admin/login/'
+LOGIN_REDIRECT_URL = '/'
