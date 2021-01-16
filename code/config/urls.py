@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from segments.views import (
+    ActivateSegmentView,
     MoveSegmentView,
     PrintSegmentsView,
     RemoveSegmentView,
@@ -19,6 +20,7 @@ urlpatterns = [
     path('print/', PrintSegmentsView.as_view()),
     path('move/<int:pk>/', MoveSegmentView.as_view()),
     path('remove/<int:pk>/', RemoveSegmentView.as_view()),
+    path('activate/<int:pk>/', ActivateSegmentView.as_view()),
     path('', SegmentsListView.as_view()),
 ]
 

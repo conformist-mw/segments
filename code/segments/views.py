@@ -96,6 +96,18 @@ class MoveSegmentView(UpdateView):
         return JsonResponse({}, status=400)
 
 
+class ActivateSegmentView(UpdateView):
+    model = Segment
+    fields = ['active']
+
+    def form_valid(self, form):
+        segment = form.save(commit=False)
+        segment.order_number = None
+        segment.description = ''
+        segment.save()
+        return JsonResponse({}, status=200)
+
+
 class RemoveSegmentView(UpdateView):
     model = Segment
     fields = ['defect', 'description']

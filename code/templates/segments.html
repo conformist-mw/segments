@@ -36,17 +36,5 @@
     $('#{{ search_form.deleted.id_for_label }}').click(function(){
       $('#{{ search_form.order_number.id_for_label }}')[this.checked ? 'show': 'hide']();
     });
-
-    $('.activate').click(function(){
-      var segment_id = $(this).parents('div.parent').data('id');
-      $.ajax({
-        url: '/activate',
-        data: {'id': segment_id},
-        type: 'post',
-        success: function(result){
-          $('div[data-id="' + segment_id + '"]').remove();
-        }
-      })
-    })
   </script>
 {% endblock %}
