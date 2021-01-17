@@ -4,6 +4,7 @@ import environ
 
 env = environ.Env(
     DEBUG=(bool, False),
+    ALLOWED_HOSTS=(list, []),
 )
 environ.Env.read_env('.env')
 
@@ -12,7 +13,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 IS_HEROKU = env('IS_HEROKU', default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
