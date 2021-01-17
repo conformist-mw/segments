@@ -1,8 +1,8 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.generic import CreateView, ListView, UpdateView, View
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import PrintSegmentsForm, SearchSegmentsForm, SegmentCreateForm
 from .models import ColorType, OrderNumber, Rack, Segment
