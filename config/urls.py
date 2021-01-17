@@ -6,7 +6,7 @@ admin.site.site_header = 'Отрезки'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', include('segments.urls')),
+    path('', include('segments.urls')),
 ]
 
 if settings.DEBUG:
