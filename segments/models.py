@@ -10,10 +10,12 @@ class SegmentOld(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     deleted = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
-    order_number = models.CharField(blank=True, max_length=15)
+    order_number = models.CharField(  # noqa: DJ01
+        blank=True, max_length=15, null=True,
+    )
     rack = models.CharField(blank=True, max_length=20)
-    defect = models.BooleanField(default=False)
-    description = models.TextField(blank=True)
+    defect = models.BooleanField(default=False, null=True)
+    description = models.TextField(blank=True, null=True)  # noqa: DJ01
 
     class Meta:
         db_table = 'segment'
