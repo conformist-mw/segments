@@ -3,7 +3,7 @@ from django.db import models
 
 class SegmentOld(models.Model):
     type = models.CharField(blank=True, max_length=15)
-    color = models.CharField(blank=True, max_length=15)
+    color = models.CharField(blank=True, max_length=25)
     width = models.IntegerField()
     height = models.IntegerField()
     square = models.FloatField(blank=True, null=True)
