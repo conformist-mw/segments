@@ -58,6 +58,7 @@ class Segment(models.Model):
     class Meta:
         verbose_name = 'Отрезок'
         verbose_name_plural = 'Отрезки'
+        ordering = ['-created']
 
     def __str__(self):
         return f'{self.color} - {self.width} - {self.height}'
