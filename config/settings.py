@@ -98,5 +98,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
 LOGIN_URL = '/admin/login/'
 LOGIN_REDIRECT_URL = '/'
