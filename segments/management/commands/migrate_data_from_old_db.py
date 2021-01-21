@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.core.management.base import BaseCommand
 
 from segments.models import (
@@ -20,18 +22,11 @@ class Command(BaseCommand):
 
 def add_colors_and_types():
 
-    racks = [
-        'Стеллаж 1',
-        'Стеллаж 2',
-        'Стеллаж 3',
-        'Стеллаж 4',
-        'Стол',
-    ]
-
+    racks = SegmentOld.objects.values_list('rack', flat=True).distinct()
     for rack in racks:
-        Rack.objects.create(name=rack)
+        Rack.objects.get_or_create(name=rack)
 
-    colors = {
+    types_with_colors = {
         'LAK': [
             'L 100', 'L 102', 'L 104', 'L 108', 'L 110', 'L 114', 'L 120',
             'L 140', 'L 156', 'L 160', 'L 162', 'L 180', 'L 201', 'L 205',
@@ -70,15 +65,31 @@ def add_colors_and_types():
         ],
     }
 
+    db_colors = defaultdict(set)
+    for segment in SegmentOld.objects.all():
+        db_colors[segment.type].add(segment.color)
+
+    for color_type, colors in db_colors.items():
+        if color_type not in types_with_colors:
+            types_with_colors[color_type] = list(colors)
+            continue
+        default_colors = types_with_colors[color_type]
+        different_colors = list(
+            db_colors[color_type] - set(types_with_colors[color_type]),
+        )
+        types_with_colors[color_type] = default_colors + different_colors
+
     color_types_map = {}
 
-    for color_type in colors:
-        color_type_obj = ColorType.objects.create(name=color_type)
+    for color_type in types_with_colors:
+        color_type_obj, _ = ColorType.objects.get_or_create(name=color_type)
         color_types_map[color_type] = color_type_obj
 
-    for color_type, colors_values in colors.items():
+    for color_type, colors_values in types_with_colors.items():
         for color in colors_values:
-            Color.objects.create(name=color, type=color_types_map[color_type])
+            Color.objects.get_or_create(
+                name=color, type=color_types_map[color_type],
+            )
 
 
 def fill_segment_table():
@@ -91,7 +102,9 @@ def fill_segment_table():
             racks[segment.rack] = rack
         else:
             rack = racks[segment.rack]
-        color = Color.objects.get(name=segment.color, type__name=segment.type)
+        color, _ = Color.objects.get_or_create(
+            name=segment.color, type__name=segment.type,
+        )
         order_number = None
         if segment.order_number:
             order_number, _ = (
