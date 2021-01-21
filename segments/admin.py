@@ -1,7 +1,15 @@
 from django.contrib import admin
 from django.db.models import Count
 
-from .models import Color, ColorType, OrderNumber, Rack, Segment
+from .models import Color, ColorType, OrderNumber, Rack, Segment, SegmentOld
+
+
+@admin.register(SegmentOld)
+class SegmentOldAdmin(admin.ModelAdmin):
+    list_display = [
+        'width', 'height', 'square', 'color', 'rack',
+        'order_number', 'active',
+    ]
 
 
 @admin.register(Segment)
