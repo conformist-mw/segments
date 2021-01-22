@@ -27,7 +27,7 @@ $('#add').submit(function(e) {
     $.ajax({
         headers: { 'X-CSRFToken': csrftoken },
         type: 'POST',
-        url: '/add/',
+        url: `${window.location.pathname}add/`,
         data: form.serialize(),
         success: function() {
             location.reload();
@@ -77,7 +77,7 @@ $('#print-form').on('submit', function(e) {
     $.ajax({
         headers: { 'X-CSRFToken': csrftoken },
         type: 'POST',
-        url: '/print/',
+        url: `${window.location.pathname}print/`,
         data: form.serialize(),
         success: function(result){
             const new_window = window.open('', 'new_window', 'status=1');
@@ -103,7 +103,7 @@ $('.removeSegment').click(function(e){
   const form = $(this).parents('form');
   $.ajax({
     headers: { 'X-CSRFToken': csrftoken },
-    url: `/remove/${segmentId}/`,
+    url: `${window.location.pathname}remove/${segmentId}/`,
     data: form.serialize(),
     type: 'post',
     success: function(result){
@@ -122,7 +122,7 @@ $('.activate').click(function(){
   const parent = $(this).parents('div.parent');
   $.ajax({
     headers: { 'X-CSRFToken': csrftoken },
-    url: `/activate/${segmentId}/`,
+    url: `${window.location.pathname}activate/${segmentId}/`,
     data: {'active': true},
     type: 'post',
     success: function(result){
@@ -133,5 +133,5 @@ $('.activate').click(function(){
 
 // search segments form
 $('#reset-form').on('click', function() {
-  window.location.replace('/');
+  window.location.replace(window.location.pathname);
 });
