@@ -50,6 +50,17 @@ class SegmentCreateForm(forms.ModelForm):
         model = Segment
         fields = ['color', 'width', 'height', 'rack', 'color_type']
 
+    def __init__(self, *args, **kwargs):
+        section = kwargs.pop('section', None)
+        super().__init__(*args, **kwargs)
+        if section:
+            filtered_types = ColorType.objects.filter_by(section)
+            self.fields['color_type'].queryset = filtered_types
+            self.fields['color'].queryset = (
+                Color.objects.filter(type__in=filtered_types)
+            )
+            self.fields['rack'].queryset = Rack.objects.filter(section=section)
+
 
 class PrintSegmentsForm(forms.Form):
     print_rack = forms.ModelChoiceField(
@@ -58,6 +69,14 @@ class PrintSegmentsForm(forms.Form):
         empty_label='Все',
         required=False,
     )
+
+    def __init__(self, *args, **kwargs):
+        section = kwargs.pop('section', None)
+        super().__init__(*args, **kwargs)
+        if section:
+            self.fields['print_rack'].queryset = (
+                Rack.objects.filter(section=section)
+            )
 
 
 class SearchSegmentsForm(forms.Form):

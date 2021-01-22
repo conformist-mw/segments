@@ -1,11 +1,35 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
+from django.db.models import Count, Q, Sum
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.generic import CreateView, ListView, UpdateView, View
 
 from .forms import PrintSegmentsForm, SearchSegmentsForm, SegmentCreateForm
-from .models import ColorType, OrderNumber, Rack, Segment
+from .models import Company, OrderNumber, Rack, Section, Segment
+
+
+class CompaniesListView(LoginRequiredMixin, ListView):
+    model = Company
+    template_name = 'companies.html'
+    context_object_name = 'companies'
+    queryset = Company.objects.all()
+
+
+class SectionsListView(LoginRequiredMixin, ListView):
+    model = Section
+    template_name = 'sections.html'
+    context_object_name = 'sections'
+
+    def get_queryset(self):
+        company_slug = self.kwargs['company']
+        return (
+            super()
+            .get_queryset()
+            .filter(company__slug=company_slug)
+            .annotate(segments_count=Count('racks__segments'))
+            .annotate(square_sum=Sum('racks__segments__square', distinct=True))
+            .annotate(racks_count=Count('racks', distinct=True))
+        )
 
 
 class SegmentsListView(LoginRequiredMixin, ListView):
@@ -13,19 +37,34 @@ class SegmentsListView(LoginRequiredMixin, ListView):
     template_name = 'segments.html'
     context_object_name = 'segments'
     paginate_by = 10
-    queryset = Segment.objects.select_related('color', 'rack', 'color__type')
+    queryset = Segment.objects.select_related(
+        'color',
+        'rack',
+        'color__type',
+        'rack__section',
+        'rack__section__company',
+    )
+
+    def get_queryset(self):
+        company = self.kwargs['company']
+        section = self.kwargs['section']
+        return super().get_queryset().filter(
+            rack__section__slug=section,
+            rack__section__company__slug=company,
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        colors = {
-            ct.name: [c.name for c in ct.colors.all()]
-            for ct in ColorType.objects.prefetch_related('colors').all()
-        }
+        section = Section.objects.get(slug=self.kwargs['section'])
         context.update({
-            'form': SegmentCreateForm(prefix='create'),
-            'print_form': PrintSegmentsForm(),
-            'colors': colors,
-            'racks': {r.name: r.id for r in Rack.objects.order_by('name')},
+            'section': section,
+            'company': section.company,
+            'form': SegmentCreateForm(prefix='create', section=section),
+            'print_form': PrintSegmentsForm(section=section),
+            'racks': {
+                r.name: r.id for r in
+                Rack.objects.filter(section=section).order_by('name')
+            },
         })
         return context
 
