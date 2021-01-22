@@ -1,4 +1,21 @@
 {% extends 'base.html' %}
+
+{% block extra-navbar %}
+<a class="print" href="#"><span class="glyphicon glyphicon-print"></span> Печать</a>
+<div class="print-form well">
+  <form class="form" id="print-form">
+    {{ print_form }}
+    <button type="submit" class="btn btn-info pull-right">Печать</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  <li><a href="{% url 'company_view' company.slug %}">{{ company.name }}</a></li>
+  <li class="active">{{ section.name }}</li>
+{% endblock %}
+
 {% block container %}
   <div class="col-lg-12">
     <div class="row">

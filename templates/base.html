@@ -19,19 +19,21 @@
       <a class="navbar-brand" href="/admin">Admin</a>
     </div>
     <div class="navbar-brand navbar-right">
-      <a class="print" href="#">Печать</a>
-        <div class="print-form well">
-          <form class="form" id="print-form">
-            {{ print_form }}
-            <button type="submit" class="btn btn-info pull-right">Печать</button>
-          </form>
-        </div>
-      </div>
+      {% block extra-navbar %}{% endblock %}
+      <span class="username">
+        <span class="glyphicon glyphicon-user"></span> {{ request.user.username }}
+      </span>
+    </div>
   </div>
 </nav>
 
 <div class="container">
   <div class="row">
+    <ol class="breadcrumb">
+      {% block breadcrumbs %}
+        <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+      {% endblock %}
+    </ol>
     {% block container %}{% endblock %}
   </div>
 </div>
