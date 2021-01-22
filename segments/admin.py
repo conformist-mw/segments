@@ -1,7 +1,16 @@
 from django.contrib import admin
 from django.db.models import Count
 
-from .models import Color, ColorType, OrderNumber, Rack, Segment, SegmentOld
+from .models import (
+    Color,
+    ColorType,
+    Company,
+    OrderNumber,
+    Rack,
+    Section,
+    Segment,
+    SegmentOld,
+)
 
 
 @admin.register(SegmentOld)
@@ -19,8 +28,20 @@ class SegmentAdmin(admin.ModelAdmin):
         'order_number', 'active',
     ]
     list_select_related = ['rack', 'color', 'color__type', 'order_number']
-    list_filter = ['active', 'rack', 'color__type']
+    list_filter = ['active', 'rack', 'color__type', 'rack__section']
     readonly_fields = ['order_number']
+
+
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    prepopulated_fields = {'slug': ['name']}
+
+
+@admin.register(Section)
+class SectionAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    prepopulated_fields = {'slug': ['name']}
 
 
 @admin.register(Color)
@@ -47,7 +68,8 @@ class ColorTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Rack)
 class RackAdmin(admin.ModelAdmin):
-    list_display = ['name', 'segments_count']
+    list_display = ['name', 'segments_count', 'section']
+    list_filter = ['section', 'section__company']
 
     def get_queryset(self, request):
         return (

@@ -1,8 +1,17 @@
 from django.db import models
 
 
+class ColorTypeManager(models.Manager):
+    def filter_by(self, section):
+        return super().get_queryset().exclude(
+            pk__in=section.excluded_colors.values_list('id', flat=True),
+        )
+
+
 class ColorType(models.Model):
     name = models.CharField('Фактура', max_length=15, unique=True)
+
+    objects = ColorTypeManager()
 
     class Meta:
         verbose_name = 'Фактура'
