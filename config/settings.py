@@ -41,11 +41,16 @@ MIDDLEWARE = [
 ]
 
 if IS_HEROKU:
-    MIDDLEWARE.insert(0, 'whitenoise.middleware.WhiteNoiseMiddleware')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # noqa: E501
+    INSTALLED_APPS.insert(5, 'cloudinary_storage')
+    INSTALLED_APPS += ['cloudinary']
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 if DEBUG:
-    INSTALLED_APPS += ['debug_toolbar']
+    INSTALLED_APPS += [
+        'debug_toolbar',
+        'django_extensions',
+    ]
+
     MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
     INTERNAL_IPS = ['127.0.0.1']
 

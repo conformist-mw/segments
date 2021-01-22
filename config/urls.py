@@ -12,7 +12,9 @@ urlpatterns = [
 if settings.DEBUG:
     import debug_toolbar
     from django.conf.urls.static import static
-    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
+
+    # have to insert it because it was intercepted by nested <slug><slug> url
+    urlpatterns.insert(0, path('__debug__/', include(debug_toolbar.urls)))
     urlpatterns += static(
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,
     )
