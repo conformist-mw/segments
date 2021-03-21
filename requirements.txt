@@ -1,9 +1,9 @@
 cloudinary==1.24.0
-Django==3.1.5
+Django==3.1.6
 django-cloudinary-storage==0.3.0
 django-environ==0.4.5
 django-widget-tweaks==1.4.8
 gunicorn==20.0.4
-Pillow==8.1.0
+Pillow==8.1.1
 psycopg2-binary==2.8.6
 whitenoise==5.2.0
