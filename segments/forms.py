@@ -1,6 +1,16 @@
 from django import forms
+from django.contrib.admin.forms import AdminAuthenticationForm
 
 from .models import Color, ColorType, Rack, Segment
+
+
+class CustomAdminAuthenticationForm(AdminAuthenticationForm):
+
+    def confirm_login_allowed(self, user):
+        # Allow user login through the admin login form
+        if user.groups.filter(name='users').exists():
+            return
+        super().confirm_login_allowed(user)
 
 
 class ColorSelect(forms.Select):
