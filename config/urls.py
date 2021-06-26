@@ -2,7 +2,10 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
+from segments.forms import CustomAdminAuthenticationForm
+
 admin.site.site_header = 'Отрезки'
+admin.site.login_form = CustomAdminAuthenticationForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
