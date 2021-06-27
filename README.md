@@ -9,3 +9,8 @@ pyhton -m venv venv
 . venv/bin/activate
 pip install -r requirements.txt
 ```
+
+## Regular users
+
+Users are not allowed to login but if it is the need, they should be in the `users` group.
+
