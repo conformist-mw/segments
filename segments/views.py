@@ -76,9 +76,9 @@ class SegmentsListView(LoginRequiredMixin, ListView):
                 return redirect('/')
             fields = form.cleaned_data
             if color_type := fields['color_type']:
-                qs = qs.filter(color__type__name=color_type)
+                qs = qs.filter(color__type=color_type)
             if color := fields['color']:
-                qs = qs.filter(color__name=color)
+                qs = qs.filter(color=color)
             if width := fields['width']:
                 qs = qs.filter(Q(width__gte=width) | Q(height__gte=width))
             if height := fields['height']:
