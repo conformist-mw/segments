@@ -48,11 +48,13 @@ class SectionAdmin(admin.ModelAdmin):
 class ColorAdmin(admin.ModelAdmin):
     list_display = ['name', 'type']
     list_filter = ['type']
+    prepopulated_fields = {'slug': ['name']}
 
 
 @admin.register(ColorType)
 class ColorTypeAdmin(admin.ModelAdmin):
     list_display = ['name', 'colors_count']
+    prepopulated_fields = {'slug': ['name']}
 
     def get_queryset(self, request):
         return (

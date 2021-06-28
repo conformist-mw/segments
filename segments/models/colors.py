@@ -10,6 +10,7 @@ class ColorTypeManager(models.Manager):
 
 class ColorType(models.Model):
     name = models.CharField('Фактура', max_length=15, unique=True)
+    slug = models.SlugField(max_length=25, unique=True)
 
     objects = ColorTypeManager()
 
@@ -28,6 +29,8 @@ class ColorManager(models.Manager):
 
 class Color(models.Model):
     name = models.CharField('Цвет', max_length=30)
+    slug = models.SlugField(max_length=45)
+
     type = models.ForeignKey(
         ColorType,
         on_delete=models.CASCADE,

@@ -30,10 +30,9 @@ class ColorSelect(forms.Select):
             name, value, label, selected, index, subindex, attrs,
         )
         if value:
-            color_type = label.split()[0]
             option.update({
-                'color_type': color_type,
-                'label': value,
+                'color_type': value.instance.type.slug,
+                'label': value.instance.name,
             })
         return option
 
@@ -42,12 +41,12 @@ class SegmentCreateForm(forms.ModelForm):
 
     color_type = forms.ModelChoiceField(
         queryset=ColorType.objects.all(),
-        to_field_name='name',
+        to_field_name='slug',
         empty_label='Фактура',
     )
     color = forms.ModelChoiceField(
         queryset=Color.objects.all(),
-        to_field_name='name',
+        to_field_name='slug',
         empty_label='Выберите цвет',
         widget=ColorSelect(),
     )
@@ -91,17 +90,17 @@ class PrintSegmentsForm(forms.Form):
 
 class SearchSegmentsForm(forms.Form):
 
-    color_type = forms.ChoiceField(
-        choices=[('', 'Все')] + [
-            (ct.name, ct.name) for ct in ColorType.objects.all()
-        ],
+    color_type = forms.ModelChoiceField(
+        queryset=ColorType.objects.all(),
+        to_field_name='slug',
+        empty_label='Все',
         required=False,
         widget=forms.Select(),
     )
-    color = forms.ChoiceField(
-        choices=[('', 'Все')] + [
-            (c.name, str(c)) for c in Color.objects.all()
-        ],
+    color = forms.ModelChoiceField(
+        queryset=Color.objects.all(),
+        to_field_name='slug',
+        empty_label='Все',
         required=False,
         widget=ColorSelect(),
     )
