@@ -44,6 +44,8 @@ if IS_HEROKU:
     INSTALLED_APPS.insert(5, 'cloudinary_storage')
     INSTALLED_APPS += ['cloudinary']
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 if DEBUG:
     INSTALLED_APPS += [
