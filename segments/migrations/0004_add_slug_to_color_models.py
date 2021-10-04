@@ -25,12 +25,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='color',
             name='slug',
-            field=models.SlugField(max_length=45, null=True),
+            field=models.SlugField(max_length=45, null=True),  # noqa: DJ01
         ),
         migrations.AddField(
             model_name='colortype',
             name='slug',
-            field=models.SlugField(max_length=25, null=True),
+            field=models.SlugField(max_length=25, null=True),  # noqa: DJ01
         ),
         migrations.RunPython(
             generate_slugs_for_names, migrations.RunPython.noop,

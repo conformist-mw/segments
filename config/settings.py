@@ -8,6 +8,8 @@ env = environ.Env(
 )
 environ.Env.read_env('.env')
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
@@ -44,7 +46,9 @@ if IS_HEROKU:
     INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATICFILES_STORAGE = (
+        'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    )
 
 if DEBUG:
     INSTALLED_APPS += [
