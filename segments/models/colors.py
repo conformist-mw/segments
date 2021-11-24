@@ -43,6 +43,7 @@ class Color(models.Model):
         verbose_name = 'Цвет'
         verbose_name_plural = 'Цвета'
         unique_together = ('name', 'type')
+        ordering = ('type', 'name')
 
     def __str__(self):
         return f'{self.type.name} - {self.name}'
