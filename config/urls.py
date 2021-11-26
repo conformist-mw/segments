@@ -13,6 +13,7 @@ admin.site.login_form = CustomAdminAuthenticationForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
     path('', include('segments.urls')),
 ]
 

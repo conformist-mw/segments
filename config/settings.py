@@ -25,8 +25,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.forms',
+    'corsheaders',
+    'rest_framework',
     'widget_tweaks',
 
+    'api',
     'segments',
 ]
 
@@ -35,6 +38,7 @@ FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -111,3 +115,13 @@ MEDIA_URL = '/media/'
 
 LOGIN_URL = '/admin/login/'
 LOGIN_REDIRECT_URL = '/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # noqa: E501
+    'PAGE_SIZE': 10,
+}
+
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:8080',
+    'http://localhost:8080',
+]
