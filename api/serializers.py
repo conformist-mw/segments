@@ -1,6 +1,22 @@
 from rest_framework.serializers import ModelSerializer
 
-from segments.models import Color, ColorType, Rack, Segment
+from segments.models import Color, ColorType, Rack, Segment, Company, Section
+
+
+class CompanySerializer(ModelSerializer):
+
+    class Meta:
+        model = Company
+        fields = ['name', 'slug', 'image']
+
+
+class SectionSerializer(ModelSerializer):
+
+    company = CompanySerializer()
+
+    class Meta:
+        model = Section
+        fields = ['name', 'slug', 'company']
 
 
 class ColorTypeSerializer(ModelSerializer):
