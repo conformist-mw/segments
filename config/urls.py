@@ -22,7 +22,10 @@ if settings.DEBUG:
     from django.conf.urls.static import static
 
     # have to insert it because it was intercepted by nested <slug><slug> url
-    urlpatterns.insert(0, path('__debug__/', include(debug_toolbar.urls)))
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+        path('silk/', include('silk.urls', namespace='silk')),
+    ] + urlpatterns
     urlpatterns += static(
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,
     )

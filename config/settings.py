@@ -54,12 +54,24 @@ if IS_HEROKU:
 
 if DEBUG:
     INSTALLED_APPS += [
+        'silk',
         'debug_toolbar',
         'django_extensions',
     ]
 
-    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+    MIDDLEWARE = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+        'silk.middleware.SilkyMiddleware',
+    ] + MIDDLEWARE
+
     INTERNAL_IPS = ['127.0.0.1']
+
+    SILKY_AUTHENTICATION = True
+    SILKY_AUTHORISATION = True
+    SILKY_META = True
+    SILKY_PYTHON_PROFILER = True
+    SILKY_PYTHON_PROFILER_BINARY = True
+    SILKY_PERMISSIONS = lambda user: user.is_superuser  # noqa: E731
 
 ROOT_URLCONF = 'config.urls'
 

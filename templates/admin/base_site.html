@@ -7,6 +7,9 @@
 {% endblock %}
 
 {% block welcome-msg %}
+    {% if debug %}
+        <a href="/silk" target="_blank" style="margin-right: 100px">Silk</a>
+    {% endif %}
   <a href="https://github.com/conformist-mw/segments" target="_blank" style="margin-right: 100px">GitHub</a>
   {{ block.super }}
 {% endblock %}
