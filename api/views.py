@@ -1,18 +1,29 @@
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.viewsets import ModelViewSet
 
-from segments.models import Segment, Company, Section
+from segments.models import Company, Section, Segment
 
-from .serializers import SegmentSerializer, CompanySerializer, SectionSerializer
+from .serializers import (
+    CompanySerializer,
+    SectionSerializer,
+    SegmentSerializer,
+)
+
+
+class SegmentsPagination(LimitOffsetPagination):
+    max_limit = 20
 
 
 class CompanyViewSet(ModelViewSet):
     serializer_class = CompanySerializer
+    pagination_class = None
     queryset = Company.objects.all()
     lookup_field = 'slug'
 
 
 class SectionViewSet(ModelViewSet):
     serializer_class = SectionSerializer
+    pagination_class = None
     lookup_field = 'slug'
     queryset = Section.objects.select_related('company').all()
 
@@ -22,4 +33,11 @@ class SectionViewSet(ModelViewSet):
 
 class SegmentsViewSet(ModelViewSet):
     serializer_class = SegmentSerializer
+    pagination_class = SegmentsPagination
     queryset = Segment.objects.select_related('color__type', 'rack').all()
+
+    def get_queryset(self):
+        return self.queryset.filter(
+            rack__section__slug=self.kwargs['section_slug'],
+            rack__section__company__slug=self.kwargs['company_slug'],
+        )

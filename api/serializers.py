@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from segments.models import Color, ColorType, Rack, Segment, Company, Section
+from segments.models import Color, ColorType, Company, Rack, Section, Segment
 
 
 class CompanySerializer(ModelSerializer):

@@ -68,10 +68,8 @@ if DEBUG:
 
     SILKY_AUTHENTICATION = True
     SILKY_AUTHORISATION = True
-    SILKY_META = True
-    SILKY_PYTHON_PROFILER = True
-    SILKY_PYTHON_PROFILER_BINARY = True
     SILKY_PERMISSIONS = lambda user: user.is_superuser  # noqa: E731
+    SILKY_META = True
 
 ROOT_URLCONF = 'config.urls'
 
@@ -131,6 +129,7 @@ LOGIN_REDIRECT_URL = '/'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # noqa: E501
     'PAGE_SIZE': 10,
+    'MAX_LIMIT': 20,
 }
 
 CORS_ALLOWED_ORIGINS = [
