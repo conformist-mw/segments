@@ -1,3 +1,5 @@
+from django.db.models import Count, Sum
+from django.db.models.functions import Round
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.viewsets import ModelViewSet
 
@@ -28,7 +30,17 @@ class SectionViewSet(ModelViewSet):
     queryset = Section.objects.select_related('company').all()
 
     def get_queryset(self):
-        return self.queryset.filter(company__slug=self.kwargs['company_slug'])
+        return (
+            self.queryset
+            .filter(company__slug=self.kwargs['company_slug'])
+            .annotate(segments_count=Count('racks__segments'))
+            .annotate(
+                square_sum=Round(
+                    Sum('racks__segments__square', distinct=True),
+                ),
+            )
+            .annotate(racks_count=Count('racks', distinct=True))
+        )
 
 
 class SegmentsViewSet(ModelViewSet):

@@ -1,4 +1,8 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import (
+    FloatField,
+    IntegerField,
+    ModelSerializer,
+)
 
 from segments.models import Color, ColorType, Company, Rack, Section, Segment
 
@@ -13,10 +17,20 @@ class CompanySerializer(ModelSerializer):
 class SectionSerializer(ModelSerializer):
 
     company = CompanySerializer()
+    segments_count = IntegerField()
+    racks_count = IntegerField()
+    square_sum = FloatField()
 
     class Meta:
         model = Section
-        fields = ['name', 'slug', 'company']
+        fields = [
+            'name',
+            'slug',
+            'company',
+            'segments_count',
+            'racks_count',
+            'square_sum',
+        ]
 
 
 class ColorTypeSerializer(ModelSerializer):
