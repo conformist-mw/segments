@@ -80,11 +80,6 @@
 </template>
 
 <script>
-import Card from 'primevue/card';
-import Checkbox from 'primevue/checkbox';
-import Dialog from 'primevue/dialog';
-import InputText from 'primevue/inputtext';
-import Tag from 'primevue/tag';
 import axios from 'axios';
 
 import moment from 'moment';
@@ -95,9 +90,7 @@ export default {
   setup() {
     return { v$: useVuelidate() };
   },
-  components: {
-    Card, Checkbox, Dialog, InputText, Tag,
-  },
+  components: {},
   data() {
     return {
       display: false,
