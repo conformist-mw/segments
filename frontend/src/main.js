@@ -1,19 +1,15 @@
 import { createApp } from 'vue';
-import PrimeVue from 'primevue/config';
-import Button from 'primevue/button';
-import Chip from 'primevue/chip';
-import Panel from 'primevue/panel';
-
-import 'primevue/resources/themes/saga-blue/theme.css';
-import 'primevue/resources/primevue.min.css';
-import 'primeicons/primeicons.css';
-import 'primeflex/primeflex.css';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import router from '@/router/router';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
 
 import App from './App.vue';
 
 const app = createApp(App);
-app.use(PrimeVue);
+
+app.component('font-awesome-icon', FontAwesomeIcon);
+app.config.productionTip = false;
+
+app.use(router);
 app.mount('#app');
-app.component('Button', Button);
-app.component('Chip', Chip);
-app.component('Panel', Panel);
