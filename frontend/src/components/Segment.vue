@@ -1,82 +1,22 @@
 <template>
-  <Card class="mb-5 shadow-5 transition-all">
-    <template #content>
-      <div class="flex justify-content-between">
-        <div>
-          <Chip
-            :label="segment.color.type.name"
-            icon="pi pi-circle"
-            class="color-type"
-          />
-          <Chip :label="segment.color.name" icon="pi pi-circle-fill" class="ml-2" />
-        </div>
-        <div>
-          <Tag
-            :value="`${segment.width}см x ${segment.height}см`"
-            severity="success"
-            icon="pi pi-stop"
-          ></Tag>
-        </div>
-        <div>
-          <Tag severity="warning" :value="`${segment.square} м²`" icon="pi pi-times" />
-        </div>
+  <div class="card text-dark bg-light mb-2">
+    <div class="card-header d-flex justify-content-between fs-5">
+      <div class="badge bg-info">
+        {{ segment.color.type.name }} - {{ segment.color.name }}
       </div>
-    </template>
-    <template #footer>
-      <div class="flex justify-content-between">
-        <div>
-          Расположение: <span class="rack">{{ segment.rack.name }}</span>
-        </div>
-        <div>
-          Добавлено: {{ dateAdded }}
-        </div>
-        <div>
-          <Button
-            @click="toggleDialog"
-            class="p-button-icon-only p-button-danger p-button-outlined">
-            <i class="pi pi-trash"></i>
-          </Button>
-
-        </div>
+      <div class="badge bg-success">
+        {{ segment.width }}см x {{ segment.height }}см | {{ segment.square }} м²
       </div>
-    </template>
-  </Card>
-  <Dialog v-model:visible="display" :modal="true">
-    <template #header>
-      <h3>Удалить отрезок</h3>
-    </template>
-    <form @submit.prevent="deleteSegment(!v$.$invalid, segment.id)">
-      <div class="p-fluid">
-        <div class="p-field">
-          <label
-            :class="{'p-error':v$.deletedSegment.orderNumber.$invalid && submitted }"
-          >Номер заказа</label>
-          <InputText
-            v-model="v$.deletedSegment.orderNumber.$model"
-            :class="{'p-invalid':v$.deletedSegment.orderNumber.$invalid && submitted }"
-            type="text"
-          />
-          <div v-if="v$.$invalid && submitted">
-            Это поле обязательно!
-          </div>
-        </div>
-        <div class="p-field mt-3">
-          <label><Checkbox v-model="deletedSegment.hasDefect" :binary="true" /> Есть дефект?</label>
-        </div>
-        <div class="p-field mt-3">
-          <label>Описание отреза</label>
-          <InputText v-model="deletedSegment.description" type="text" />
-        </div>
-      </div>
-      <Button
-        type="submit"
-        label="Удалить"
-        icon="pi pi-trash"
-        style="float: right"
-        class="p-button-danger p-button-outlined mt-5"
-      />
-    </form>
-  </Dialog>
+    </div>
+    <div class="card-body d-flex justify-content-between">
+      <button type="button" class="btn btn-outline-secondary" disabled>{{ dateAdded }}</button>
+      <button type="button" class="btn btn-outline-primary">{{ segment.rack.name }}</button>
+      <button
+          @click="$router.push(`${$route.fullPath}${segment.id}`)"
+        class="btn btn-outline-secondary"
+      >Редактировать</button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -146,14 +86,4 @@ export default {
 </script>
 
 <style scoped>
-.color-type {
-  background-color: var(--surface-200);
-}
-.rack {
-  border-bottom: 1px dashed var(--surface-600);
-}
-label {
-  margin-bottom: 0.5rem;
-  display: inline-block;
-}
 </style>
