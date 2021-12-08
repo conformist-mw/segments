@@ -8,7 +8,7 @@ from segments.models import Company, Section, Segment
 from .serializers import (
     CompanySerializer,
     SectionSerializer,
-    SegmentSerializer,
+    SegmentSerializer, SegmentDetailSerializer,
 )
 
 
@@ -47,6 +47,11 @@ class SegmentsViewSet(ModelViewSet):
     serializer_class = SegmentSerializer
     pagination_class = SegmentsPagination
     queryset = Segment.objects.select_related('color__type', 'rack').all()
+
+    def get_serializer_class(self):
+        if self.action in ['retrieve', 'partial_update']:
+            return SegmentDetailSerializer
+        return self.serializer_class
 
     def get_queryset(self):
         return self.queryset.filter(

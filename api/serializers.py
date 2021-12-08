@@ -3,6 +3,7 @@ from rest_framework.serializers import (
     IntegerField,
     ModelSerializer,
 )
+from rest_framework.exceptions import ValidationError
 
 from segments.models import Color, ColorType, Company, Rack, Section, Segment
 
@@ -54,6 +55,32 @@ class ColorSerializer(ModelSerializer):
     class Meta:
         model = Color
         fields = ['id', 'name', 'slug', 'type']
+
+
+class SegmentDetailSerializer(ModelSerializer):
+    color = ColorSerializer()
+    rack = RackSerializer(read_only=False)
+    racks = RackSerializer(many=True, read_only=True, source='get_racks')
+
+    class Meta:
+        model = Segment
+        fields = '__all__'
+
+    def update(self, instance, validated_data):
+        validated_data.pop('rack')
+        data = self.context['request'].data
+        rack_id = data.get('rack', {}).get('id')
+        if not rack_id:
+            return super().update(instance, validated_data)
+        try:
+            rack = Rack.objects.get(id=rack_id)
+        except Rack.DoesNotExist:
+            raise ValidationError({'rack': 'Такого стеллажа не существует.'})
+        if rack not in instance.get_racks():
+            raise ValidationError({'rack': 'В данном цеху нет такого стеллажа'})
+        instance.rack = rack
+        instance.save()
+        return super().update(instance, validated_data)
 
 
 class SegmentSerializer(ModelSerializer):
