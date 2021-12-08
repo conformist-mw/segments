@@ -1,5 +1,7 @@
 from django.db import models
 
+from segments.models import Rack
+
 
 class SegmentOld(models.Model):
     type = models.CharField(blank=True, max_length=15)
@@ -66,3 +68,6 @@ class Segment(models.Model):
     def save(self, *args, **kwargs):
         self.square = (self.height * self.width) / 10000
         super().save(*args, **kwargs)
+
+    def get_racks(self):
+        return Rack.objects.filter(section=self.rack.section)
