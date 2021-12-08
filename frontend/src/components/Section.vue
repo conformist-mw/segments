@@ -16,9 +16,7 @@
         :key="section.slug"
       >
         <div class="card">
-          <div class="card-header text-center">
-            {{ section.name }} — {{ $route.fullPath }}
-          </div>
+          <div class="card-header text-center">{{ section.name }}</div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex justify-content-between">
               <span>Количество стеллажей</span>
@@ -49,33 +47,15 @@
 </template>
 
 <script>
-import $api from '../http';
+import useSections from '../hooks/useSections';
 
 export default {
-  data() {
+  setup() {
+    const { sections, error, isLoading } = useSections();
+
     return {
-      sections: [],
-      isLoading: false,
-      error: false,
+      sections, error, isLoading,
     };
-  },
-  methods: {
-    fetchSections() {
-      this.isLoading = true;
-      $api.get(`/companies/${this.$route.params.slug}/sections/`)
-        .then((response) => {
-          this.sections = response.data;
-        })
-        .catch((error) => {
-          this.error = error.response.data.detail;
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
-    },
-  },
-  mounted() {
-    this.fetchSections();
   },
 };
 </script>

@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Company from '../components/Company.vue';
 import Section from '../components/Section.vue';
+import SegmentsPage from '../pages/SegmentsPage.vue';
+import SegmentEdit from '../components/SegmentEdit.vue';
 
 const routes = [
   {
@@ -8,8 +10,16 @@ const routes = [
     component: Company,
   },
   {
-    path: '/company/:slug/sections',
+    path: '/companies/:companySlug/sections',
     component: Section,
+  },
+  {
+    path: '/companies/:companySlug/sections/:sectionSlug/segments',
+    component: SegmentsPage,
+  },
+  {
+    path: '/companies/:companySlug/sections/:sectionSlug/segments/:segmentId',
+    component: SegmentEdit,
   },
 ];
 
