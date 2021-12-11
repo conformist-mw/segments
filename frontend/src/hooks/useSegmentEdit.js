@@ -21,9 +21,13 @@ export default function useSegmentEdit() {
       });
   };
 
+  const saveSegment = () => {
+    console.log('Save pressed');
+  };
+
   onMounted(fetchSegment);
 
   return {
-    segment, error, isLoading,
+    segment, error, isLoading, saveSegment,
   };
 }

@@ -7,7 +7,7 @@
   </div>
   <div v-else class="row">
     <div class="col-7 mx-auto">
-      <form action="">
+      <form @submit.prevent>
         <div class="row">
           <div class="col">
             <div class="input-group mb-3">
@@ -48,10 +48,9 @@
               <input
                 class="form-check-input"
                 type="checkbox"
-                id="to_delete"
-                :checked="segment.active"
+                v-model="segment.active"
               >
-              <label class="form-check-label" for="to_delete">Активный</label>
+              <label class="form-check-label">Активный</label>
               <div class="form-text">Отрез будет отмечен как удалённый</div>
             </div>
           </div>
@@ -60,10 +59,9 @@
               <input
                 class="form-check-input"
                 type="checkbox"
-                id="has_defect"
-                :checked="segment.defect"
+                v-model="segment.defect"
               >
-              <label class="form-check-label" for="has_defect">Есть дефект?</label>
+              <label class="form-check-label">Есть дефект?</label>
               <div class="form-text">Потребуется добавить описание дефекта</div>
             </div>
           </div>
@@ -72,19 +70,14 @@
           <div class="col">
             <div class="input-group mb-3">
               <span class="input-group-text">Номер заказа</span>
-              <input type="text" class="form-control" :value="segment.order_number">
+              <input class="form-control" v-model="segment.order_number">
             </div>
           </div>
           <div class="col">
             <div class="input-group mb-3">
-              <label class="input-group-text" for="rack">Расположение</label>
-              <select class="form-select" id="rack">
-                <option
-                  v-for="rack in segment.racks"
-                  v-bind:key="rack.id"
-                  value="rack.id"
-                  :selected="rack.id === segment.rack.id"
-                >
+              <label class="input-group-text">Расположение</label>
+              <select class="form-select" v-model="segment.rack">
+                <option v-for="rack in segment.racks" :value="rack.id">
                   {{ rack.name }}
                 </option>
               </select>
@@ -93,7 +86,10 @@
         </div>
         <div class="input-group">
           <span class="input-group-text">Описание</span>
-          <textarea class="form-control" :value="segment.description"></textarea>
+          <textarea class="form-control" v-model="segment.description"></textarea>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button @click="saveSegment" class="btn btn-primary mt-3">Сохранить</button>
         </div>
       </form>
     </div>
@@ -105,9 +101,13 @@ import useSegmentEdit from '../hooks/useSegmentEdit';
 
 export default {
   setup() {
-    const { segment, error, isLoading } = useSegmentEdit();
+    const {
+      segment, error, isLoading, saveSegment,
+    } = useSegmentEdit();
 
-    return { segment, error, isLoading };
+    return {
+      segment, error, isLoading, saveSegment,
+    };
   },
 };
 </script>
