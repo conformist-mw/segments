@@ -8,7 +8,7 @@ from segments.models import Company, Section, Segment
 from .serializers import (
     CompanySerializer,
     SectionSerializer,
-    SegmentSerializer, SegmentDetailSerializer,
+    SegmentListSerializer, SegmentDetailSerializer,
 )
 
 
@@ -44,7 +44,7 @@ class SectionViewSet(ModelViewSet):
 
 
 class SegmentsViewSet(ModelViewSet):
-    serializer_class = SegmentSerializer
+    serializer_class = SegmentListSerializer
     pagination_class = SegmentsPagination
     queryset = Segment.objects.select_related('color__type', 'rack').all()
 

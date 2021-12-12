@@ -1,4 +1,5 @@
 from rest_framework.serializers import (
+    CharField,
     FloatField,
     IntegerField,
     ModelSerializer,
@@ -58,35 +59,32 @@ class ColorSerializer(ModelSerializer):
 
 
 class SegmentDetailSerializer(ModelSerializer):
-    color = ColorSerializer()
-    rack = RackSerializer(read_only=False)
+    color = ColorSerializer(read_only=True)
     racks = RackSerializer(many=True, read_only=True, source='get_racks')
 
     class Meta:
         model = Segment
-        fields = '__all__'
+        fields = [
+            'width', 'height', 'square', 'created', 'deleted', 'defect',
+            'description', 'active', 'color', 'order_number', 'racks', 'rack',
+        ]
+        read_only_fields = [
+            'color', 'racks', 'width', 'height', 'square', 'created', 'deleted',
+        ]
 
-    def update(self, instance, validated_data):
-        validated_data.pop('rack')
-        data = self.context['request'].data
-        rack_id = data.get('rack', {}).get('id')
-        if not rack_id:
-            return super().update(instance, validated_data)
-        try:
-            rack = Rack.objects.get(id=rack_id)
-        except Rack.DoesNotExist:
-            raise ValidationError({'rack': 'Такого стеллажа не существует.'})
-        if rack not in instance.get_racks():
-            raise ValidationError({'rack': 'В данном цеху нет такого стеллажа'})
-        instance.rack = rack
-        instance.save()
-        return super().update(instance, validated_data)
+    def validate(self, attrs):
+        if attrs.get('defect') and not attrs.get('description'):
+            raise ValidationError('Описание обязательно при отметки дефекта.')
+        return attrs
 
 
-class SegmentSerializer(ModelSerializer):
+class SegmentListSerializer(ModelSerializer):
     color = ColorSerializer()
-    rack = RackSerializer()
+    rack = CharField(source='rack.name')
 
     class Meta:
         model = Segment
-        fields = '__all__'
+        fields = [
+            'id', 'width', 'height', 'square', 'created', 'deleted', 'defect',
+            'description', 'active', 'color', 'order_number', 'rack',
+        ]
