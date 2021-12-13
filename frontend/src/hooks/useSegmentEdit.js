@@ -22,7 +22,16 @@ export default function useSegmentEdit() {
   };
 
   const saveSegment = () => {
-    console.log('Save pressed');
+    $api.patch(`${route.fullPath}/`, segment.value)
+      .then((response) => {
+        segment.value = response.data;
+      })
+      .catch((err) => {
+        error.value = err.response.data;
+      })
+      .finally(() => {
+        isLoading.value = false;
+      });
   };
 
   onMounted(fetchSegment);

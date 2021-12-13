@@ -10,7 +10,7 @@
     </div>
     <div class="card-body d-flex justify-content-between">
       <button type="button" class="btn btn-outline-secondary" disabled>{{ dateAdded }}</button>
-      <button type="button" class="btn btn-outline-primary">{{ segment.rack.name }}</button>
+      <button type="button" class="btn btn-outline-primary">{{ segment.rack }}</button>
       <button
           @click="$router.push(`${$route.fullPath}${segment.id}`)"
         class="btn btn-outline-secondary"

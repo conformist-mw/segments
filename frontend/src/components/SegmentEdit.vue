@@ -51,7 +51,8 @@
                 v-model="segment.active"
               >
               <label class="form-check-label">Активный</label>
-              <div class="form-text">Отрез будет отмечен как удалённый</div>
+              <div v-if="segment.active" class="form-text">Отрез существует</div>
+              <div v-else class="form-text">Отрез удалён</div>
             </div>
           </div>
           <div class="col">
@@ -62,7 +63,9 @@
                 v-model="segment.defect"
               >
               <label class="form-check-label">Есть дефект?</label>
-              <div class="form-text">Потребуется добавить описание дефекта</div>
+              <div v-if="segment.defect" class="form-text">
+                Потребуется добавить описание дефекта
+              </div>
             </div>
           </div>
         </div>
