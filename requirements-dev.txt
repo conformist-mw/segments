@@ -1,6 +1,6 @@
 -r requirements.txt
 
-django-debug-toolbar==3.2.2
+django-debug-toolbar==3.2.4
 django-silk==4.2.0
 flake8==4.0.1
 flake8-builtins==1.5.3
