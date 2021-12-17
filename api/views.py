@@ -47,6 +47,7 @@ class SegmentsViewSet(ModelViewSet):
     serializer_class = SegmentListSerializer
     pagination_class = SegmentsPagination
     queryset = Segment.objects.select_related('color__type', 'rack').all()
+    filterset_fields = ['active']
 
     def get_serializer_class(self):
         if self.action in ['retrieve', 'partial_update']:
