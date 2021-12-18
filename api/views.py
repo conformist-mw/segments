@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from segments.models import Company, Section, Segment
 
+from .filters import SegmentFilter
 from .serializers import (
     CompanySerializer,
     SectionSerializer,
@@ -47,7 +48,7 @@ class SegmentsViewSet(ModelViewSet):
     serializer_class = SegmentListSerializer
     pagination_class = SegmentsPagination
     queryset = Segment.objects.select_related('color__type', 'rack').all()
-    filterset_fields = ['active']
+    filterset_class = SegmentFilter
 
     def get_serializer_class(self):
         if self.action in ['retrieve', 'partial_update']:
