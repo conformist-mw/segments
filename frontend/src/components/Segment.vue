@@ -1,21 +1,56 @@
 <template>
-  <div class="card text-dark bg-light mb-2">
-    <div class="card-header d-flex justify-content-between fs-5">
-      <div class="badge bg-info">
-        {{ segment.color.type.name }} - {{ segment.color.name }}
+  <div class="text-dark mb-2">
+    <div class="row">
+      <div class="col-6">
+        <p>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Фактура: </span><strong>{{ segment.color.type.name }}</strong>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Цвет: </span><strong>{{ segment.color.name }}</strong>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Расположение: </span><span>{{ segment.rack }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Добавлено: </span><span>{{ dateAdded }}</span>
+            </li>
+          </ul>
+        </p>
       </div>
-      <div class="badge bg-success">
-        {{ segment.width }}см x {{ segment.height }}см | {{ segment.square }} м²
+      <div class="col-6 text-right">
+        <p>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between">
+              <span>ширина: </span><span class="badge bg-success">{{ segment.width }}см</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>длина: </span><span class="badge bg-primary">{{ segment.height }}см</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>площадь: </span><span class="badge bg-secondary">{{ segment.square }} м²</span>
+            </li>
+            <li v-if="!segment.active" class="list-group-item d-flex justify-content-between">
+              <span>Удалено: </span><span>{{ dateAdded }}</span>
+            </li>
+            <li
+              v-if="!segment.active && segment.order_number"
+              class="list-group-item d-flex justify-content-between"
+            >
+              <span>Номер заказа: </span><span>{{ segment.order_number.name }}</span>
+            </li>
+          </ul>
+        </p>
       </div>
     </div>
-    <div class="card-body d-flex justify-content-between">
-      <button type="button" class="btn btn-outline-secondary" disabled>{{ dateAdded }}</button>
-      <button type="button" class="btn btn-outline-primary">{{ segment.rack }}</button>
+    <div class="d-grid gap-2">
       <button
-          @click="$router.push(`${$route.fullPath}${segment.id}`)"
+        @click="$router.push(`${$route.fullPath}${segment.id}`)"
         class="btn btn-outline-secondary"
       >Редактировать</button>
     </div>
+    <hr class="mb-3">
   </div>
 </template>
 
@@ -80,6 +115,9 @@ export default {
   computed: {
     dateAdded() {
       return moment(String(this.segment.created)).format('DD.MM.YY | hh:mm');
+    },
+    dateDeleted() {
+      return moment(String(this.segment.deleted)).format('DD.MM.YY | hh:mm');
     },
   },
 };
