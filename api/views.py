@@ -47,7 +47,9 @@ class SectionViewSet(ModelViewSet):
 class SegmentsViewSet(ModelViewSet):
     serializer_class = SegmentListSerializer
     pagination_class = SegmentsPagination
-    queryset = Segment.objects.select_related('color__type', 'rack').all()
+    queryset = Segment.objects.select_related(
+        'color__type', 'rack', 'order_number',
+    ).all()
     filterset_class = SegmentFilter
 
     def get_serializer_class(self):

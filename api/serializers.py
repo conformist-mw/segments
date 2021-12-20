@@ -6,7 +6,14 @@ from rest_framework.serializers import (
 )
 from rest_framework.exceptions import ValidationError
 
-from segments.models import Color, ColorType, Company, Rack, Section, Segment
+from segments.models import Color, ColorType, Company, Rack, Section, Segment, OrderNumber
+
+
+class OrderSerializer(ModelSerializer):
+
+    class Meta:
+        model = OrderNumber
+        fields = ['name']
 
 
 class CompanySerializer(ModelSerializer):
@@ -81,6 +88,7 @@ class SegmentDetailSerializer(ModelSerializer):
 class SegmentListSerializer(ModelSerializer):
     color = ColorSerializer()
     rack = CharField(source='rack.name')
+    order_number = OrderSerializer()
 
     class Meta:
         model = Segment
