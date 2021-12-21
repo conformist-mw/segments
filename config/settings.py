@@ -63,6 +63,7 @@ if DEBUG:
     MIDDLEWARE = [
         'debug_toolbar.middleware.DebugToolbarMiddleware',
         'silk.middleware.SilkyMiddleware',
+        'query_counter.middleware.DjangoQueryCounterMiddleware',
     ] + MIDDLEWARE
 
     INTERNAL_IPS = ['127.0.0.1']
