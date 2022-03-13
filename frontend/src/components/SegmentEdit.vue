@@ -1,5 +1,4 @@
 <template>
-  <h1>Редактируем отрез</h1>
   <div v-if="isLoading" class="d-flex justify-content-center">
     <div class="spinner-border" role="status">
       <span class="visually-hidden">Loading...</span>

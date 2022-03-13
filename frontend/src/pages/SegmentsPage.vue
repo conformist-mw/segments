@@ -1,9 +1,8 @@
 <template>
-  <h1 class="my-5">Отрезки!</h1>
-  <div class="row">
+  <div class="row mt-4">
     <div class="col-4"></div>
     <div class="col-8">
-      <SegmentList :segments="segments" />
+      <SegmentList :segments="segments" :isLoading="isSegmentsLoading" />
     </div>
   </div>
 </template>

@@ -1,5 +1,10 @@
 <template>
-  <div class="segments-list" v-if="segments.length > 0">
+  <div v-if="isLoading" class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div class="segments-list" v-else-if="segments.length > 0">
     <Segment
       v-for="segment in segments"
       :segment="segment"
@@ -9,15 +14,6 @@
   <h2 v-else style="color: red">
     Таких отрезов нет.
   </h2>
-  <button
-  class="btn btn-primary"
-  data-bs-target="#collapseTarget"
-  data-bs-toggle="collapse">
-  Bootstrap collapse
-</button>
-<div class="collapse py-2" id="collapseTarget">
-  This is the toggle-able content!
-</div>
 
 </template>
 
@@ -31,6 +27,10 @@ export default {
   props: {
     segments: {
       type: Array,
+      required: true,
+    },
+    isLoading: {
+      type: Boolean,
       required: true,
     },
   },
