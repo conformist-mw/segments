@@ -1,6 +1,6 @@
 awesome-slugify==1.6.5
 cloudinary==1.28.0
-Django==3.2.12
+Django==3.2.14
 djangorestframework==3.13.1
 django-cloudinary-storage==0.3.0
 django-cors-headers==3.10.1
