@@ -13,7 +13,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
-IS_HEROKU = env('IS_HEROKU', default=False)
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
@@ -47,31 +46,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-if IS_HEROKU:
-    INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # noqa: E501
-
 if DEBUG:
-    INSTALLED_APPS += [
-        'silk',
-        'debug_toolbar',
-        'django_extensions',
-    ]
+    INSTALLED_APPS += ['debug_toolbar', 'django_extensions']
 
     MIDDLEWARE = [
         'debug_toolbar.middleware.DebugToolbarMiddleware',
-        'silk.middleware.SilkyMiddleware',
         'query_counter.middleware.DjangoQueryCounterMiddleware',
     ] + MIDDLEWARE
 
     INTERNAL_IPS = ['127.0.0.1']
-
-    SILKY_AUTHENTICATION = True
-    SILKY_AUTHORISATION = True
-    SILKY_PERMISSIONS = lambda user: user.is_superuser  # noqa: E731
-    SILKY_META = True
 
 ROOT_URLCONF = 'config.urls'
 
