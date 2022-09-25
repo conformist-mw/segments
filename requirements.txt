@@ -1,5 +1,5 @@
 awesome-slugify==1.6.5
-Django==3.2.14
+Django==3.2.15
 djangorestframework==3.13.1
 django-cors-headers==3.10.1
 django-environ==0.8.1
