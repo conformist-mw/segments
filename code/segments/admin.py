@@ -24,8 +24,8 @@ class SegmentOldAdmin(admin.ModelAdmin):
 @admin.register(Segment)
 class SegmentAdmin(admin.ModelAdmin):
     list_display = [
-        'width', 'height', 'square', 'color', 'rack',
-        'order_number', 'active',
+        'id', 'width', 'height', 'square', 'color', 'rack',
+        'order_number', 'active', 'created',
     ]
     list_select_related = ['rack', 'color', 'color__type', 'order_number']
     list_filter = ['active', 'rack', 'color__type', 'rack__section']
