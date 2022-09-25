@@ -5,3 +5,8 @@ media
 *.log
 frontend/node_modules
 db-data
+venv
+*.py[co]
+__pycache__
+.pytest_cache
+.idea
