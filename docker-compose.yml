@@ -16,3 +16,4 @@ services:
       - DATABASE_URL=sqlite:////data/db.sqlite
       - SECRET_KEY=secret
       - ALLOWED_HOSTS=*
+      - STATICFILES_DIR=/data/staticfiless
