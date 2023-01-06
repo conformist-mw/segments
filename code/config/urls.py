@@ -6,14 +6,11 @@ from django.urls import include, path
 
 from segments.forms import CustomAdminAuthenticationForm
 
-version = os.getenv('HEROKU_RELEASE_VERSION', 'dev')
-
-admin.site.site_header = f'Отрезки {version}'
+admin.site.site_header = 'Отрезки'
 admin.site.login_form = CustomAdminAuthenticationForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
     path('', include('segments.urls')),
 ]
 

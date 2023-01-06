@@ -4,7 +4,7 @@ from django.db import models
 class Company(models.Model):
     name = models.CharField('Компания', max_length=30, unique=True)
     slug = models.SlugField(max_length=50)
-    image = models.ImageField('Лого', upload_to='images')
+    image_url = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = 'Компания'
