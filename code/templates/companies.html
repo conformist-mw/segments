@@ -11,7 +11,7 @@
         <div class="col-lg-6 text-center">
           <a href="{% url 'company_view' company.slug %}">
             <h2>{{ company.name }}</h2>
-            <img src="{{ company.image.url }}" class="img-thumbnail" alt="{{ company.name }}">
+            <img src="{{ company.image_url }}" class="img-thumbnail" alt="{{ company.name }}">
           </a>
         </div>
       {% endfor %}
