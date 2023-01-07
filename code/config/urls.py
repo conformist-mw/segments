@@ -14,7 +14,7 @@ urlpatterns = [
     path('', include('segments.urls')),
 ]
 
-if settings.DEBUG:
+if settings.DEBUG and 0:
     import debug_toolbar
     from django.conf.urls.static import static
 

@@ -42,7 +42,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-if DEBUG:
+if DEBUG and 0:
     INSTALLED_APPS += ['debug_toolbar', 'django_extensions']
 
     MIDDLEWARE = [
