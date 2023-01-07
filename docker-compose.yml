@@ -12,8 +12,9 @@ services:
       - ./code:/code
       - ./data:/data
     environment:
-#      - DEBUG=1
+      - DEBUG=1
       - DATABASE_URL=sqlite:////data/db.sqlite
       - SECRET_KEY=secret
-      - ALLOWED_HOSTS=*
+      - ALLOWED_HOSTS=127.0.0.1,localhost
+      - CSRF_TRUSTED_ORIGINS=127.0.0.1
       - STATICFILES_DIR=/data/staticfiless
