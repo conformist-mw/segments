@@ -21,9 +21,9 @@ type Segment struct {
 	Deleted       time.Time `gorm:"type:datetime" json:"deleted"`
 	Defect        bool      `gorm:"type:bool;not null;default:false" json:"defect"`
 	Active        bool      `gorm:"type:bool;not null;default:true" json:"active"`
-	ColorID       uint      `gorm:"foreignkey:ColorID;not null" json:"color"`
-	OrderNumberID *uint     `gorm:"foreignkey:OrderNumberID" json:"order_number"`
-	RackID        uint      `gorm:"foreignkey:RackID;not null" json:"rack"`
+	ColorID       uint      `gorm:"foreignkey:ColorID;references:ID;not null" json:"color"`
+	OrderNumberID *uint     `gorm:"foreignkey:OrderNumberID;references:ID" json:"order_number"`
+	RackID        uint      `gorm:"foreignkey:RackID;references:ID;not null" json:"rack"`
 }
 
 func (Segment) TableName() string {

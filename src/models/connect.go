@@ -36,7 +36,6 @@ func ConnectDb() {
 		&Color{},
 		&Company{},
 		&Section{},
-		&SectionExcludedColors{},
 		&Rack{},
 		&OrderNumber{},
 		&Segment{},
