@@ -3,10 +3,12 @@ package main
 import (
 	"net/http"
 
+	"github.com/conformist-mw/segments/models"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	models.ConnectDb()
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
