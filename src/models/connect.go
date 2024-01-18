@@ -31,6 +31,15 @@ func ConnectDb() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	db.AutoMigrate(&ColorType{}, &Color{}, &Company{}, &Section{}, &SectionExcludedColors{}, &Rack{})
+	db.AutoMigrate(
+		&ColorType{},
+		&Color{},
+		&Company{},
+		&Section{},
+		&SectionExcludedColors{},
+		&Rack{},
+		&OrderNumber{},
+		&Segment{},
+	)
 	DB = db
 }
