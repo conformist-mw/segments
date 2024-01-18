@@ -12,9 +12,9 @@ func (ColorType) TableName() string {
 
 type Color struct {
 	ID     uint   `gorm:"primarykey;not null" json:"id"`
-	Name   string `gorm:"type:varchar(30);not null;uniqueIndex:idx_color_type_name" json:"name"`
+	Name   string `gorm:"type:varchar(30);not null;uniqueIndex:idx_color_type_name_uniq" json:"name"`
 	Slug   string `gorm:"type:varchar(45);not null" json:"slug"`
-	TypeID uint   `gorm:"foreignkey:ColorTypeID;not null;uniqueIndex:idx_color_type_name" json:"type"`
+	TypeID uint   `gorm:"foreignkey:ColorTypeID;not null;uniqueIndex:idx_color_type_name_uniq" json:"type"`
 }
 
 func (Color) TableName() string {
