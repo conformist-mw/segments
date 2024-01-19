@@ -1,0 +1,47 @@
+{{ template "top" . }}
+
+<div class="container">
+  <div class="row">
+    <ol class="breadcrumb">
+      <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+      <li class="active">{{ .Company.Name }}</li>
+    </ol>
+    <div class="col-lg-12">
+      <div class="row">
+        {{ $company := .Company }}
+        {{ range .Sections }}
+          <div class="col-lg-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title text-center">
+                  <a href="/{{ $company.Slug }}/{{ .Slug }}">
+                    {{ .Name }}
+                  </a>
+                </h3>
+              </div>
+              <div class="panel-body">
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <span class="badge">{{ .RacksCount }}</span>
+                    Количество стеллажей
+                  </li>
+                  <li class="list-group-item">
+                    <span class="badge">{{ .SegmentsCount }}</span>
+                    Количество отрезов
+                  </li>
+                  <li class="list-group-item">
+                    <span class="badge">{{ printf "%.2f" .SquareSum }} м²</span>
+                    Общая площадь отрезов
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ template "scripts" . }}
+{{ template "bottom" . }}

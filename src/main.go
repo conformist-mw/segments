@@ -12,5 +12,6 @@ func main() {
 	router.Static("/static", "./static")
 	router.LoadHTMLGlob("templates/*")
 	router.GET("/", controllers.GetCompanies)
+	router.GET("/:company", controllers.GetSections)
 	router.Run()
 }

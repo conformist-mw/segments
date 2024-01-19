@@ -37,3 +37,38 @@ func GetCompanies() []Company {
 	DB.Find(&companies)
 	return companies
 }
+
+func GetCompany(companySlug string) Company {
+	var company Company
+	DB.Where(&Company{Slug: companySlug}).First(&company)
+	return company
+}
+
+type SectionWithAmount struct {
+	Section
+	SegmentsCount int
+	SquareSum     float64
+	RacksCount    int
+}
+
+func GetSections(companySlug string) []SectionWithAmount {
+	var sections []SectionWithAmount
+
+	DB.Table(new(Section).TableName()).
+		Select(
+			"segments_section.*, "+
+				"count(distinct segments_rack.id) as racks_count, "+
+				"count(distinct segments_segment.id) as segments_count, "+
+				"sum(distinct segments_segment.square) as square_sum").
+		Joins(
+			"join segments_company "+
+				"on segments_company.id = segments_section.company_id "+
+				"AND segments_company.slug = ?",
+			companySlug).
+		Joins("left join segments_rack on segments_rack.section_id = segments_section.id").
+		Joins("left join segments_segment on segments_segment.rack_id = segments_rack.id").
+		Group("segments_section.id").
+		Scan(&sections)
+
+	return sections
+}
