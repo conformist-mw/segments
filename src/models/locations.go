@@ -26,9 +26,14 @@ type Rack struct {
 	ID        uint   `gorm:"primarykey;not null" json:"id"`
 	Name      string `gorm:"type:varchar(30);not null;uniqueIndex:idx_rack_name_section_uniq" json:"name"`
 	SectionID uint   `gorm:"foreignkey:SectionID;references:ID;not null;uniqueIndex:idx_rack_name_section_uniq" json:"section"`
-	Section   Section
 }
 
 func (Rack) TableName() string {
 	return "segments_rack"
+}
+
+func GetCompanies() []Company {
+	var companies []Company
+	DB.Find(&companies)
+	return companies
 }

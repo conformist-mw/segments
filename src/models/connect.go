@@ -31,14 +31,16 @@ func ConnectDb() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	db.AutoMigrate(
-		&ColorType{},
-		&Color{},
-		&Company{},
-		&Section{},
-		&Rack{},
-		&OrderNumber{},
-		&Segment{},
-	)
+	if 1 == 0 {
+		db.AutoMigrate(
+			&ColorType{},
+			&Color{},
+			&Company{},
+			&Section{},
+			&Rack{},
+			&OrderNumber{},
+			&Segment{},
+		)
+	}
 	DB = db
 }
