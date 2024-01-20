@@ -29,3 +29,17 @@ type Segment struct {
 func (Segment) TableName() string {
 	return "segments_segment"
 }
+
+func GetSegments(sectionSlug, companySlug string) []Segment {
+	var segments []Segment
+
+	DB.Preload("Color").
+		Preload("Color.Type").
+		Joins("JOIN segments_rack on segments_rack.id = segments_segment.rack_id").
+		Joins("JOIN segments_section on segments_section.id = segments_rack.section_id").
+		Joins("JOIN segments_company on segments_company.id = segments_section.company_id").
+		Where("segments_section.slug = ? AND segments_company.slug = ?", sectionSlug, companySlug).
+		Find(&segments)
+
+	return segments
+}
