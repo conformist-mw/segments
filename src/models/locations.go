@@ -44,6 +44,12 @@ func GetCompany(companySlug string) Company {
 	return company
 }
 
+func GetSection(sectionSlug string) Section {
+	var section Section
+	DB.Where(&Section{Slug: sectionSlug}).First(&section)
+	return section
+}
+
 type SectionWithAmount struct {
 	Section
 	SegmentsCount int

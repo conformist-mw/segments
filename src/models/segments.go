@@ -12,18 +12,21 @@ func (OrderNumber) TableName() string {
 }
 
 type Segment struct {
-	ID            uint      `gorm:"primarykey;not null" json:"id"`
-	Width         int       `gorm:"type:int;not null" json:"width"`
-	Height        int       `gorm:"type:int;not null" json:"height"`
-	Square        float64   `gorm:"type:float;not null" json:"square"`
-	Description   string    `gorm:"type:text;not null" json:"description"`
-	Created       time.Time `gorm:"type:datetime;not null" json:"created"`
-	Deleted       time.Time `gorm:"type:datetime" json:"deleted"`
-	Defect        bool      `gorm:"type:bool;not null;default:false" json:"defect"`
-	Active        bool      `gorm:"type:bool;not null;default:true" json:"active"`
-	ColorID       uint      `gorm:"foreignkey:ColorID;references:ID;not null" json:"color"`
-	OrderNumberID *uint     `gorm:"foreignkey:OrderNumberID;references:ID" json:"order_number"`
-	RackID        uint      `gorm:"foreignkey:RackID;references:ID;not null" json:"rack"`
+	ID            uint        `gorm:"primarykey;not null" json:"id"`
+	Width         int         `gorm:"type:int;not null" json:"width"`
+	Height        int         `gorm:"type:int;not null" json:"height"`
+	Square        float64     `gorm:"type:float;not null" json:"square"`
+	Description   string      `gorm:"type:text;not null" json:"description"`
+	Created       time.Time   `gorm:"type:datetime;not null" json:"created"`
+	Deleted       time.Time   `gorm:"type:datetime" json:"deleted"`
+	Defect        bool        `gorm:"type:bool;not null;default:false" json:"defect"`
+	Active        bool        `gorm:"type:bool;not null;default:true" json:"active"`
+	ColorID       uint        `gorm:"foreignkey:ColorID;references:ID;not null" json:"color_id"`
+	Color         Color       `gorm:"foreignkey:ColorID;references:ID;not null" json:"color"`
+	OrderNumberID *uint       `gorm:"foreignkey:OrderNumberID;references:ID" json:"order_number_id"`
+	OrderNumber   OrderNumber `gorm:"foreignkey:OrderNumberID;references:ID" json:"order_number"`
+	RackID        uint        `gorm:"foreignkey:RackID;references:ID;not null" json:"rack_id"`
+	Rack          Rack        `gorm:"foreignkey:RackID;references:ID;not null" json:"rack"`
 }
 
 func (Segment) TableName() string {

@@ -1,0 +1,52 @@
+{{ template "top" . }}
+
+<div class="container">
+  <div class="row">
+    <ol class="breadcrumb">
+      <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+      <li><a href="/{{ .Company.Slug }}">{{ .Company.Name }}</a></li>
+      <li class="active">{{ .Section.Name }}</li>
+    </ol>
+    <div class="col-lg-12">
+      <div class="row">
+        <div class="col-lg-4">
+          {{ template "search_form" . }}
+        </div>
+        <div class="col-lg-8">
+          <div class="panel panel-default">
+            {{ if gt (len .Segments) 0 }}
+              {{ range .Segments }}
+                {{ template "segment_tpl" . }}
+              {{ end }}
+            {{ else }}
+              <h3 class="text-center">Таких отрезков нет</h3>
+            {{ end }}
+            <div class="panel-body">
+              <div class="clearfix">
+                {{ if gt (len .Segments) 0 }}
+                  <p>here will be pagination</p>
+                {{ end }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ template "scripts" . }}
+<script>
+  window.onload = function(){
+    if ($('#search_form.deleted.id_for_label').is(':checked')) {
+      $('#search_form.order_number.id_for_label').show();
+    }
+  }
+  $('#form.color_type.id_for_label }}, #search_form.color_type.id_for_label').on('change', filterColors);
+  $('#form.color.id_for_label, #search_form.color.id_for_label').on('change', setColorType);
+
+  $('#search_form.deleted.id_for_label').click(function(){
+    $('#search_form.order_number.id_for_label')[this.checked ? 'show': 'hide']();
+  });
+</script>
+
+{{ template "bottom" . }}
