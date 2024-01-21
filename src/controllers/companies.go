@@ -16,3 +16,11 @@ func GetSections(c *gin.Context) {
 		"Company":  models.GetCompany(c.Param("company")),
 	})
 }
+
+func GetSegments(c *gin.Context) {
+	c.HTML(200, "segments.html", gin.H{
+		"Segments": models.GetSegments(c.Param("section"), c.Param("company")),
+		"Section":  models.GetSection(c.Param("section")),
+		"Company":  models.GetCompany(c.Param("company")),
+	})
+}

@@ -13,5 +13,6 @@ func main() {
 	router.LoadHTMLGlob("templates/*")
 	router.GET("/", controllers.GetCompanies)
 	router.GET("/:company", controllers.GetSections)
+	router.GET("/:company/:section", controllers.GetSegments)
 	router.Run()
 }
