@@ -21,3 +21,15 @@ type Color struct {
 func (Color) TableName() string {
 	return "segments_color"
 }
+
+func GetColors() []Color {
+	var colors []Color
+	DB.Preload("Type").Find(&colors)
+	return colors
+}
+
+func GetColorTypes() []ColorType {
+	var colorTypes []ColorType
+	DB.Find(&colorTypes)
+	return colorTypes
+}

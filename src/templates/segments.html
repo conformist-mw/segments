@@ -10,7 +10,7 @@
     <div class="col-lg-12">
       <div class="row">
         <div class="col-lg-4">
-          {{ template "search_form" . }}
+          {{ template "search_form" (dict "ColorTypes" .ColorTypes "Colors" .Colors) }}
         </div>
         <div class="col-lg-8">
           <div class="panel panel-default">
@@ -37,15 +37,15 @@
 {{ template "scripts" . }}
 <script>
   window.onload = function(){
-    if ($('#search_form.deleted.id_for_label').is(':checked')) {
-      $('#search_form.order_number.id_for_label').show();
+    if ($('#id_deleted').is(':checked')) {
+      $('#id_order_number').show();
     }
   }
-  $('#form.color_type.id_for_label }}, #search_form.color_type.id_for_label').on('change', filterColors);
-  $('#form.color.id_for_label, #search_form.color.id_for_label').on('change', setColorType);
+  $('#id_create-color_type, #id_color_type').on('change', filterColors);
+  $('#id_create-color, #id_color').on('change', setColorType);
 
-  $('#search_form.deleted.id_for_label').click(function(){
-    $('#search_form.order_number.id_for_label')[this.checked ? 'show': 'hide']();
+  $('#id_deleted').click(function(){
+    $('#id_order_number')[this.checked ? 'show': 'hide']();
   });
 </script>
 

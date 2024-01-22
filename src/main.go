@@ -22,11 +22,6 @@ func init() {
 	}
 }
 
-type TemplateContext struct {
-	Segment models.Segment // replace SegmentType with the type of your segments
-	Racks   []models.Rack  // replace RackType with the type of your racks
-}
-
 func FormatInLocation(t time.Time) string {
 	return t.In(location).Format("02.01.06 | 15:04")
 }

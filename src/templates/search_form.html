@@ -5,11 +5,21 @@
     <div class="form-group colors">
       <div class="col-lg-6">
         <p><strong>Фактура:</strong></p>
-        {% render_field search_form.color_type class="form-control" %}
+        <select name="color_type" class="form-control" id="id_color_type">
+          <option value="" selected="">Все</option>
+          {{ range .ColorTypes }}
+            <option value="{{ .Slug }}">{{ .Name }}</option>
+          {{ end }}
+        </select>
       </div>
       <div class="col-lg-6">
         <p><strong>Цвет:</strong></p>
-        {% render_field search_form.color label=search_form.color.name class="form-control" %}
+        <select name="color" class="form-control" label="color" id="id_color">
+          <option data-type="" value="" selected="">Все</option>
+          {{ range .Colors }}
+            <option data-type="{{ .Type.Slug }}" value="{{ .Slug }}">{{ .Name }}</option>
+          {{ end }}
+        </select>
       </div>
     </div>
     <div class="form-group ">
@@ -18,23 +28,23 @@
     <div class="form-group ">
       <div class="input-group">
         <span class="input-group-addon">ширина</span>
-        {% render_field search_form.width autocomplete="off" class="form-control js-price-format" placeholder="введите значение" %}
+        <input type="number" name="width" placeholder="введите значение" class="form-control js-price-format" autocomplete="off" id="id_width">
         <span class="input-group-addon">см</span>
       </div>
     </div>
     <div class="form-group ">
       <div class="input-group">
         <span class="input-group-addon">длина</span>
-        {% render_field search_form.height autocomplete="off" class="form-control js-price-format" placeholder="введите значение" %}
+        <input type="number" name="height" placeholder="введите значение" class="form-control js-price-format" autocomplete="off" id="id_height">
         <span class="input-group-addon">см</span>
       </div>
     </div>
     <div class="form-group ">
-      <label for="search_form.deleted.id_for_label">
-        {% render_field search_form.deleted %}
-        label
+      <label for="id_deleted">
+        <input type="checkbox" name="deleted" id="id_deleted" checked="">
+        Удалённые
       </label>
-      <p>{% render_field search_form.order_number placeholder="номер заказа" style="display: none;" %}</p>
+      <p><input type="text" name="order_number" placeholder="номер заказа" id="id_order_number"></p>
     </div>
     <button type="submit" class="btn btn-success" name="search">Показать</button>
     <a href="#" id="reset-form" class="btn btn-danger pull-right">Сбросить</a>
