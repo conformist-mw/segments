@@ -16,7 +16,7 @@
           <div class="panel panel-default">
             {{ if gt (len .Segments) 0 }}
               {{ range .Segments }}
-                {{ template "segment_tpl" . }}
+                {{ template "segment_tpl" (dict "Segment" . "Racks" $.Racks) }}
               {{ end }}
             {{ else }}
               <h3 class="text-center">Таких отрезков нет</h3>

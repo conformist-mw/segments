@@ -6,57 +6,64 @@
           <div class="row">
             <div class="col-sm-7">
               <p>
-                Фактура:<strong>{{ .Color.Type.Name }}</strong>
-                Цвет: <strong>{{ .Color.Name }}</strong>
+                Фактура:<strong>{{ .Segment.Color.Type.Name }}</strong>
+                Цвет: <strong>{{ .Segment.Color.Name }}</strong>
               </p>
             </div>
             <div class="col-sm-5">
-              <p class="text-right">Площадь: <strong class="label label-default">{{ .Square }} м²</strong></p>
+              <p class="text-right">Площадь: <strong class="label label-default">{{ .Segment.Square }} м²</strong></p>
             </div>
             <div class="col-sm-12">
               <div>Расположение:
                 <span class="rack">
-                  <strong>{{ .Rack.Name }}</strong>
+                  <strong>{{ .Segment.Rack.Name }}</strong>
                   <button class="edit">&#9998;</button>
                 </span>
               </div>
-              <!-- racks form -->
+              <form class="move-segment" style="display:none;">
+                {{ range .Racks }}
+                  <div class="radio">
+                    <label><input type="radio" name="rack" value="{{ .ID }}" required>{{ .Name }}</label>
+                  </div>
+                {{ end }}
+                <button type="submit" class="move" value="{{ .Segment.ID }}">✔</button>
+              </form>
             </div>
           </div>
       </div>
 
       <div class="col-sm-12">
         <p>
-          <span class="label label-success">ширина: {{ .Width }} см</span>
-          <span class="label label-primary">длина: {{ .Height }} см</span>
+          <span class="label label-success">ширина: {{ .Segment.Width }} см</span>
+          <span class="label label-primary">длина: {{ .Segment.Height }} см</span>
         </p>
       </div>
       <div class="col-sm-12">
       </div>
       <div class="col-sm-6">
-        <p class="text-muted">Добавлено: {{ .Created | formatInLocation }}</p>
+        <p class="text-muted">Добавлено: {{ .Segment.Created | formatInLocation }}</p>
       </div>
-      {{ if not .Active }}
+      {{ if not .Segment.Active }}
         <div class="col-sm-6">
-          <p class="text-muted">Удалено: {{ .Deleted | formatInLocation }}</p>
-          {{ if .Description }}
-            <p class="text-muted">Причина: {{ .Description }}</p>
+          <p class="text-muted">Удалено: {{ .Segment.Deleted | formatInLocation }}</p>
+          {{ if .Segment.Description }}
+            <p class="text-muted">Причина: {{ .Segment.Description }}</p>
           {{ end }}
         </div>
         <div class="col-sm-6">
-          <p class="text-muted">Номер заказа: <span style="color: red;"><b>{{ .OrderNumber.Name }}</b></span></p>
+          <p class="text-muted">Номер заказа: <span style="color: red;"><b>{{ .Segment.OrderNumber.Name }}</b></span></p>
         </div>
         <div class="col-sm-6 text-right">
-          <button class="btn btn-warning activate" value="{{ .ID }}">Вернуть</button>
+          <button class="btn btn-warning activate" value="{{ .Segment.ID }}">Вернуть</button>
         </div>
       {{ end }}
-      {{ if .Active }}
+      {{ if .Segment.Active }}
         <div class="col-sm-6 text-right">
-          <button class="btn btn-info remove-toggle" value="{{ .ID }}">Удалить</button>
+          <button class="btn btn-info remove-toggle" value="{{ .Segment.ID }}">Удалить</button>
         </div>
       {{ end }}
 
-      <div class="col-sm-10 col-sm-offset-1 remove-form" data-toggle="{{ .ID }}" style="display: none">
+      <div class="col-sm-10 col-sm-offset-1 remove-form" data-toggle="{{ .Segment.ID }}" style="display: none">
         <div class="panel panel-default">
           <div class="panel-body">
             <form class="form">
@@ -71,14 +78,14 @@
                 >
               </div>
               <div class="checkbox">
-                <label><input type="checkbox" name="defect" autocomplete="off"> Есть дефект?</label>
+                <label><input type="checkbox" name="defect" autocomplete="off">Есть дефект?</label>
               </div>
               <div class="form-group">
                 <input type="text" name="description" class="form-control description" placeholder="Описание отреза">
               </div>
               <small class="text-danger"></small>
               <div class="text-right">
-                <button class="btn btn-default btn-danger removeSegment" value="{{ .ID }}">Удалить</button>
+                <button class="btn btn-default btn-danger removeSegment" value="{{ .Segment.ID }}">Удалить</button>
               </div>
             </form>
           </div>
