@@ -11,6 +11,7 @@
       <div class="row">
         <div class="col-lg-4">
           {{ template "search_form" (dict "ColorTypes" .ColorTypes "Colors" .Colors) }}
+          {{ template "add_form" (dict "Racks" .Racks "ColorTypes" .ColorTypes "Colors" .Colors) }}
         </div>
         <div class="col-lg-8">
           <div class="panel panel-default">
