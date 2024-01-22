@@ -16,6 +16,7 @@ type Section struct {
 	Name      string `gorm:"type:varchar(30);not null;uniqueIndex:idx_section_name_company_uniq" json:"name"`
 	Slug      string `gorm:"type:varchar(50);not null" json:"slug"`
 	CompanyID uint   `gorm:"foreignkey:CompanyID;references:ID;not null;uniqueIndex:idx_section_name_company_uniq" json:"company"`
+	Racks     []Rack `gorm:"foreignKey:SectionID" json:"racks"`
 }
 
 func (Section) TableName() string {
@@ -46,7 +47,7 @@ func GetCompany(companySlug string) Company {
 
 func GetSection(sectionSlug string) Section {
 	var section Section
-	DB.Where(&Section{Slug: sectionSlug}).First(&section)
+	DB.Preload("Racks").Where(&Section{Slug: sectionSlug}).First(&section)
 	return section
 }
 

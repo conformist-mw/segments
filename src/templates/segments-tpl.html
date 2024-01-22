@@ -16,7 +16,7 @@
             <div class="col-sm-12">
               <div>Расположение:
                 <span class="rack">
-                  <strong>{{ .Rack }}</strong>
+                  <strong>{{ .Rack.Name }}</strong>
                   <button class="edit">&#9998;</button>
                 </span>
               </div>
@@ -34,17 +34,17 @@
       <div class="col-sm-12">
       </div>
       <div class="col-sm-6">
-        <p class="text-muted">Добавлено: {{ .Created }}</p>
+        <p class="text-muted">Добавлено: {{ .Created | formatInLocation }}</p>
       </div>
       {{ if not .Active }}
         <div class="col-sm-6">
-          <p class="text-muted">Удалено: {{ .Deleted }}</p>
+          <p class="text-muted">Удалено: {{ .Deleted | formatInLocation }}</p>
           {{ if .Description }}
             <p class="text-muted">Причина: {{ .Description }}</p>
           {{ end }}
         </div>
         <div class="col-sm-6">
-          <p class="text-muted">Номер заказа: <span style="color: red;"><b>{{ .OrderNumber }}</b></span></p>
+          <p class="text-muted">Номер заказа: <span style="color: red;"><b>{{ .OrderNumber.Name }}</b></span></p>
         </div>
         <div class="col-sm-6 text-right">
           <button class="btn btn-warning activate" value="{{ .ID }}">Вернуть</button>
