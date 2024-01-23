@@ -18,13 +18,16 @@ func GetSections(c *gin.Context) {
 }
 
 func GetSegments(c *gin.Context) {
+	var SearchForm models.SearchForm
+	c.Bind(&SearchForm)
 	section := models.GetSection(c.Param("section"))
 	c.HTML(200, "segments.html", gin.H{
-		"Segments":   models.GetSegments(c.Param("section"), c.Param("company")),
+		"Segments":   models.GetSegments(c.Param("section"), c.Param("company"), SearchForm),
 		"Section":    section,
 		"Company":    models.GetCompany(c.Param("company")),
 		"Racks":      section.Racks,
 		"Colors":     models.GetColors(),
 		"ColorTypes": models.GetColorTypes(),
+		"SearchForm": SearchForm,
 	})
 }
