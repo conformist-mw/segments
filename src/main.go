@@ -3,6 +3,8 @@ package main
 import (
 	"errors"
 	"os"
+	"strconv"
+	"strings"
 	"text/template"
 	"time"
 
@@ -49,6 +51,10 @@ func seq(start, end int) []int {
 	return seq
 }
 
+func replace(input, from string, to int) string {
+	return strings.ReplaceAll(input, from, strconv.Itoa(to))
+}
+
 func main() {
 	models.ConnectDb()
 	router := gin.Default()
@@ -56,6 +62,7 @@ func main() {
 		"formatInLocation": FormatInLocation,
 		"dict":             dict,
 		"seq":              seq,
+		"replace":          replace,
 	})
 	router.Static("/static", "./static")
 	router.LoadHTMLGlob("templates/*")

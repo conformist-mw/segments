@@ -1,23 +1,27 @@
 {{ define "pagination" }}
+{{ $pageUrl := .PageUrl }}
 <div class="text-center">
   <ul class="pagination">
     {{ if .HasPrevious }}
-      <li><a href="?page={{ .GetPrevious }}">&laquo;</a></li>
+    {{ $prevUrl := replace $pageUrl "__page_number__" .GetPrevious }}
+      <li><a href="{{ $prevUrl }}">&laquo;</a></li>
     {{ else }}
       <li class="disabled"><span>&laquo;</span></li>
     {{ end }}
 
     {{ $current := .Current }}
     {{ range $i := seq 1 .GetTotalPages }}
+      {{ $urlWithPage := replace $pageUrl "__page_number__" $i }}
       {{ if eq $current $i }}
         <li class="active"><span>{{ $i }} <span class="sr-only">(current)</span></span></li>
       {{ else }}
-        <li><a href="?page={{ $i }}">{{ $i }}</a></li>
+        <li><a href="{{ $urlWithPage }}">{{ $i }}</a></li>
       {{ end }}
     {{ end }}
 
     {{ if .HasNext }}
-      <li><a href="?page={{ .GetNext }}">&raquo;</a></li>
+    {{ $nextUrl := replace $pageUrl "__page_number__" .GetNext }}
+      <li><a href="{{ $nextUrl }}">&raquo;</a></li>
     {{ else }}
       <li class="disabled"><span>&raquo;</span></li>
     {{ end }}

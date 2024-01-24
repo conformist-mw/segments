@@ -2,6 +2,8 @@ package models
 
 import (
 	"math"
+	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -58,6 +60,7 @@ type Paginator struct {
 	Current    int
 	Next       int
 	Previous   int
+	SearchForm SearchForm
 }
 
 func (p Paginator) GetOffset() int {
@@ -92,6 +95,17 @@ func (p Paginator) GetNext() int {
 		return p.Current + 1
 	}
 	return p.Current
+}
+
+func (p Paginator) PageUrl() string {
+	params := make(url.Values)
+	params.Set("color", p.SearchForm.Color)
+	params.Set("color_type", p.SearchForm.ColorType)
+	params.Set("deleted", p.SearchForm.Deleted)
+	params.Set("height", strconv.Itoa(p.SearchForm.Height))
+	params.Set("width", strconv.Itoa(p.SearchForm.Width))
+	params.Set("page", "__page_number__")
+	return "?" + params.Encode()
 }
 
 func GetSegments(sectionSlug string, companySlug string, SearchForm SearchForm) ([]Segment, Paginator) {
@@ -136,6 +150,7 @@ func GetSegments(sectionSlug string, companySlug string, SearchForm SearchForm) 
 	countDB.Model(&Segment{}).Count(&rowsCount)
 	paginator.TotalItems = rowsCount
 	paginator.Current = SearchForm.GetPage()
+	paginator.SearchForm = SearchForm
 	db.Offset(paginator.GetOffset()).Limit(paginator.GetLimit()).Find(&segments)
 	return segments, paginator
 }
