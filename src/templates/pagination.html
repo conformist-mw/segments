@@ -1,5 +1,8 @@
 {{ define "pagination" }}
 {{ $pageUrl := .PageUrl }}
+{{ $current := .Current }}
+{{ $start := .Start }}
+{{ $end := .End }}  
 <div class="text-center">
   <ul class="pagination">
     {{ if .HasPrevious }}
@@ -9,14 +12,25 @@
       <li class="disabled"><span>&laquo;</span></li>
     {{ end }}
 
-    {{ $current := .Current }}
+    {{ if gt $start 1 }}
+      {{ $startUrl := replace $pageUrl "__page_number__" (add $start -1) }}
+      <li><a href="{{ $startUrl}}">&hellip;</a></li>
+    {{ end }}
+
     {{ range $i := seq 1 .GetTotalPages }}
-      {{ $urlWithPage := replace $pageUrl "__page_number__" $i }}
-      {{ if eq $current $i }}
-        <li class="active"><span>{{ $i }} <span class="sr-only">(current)</span></span></li>
-      {{ else }}
-        <li><a href="{{ $urlWithPage }}">{{ $i }}</a></li>
+      {{ if and (ge $i $start) (le $i $end) }}
+        {{ $urlWithPage := replace $pageUrl "__page_number__" $i }}
+        {{ if eq $current $i }}
+          <li class="active"><span>{{ $i }} <span class="sr-only">(current)</span></span></li>
+        {{ else }}
+          <li><a href="{{ $urlWithPage }}">{{ $i }}</a></li>
+        {{ end }}
       {{ end }}
+    {{ end }}
+
+    {{ if lt $end .GetTotalPages }}
+      {{ $endUrl := replace $pageUrl "__page_number__" (add $end 1) }}
+      <li><a href="{{ $endUrl }}">&hellip;</a></li>
     {{ end }}
 
     {{ if .HasNext }}

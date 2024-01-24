@@ -55,6 +55,10 @@ func replace(input, from string, to int) string {
 	return strings.ReplaceAll(input, from, strconv.Itoa(to))
 }
 
+func add(a, b int) int {
+	return a + b
+}
+
 func main() {
 	models.ConnectDb()
 	router := gin.Default()
@@ -63,6 +67,7 @@ func main() {
 		"dict":             dict,
 		"seq":              seq,
 		"replace":          replace,
+		"add":              add,
 	})
 	router.Static("/static", "./static")
 	router.LoadHTMLGlob("templates/*")

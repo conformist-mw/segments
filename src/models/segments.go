@@ -97,6 +97,22 @@ func (p Paginator) GetNext() int {
 	return p.Current
 }
 
+func (p Paginator) Start() int {
+	start := p.Current - 6
+	if start < 1 {
+		start = 1
+	}
+	return start
+}
+
+func (p Paginator) End() int {
+	end := p.Current + 6
+	if end > p.GetTotalPages() {
+		end = p.GetTotalPages()
+	}
+	return end
+}
+
 func (p Paginator) PageUrl() string {
 	params := make(url.Values)
 	params.Set("color", p.SearchForm.Color)
