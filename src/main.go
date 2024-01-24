@@ -41,12 +41,21 @@ func dict(values ...interface{}) (map[string]interface{}, error) {
 	return dict, nil
 }
 
+func seq(start, end int) []int {
+	seq := make([]int, end-start+1)
+	for i := range seq {
+		seq[i] = start + i
+	}
+	return seq
+}
+
 func main() {
 	models.ConnectDb()
 	router := gin.Default()
 	router.SetFuncMap(template.FuncMap{
 		"formatInLocation": FormatInLocation,
 		"dict":             dict,
+		"seq":              seq,
 	})
 	router.Static("/static", "./static")
 	router.LoadHTMLGlob("templates/*")

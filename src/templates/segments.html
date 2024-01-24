@@ -25,7 +25,7 @@
             <div class="panel-body">
               <div class="clearfix">
                 {{ if gt (len .Segments) 0 }}
-                  <p>here will be pagination</p>
+                  {{ template "pagination" .Paginator}}
                 {{ end }}
               </div>
             </div>

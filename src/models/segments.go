@@ -1,6 +1,7 @@
 package models
 
 import (
+	"math"
 	"time"
 )
 
@@ -45,17 +46,58 @@ type SearchForm struct {
 	Page        int    `form:"page"`
 }
 
-// if width := fields['width']:
-// 	qs = qs.filter(Q(width__gte=width) | Q(height__gte=width))
-// if height := fields['height']:
-// 	qs = qs.filter(Q(width__gte=height) | Q(height__gte=height))
-// active = not fields.get('deleted', False)
-// qs = qs.filter(active=active)
-// if not active and (order_number := fields.get('order_number')):
-// 	qs = qs.filter(order_number__name=order_number)
+func (s SearchForm) GetPage() int {
+	if s.Page <= 0 {
+		return 1
+	}
+	return s.Page
+}
 
-func GetSegments(sectionSlug string, companySlug string, SearchForm SearchForm) []Segment {
+type Paginator struct {
+	TotalItems int64
+	Current    int
+	Next       int
+	Previous   int
+}
+
+func (p Paginator) GetOffset() int {
+	return 10 * (p.Current - 1)
+}
+
+func (p Paginator) GetLimit() int {
+	return 10
+}
+
+func (p Paginator) GetTotalPages() int {
+	return int(math.Ceil(float64(p.TotalItems) / float64(p.GetLimit())))
+}
+
+func (p Paginator) HasPrevious() bool {
+	return p.Current > 1
+}
+
+func (p Paginator) GetPrevious() int {
+	if p.HasPrevious() {
+		return p.Current - 1
+	}
+	return p.Current
+}
+
+func (p Paginator) HasNext() bool {
+	return p.Current < p.GetTotalPages()
+}
+
+func (p Paginator) GetNext() int {
+	if p.HasNext() {
+		return p.Current + 1
+	}
+	return p.Current
+}
+
+func GetSegments(sectionSlug string, companySlug string, SearchForm SearchForm) ([]Segment, Paginator) {
 	var segments []Segment
+	var rowsCount int64
+	var paginator Paginator
 
 	db := DB.Preload("Color").
 		Preload("Color.Type").
@@ -90,7 +132,10 @@ func GetSegments(sectionSlug string, companySlug string, SearchForm SearchForm) 
 	if SearchForm.OrderNumber != "" {
 		db = db.Where("segments_ordernumber.name = ?", SearchForm.OrderNumber)
 	}
-
-	db.Find(&segments)
-	return segments
+	countDB := *db
+	countDB.Model(&Segment{}).Count(&rowsCount)
+	paginator.TotalItems = rowsCount
+	paginator.Current = SearchForm.GetPage()
+	db.Offset(paginator.GetOffset()).Limit(paginator.GetLimit()).Find(&segments)
+	return segments, paginator
 }
