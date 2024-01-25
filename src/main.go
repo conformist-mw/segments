@@ -76,5 +76,6 @@ func main() {
 	router.GET("/:company/:section", controllers.GetSegments)
 	router.POST("/:company/:section/add", controllers.AddSegment)
 	router.POST("/:company/:section/move/:segment_id", controllers.MoveSegment)
+	router.POST("/:company/:section/activate/:segment_id", controllers.ActivateSegment)
 	router.Run()
 }

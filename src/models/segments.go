@@ -234,3 +234,12 @@ func MoveSegment(segmentId int, MoveForm MoveForm) {
 	segment.RackID = uint(MoveForm.Rack)
 	DB.Save(&segment)
 }
+
+func ActivateSegment(segmentId int) {
+	var segment Segment
+	segment = GetSegment(segmentId)
+	segment.Active = true
+	segment.OrderNumberID = nil
+	segment.Description = ""
+	DB.Save(&segment)
+}

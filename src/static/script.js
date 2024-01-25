@@ -115,12 +115,9 @@ $('.removeSegment').click(function(e){
 // activate segment form
 $('.activate').click(function(){
   const segmentId = $(this).val();
-  const csrftoken = Cookies.get('csrftoken');
   const parent = $(this).parents('div.parent');
   $.ajax({
-    headers: { 'X-CSRFToken': csrftoken },
-    url: `${window.location.pathname}activate/${segmentId}`,
-    data: {'active': true},
+    url: `${window.location.pathname}/activate/${segmentId}`,
     type: 'post',
     success: function(result){
       parent.remove();

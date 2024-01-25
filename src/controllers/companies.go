@@ -69,3 +69,13 @@ func MoveSegment(c *gin.Context) {
 	models.MoveSegment(segmentId, MoveForm)
 	c.JSON(200, gin.H{})
 }
+
+func ActivateSegment(c *gin.Context) {
+	segmentId, err := strconv.Atoi(c.Param("segment_id"))
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+	models.ActivateSegment(segmentId)
+	c.JSON(200, gin.H{})
+}
