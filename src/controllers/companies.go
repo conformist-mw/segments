@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"strconv"
+
 	"github.com/conformist-mw/segments/models"
 	"github.com/gin-gonic/gin"
 )
@@ -49,4 +51,21 @@ func AddSegment(c *gin.Context) {
 	}
 	models.AddSegment(c.Param("section"), c.Param("company"), AddForm)
 	c.JSON(201, gin.H{})
+}
+
+func MoveSegment(c *gin.Context) {
+	var MoveForm models.MoveForm
+	c.ShouldBind(&MoveForm)
+	rackErr := models.ValidateRack(c.Param("company"), c.Param("section"), MoveForm.Rack)
+	if rackErr != nil {
+		c.JSON(400, gin.H{"error": rackErr.Error()})
+		return
+	}
+	segmentId, err := strconv.Atoi(c.Param("segment_id"))
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+	models.MoveSegment(segmentId, MoveForm)
+	c.JSON(200, gin.H{})
 }

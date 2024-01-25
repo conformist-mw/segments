@@ -46,17 +46,16 @@ $('button.edit').click(function() {
 });
 $('button.move').click(function(e) {
     e.preventDefault();
-    const csrftoken = Cookies.get('csrftoken');
     const segment_id = $(this).val();
     const form = $(this).parent();
     const rack = $(this).parent().prev().find('.rack').show();
+    const newName = form.find("input[type='radio']:checked").parent().text();
     $.ajax({
-        headers: { 'X-CSRFToken': csrftoken },
-        url: `/move/${segment_id}/`,
+        url: `${window.location.pathname}/move/${segment_id}`,
         data: form.serialize(),
         type: 'POST',
         success: function(result){
-            rack.find('strong').text(result.rack);
+            rack.find('strong').text(newName);
         },
         complete: function() {
             form.hide();

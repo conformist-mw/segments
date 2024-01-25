@@ -133,6 +133,12 @@ func (p Paginator) PageUrl() string {
 	return "?" + params.Encode()
 }
 
+func GetSegment(segmentId int) Segment {
+	var segment Segment
+	DB.Where(&Segment{ID: uint(segmentId)}).First(&segment)
+	return segment
+}
+
 func GetSegments(sectionSlug string, companySlug string, SearchForm SearchForm) ([]Segment, Paginator) {
 	var segments []Segment
 	var rowsCount int64
@@ -216,4 +222,15 @@ func AddSegment(sectionSlug string, companySlug string, AddForm AddForm) {
 	segment.RackID = uint(AddForm.RackID)
 
 	DB.Create(&segment)
+}
+
+type MoveForm struct {
+	Rack int `form:"rack" binding:"required"`
+}
+
+func MoveSegment(segmentId int, MoveForm MoveForm) {
+	var segment Segment
+	segment = GetSegment(segmentId)
+	segment.RackID = uint(MoveForm.Rack)
+	DB.Save(&segment)
 }
