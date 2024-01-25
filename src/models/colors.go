@@ -28,8 +28,20 @@ func GetColors() []Color {
 	return colors
 }
 
+func GetColor(slug string) Color {
+	var color Color
+	DB.Preload("Type").Where(&Color{Slug: slug}).First(&color)
+	return color
+}
+
 func GetColorTypes() []ColorType {
 	var colorTypes []ColorType
 	DB.Find(&colorTypes)
 	return colorTypes
+}
+
+func GetColorType(slug string) ColorType {
+	var colorType ColorType
+	DB.Where(&ColorType{Slug: slug}).First(&colorType)
+	return colorType
 }

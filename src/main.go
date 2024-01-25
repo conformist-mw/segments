@@ -74,5 +74,6 @@ func main() {
 	router.GET("/", controllers.GetCompanies)
 	router.GET("/:company", controllers.GetSections)
 	router.GET("/:company/:section", controllers.GetSegments)
+	router.POST("/:company/:section/add", controllers.AddSegment)
 	router.Run()
 }

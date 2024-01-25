@@ -33,3 +33,20 @@ func GetSegments(c *gin.Context) {
 		"Paginator":  paginator,
 	})
 }
+
+func AddSegment(c *gin.Context) {
+	var AddForm models.AddForm
+	c.ShouldBind(&AddForm)
+	colorErr := models.ValidateColor(AddForm.Color, AddForm.ColorType)
+	if colorErr != nil {
+		c.JSON(400, gin.H{"error": colorErr.Error()})
+		return
+	}
+	rackErr := models.ValidateRack(c.Param("company"), c.Param("section"), AddForm.RackID)
+	if rackErr != nil {
+		c.JSON(400, gin.H{"error": rackErr.Error()})
+		return
+	}
+	models.AddSegment(c.Param("section"), c.Param("company"), AddForm)
+	c.JSON(201, gin.H{})
+}

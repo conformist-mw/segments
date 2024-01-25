@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"math"
 	"net/url"
 	"strconv"
@@ -53,6 +54,14 @@ func (s SearchForm) GetPage() int {
 		return 1
 	}
 	return s.Page
+}
+
+type AddForm struct {
+	Width     int    `form:"width" binding:"required"`
+	Height    int    `form:"height" binding:"required"`
+	Color     string `form:"color" binding:"required"`
+	ColorType string `form:"color_type" binding:"required"`
+	RackID    int    `form:"rack_id" binding:"required"`
 }
 
 type Paginator struct {
@@ -169,4 +178,42 @@ func GetSegments(sectionSlug string, companySlug string, SearchForm SearchForm) 
 	paginator.SearchForm = SearchForm
 	db.Offset(paginator.GetOffset()).Limit(paginator.GetLimit()).Find(&segments)
 	return segments, paginator
+}
+
+func ValidateColor(colorSlug, colorTypeSlug string) error {
+	var color Color
+	var colorType ColorType
+	DB.Where("slug = ?", colorSlug).First(&color)
+	DB.Where("slug = ?", colorTypeSlug).First(&colorType)
+	if color.ID == 0 {
+		return errors.New("color not found")
+	}
+	if colorType.ID == 0 {
+		return errors.New("color type not found")
+	}
+	if color.TypeID != colorType.ID {
+		return errors.New("color type mismatch")
+	}
+	return nil
+}
+
+func ValidateRack(companySlug, sectionSlug string, rackId int) error {
+	rack := GetRack(companySlug, sectionSlug, rackId)
+	if rack.ID == 0 {
+		return errors.New("rack not found")
+	}
+	return nil
+}
+
+func AddSegment(sectionSlug string, companySlug string, AddForm AddForm) {
+	var segment Segment
+	color := GetColor(AddForm.Color)
+
+	segment.Width = AddForm.Width
+	segment.Height = AddForm.Height
+	segment.Square = float64(AddForm.Width*AddForm.Height) / 10000
+	segment.ColorID = color.ID
+	segment.RackID = uint(AddForm.RackID)
+
+	DB.Create(&segment)
 }

@@ -79,3 +79,12 @@ func GetSections(companySlug string) []SectionWithAmount {
 
 	return sections
 }
+
+func GetRack(companySlug, sectionSlug string, rackId int) Rack {
+	var rack Rack
+	DB.Joins("join segments_section on segments_rack.section_id = segments_section.id").
+		Joins("join segments_company on segments_section.company_id = segments_company.id").
+		Where("segments_company.slug = ? AND segments_section.slug = ? AND segments_rack.id = ?", companySlug, sectionSlug, uint(rackId)).
+		First(&rack)
+	return rack
+}
