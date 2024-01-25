@@ -20,14 +20,12 @@ function setColorType() {
 
 // add segments form
 $('#add').submit(function(e) {
-    const csrftoken = Cookies.get('csrftoken');
     e.preventDefault();
     const form = $(this);
     form.find('.text-danger').remove();
     $.ajax({
-        headers: { 'X-CSRFToken': csrftoken },
         type: 'POST',
-        url: `${window.location.pathname}add/`,
+        url: `${window.location.pathname}/add`,
         data: form.serialize(),
         success: function() {
             location.reload();
@@ -103,7 +101,7 @@ $('.removeSegment').click(function(e){
   const form = $(this).parents('form');
   $.ajax({
     headers: { 'X-CSRFToken': csrftoken },
-    url: `${window.location.pathname}remove/${segmentId}/`,
+    url: `${window.location.pathname}remove/${segmentId}`,
     data: form.serialize(),
     type: 'post',
     success: function(result){
@@ -122,7 +120,7 @@ $('.activate').click(function(){
   const parent = $(this).parents('div.parent');
   $.ajax({
     headers: { 'X-CSRFToken': csrftoken },
-    url: `${window.location.pathname}activate/${segmentId}/`,
+    url: `${window.location.pathname}activate/${segmentId}`,
     data: {'active': true},
     type: 'post',
     success: function(result){
