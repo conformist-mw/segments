@@ -2,11 +2,15 @@ package main
 
 import (
 	"errors"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/gin-contrib/sessions"
+	gormsessions "github.com/gin-contrib/sessions/gorm"
 
 	"github.com/conformist-mw/segments/controllers"
 	"github.com/conformist-mw/segments/models"
@@ -14,6 +18,8 @@ import (
 )
 
 var location *time.Location
+
+const userkey = "user"
 
 func init() {
 	os.Setenv("TZ", "Europe/Kyiv")
@@ -59,9 +65,23 @@ func add(a, b int) int {
 	return a + b
 }
 
+func AuthRequired(c *gin.Context) {
+	session := sessions.Default(c)
+	user := session.Get(userkey)
+	if user == nil {
+		c.Redirect(http.StatusFound, "/login")
+		return
+	}
+	c.Keys["User"] = user
+	c.Next()
+}
+
 func main() {
 	models.ConnectDb()
+	store := gormsessions.NewStore(models.DB, true, []byte("secret"))
+
 	router := gin.Default()
+	router.Use(sessions.Sessions("session", store))
 	router.SetFuncMap(template.FuncMap{
 		"formatInLocation": FormatInLocation,
 		"dict":             dict,
@@ -71,14 +91,21 @@ func main() {
 	})
 	router.Static("/static", "./static")
 	router.LoadHTMLGlob("templates/*")
-	router.GET("/", controllers.GetCompanies)
-	router.GET("/:company", controllers.GetSections)
-	router.GET("/:company/:section", controllers.GetSegments)
-	router.POST("/:company/:section/add", controllers.AddSegment)
-	router.POST("/:company/:section/print", controllers.PrintSegments)
-	router.POST("/:company/:section/move/:segment_id", controllers.MoveSegment)
-	router.POST("/:company/:section/activate/:segment_id", controllers.ActivateSegment)
-	router.POST("/:company/:section/remove/:segment_id", controllers.RemoveSegment)
+
+	auth := router.Group("/")
+	auth.Use(AuthRequired)
+	{
+		auth.GET("/", controllers.GetCompanies)
+		auth.GET("/:company", controllers.GetSections)
+		auth.GET("/:company/:section", controllers.GetSegments)
+		auth.POST("/:company/:section/add", controllers.AddSegment)
+		auth.POST("/:company/:section/print", controllers.PrintSegments)
+		auth.POST("/:company/:section/move/:segment_id", controllers.MoveSegment)
+		auth.POST("/:company/:section/activate/:segment_id", controllers.ActivateSegment)
+		auth.POST("/:company/:section/remove/:segment_id", controllers.RemoveSegment)
+
+	}
+
 	router.GET("/login", controllers.LoginForm)
 	router.POST("/login", controllers.Login)
 	router.Run()

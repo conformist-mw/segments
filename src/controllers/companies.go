@@ -4,8 +4,11 @@ import (
 	"strconv"
 
 	"github.com/conformist-mw/segments/models"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
+
+const userkey = "user"
 
 func GetCompanies(c *gin.Context) {
 	c.HTML(200, "companies.html", gin.H{"Companies": models.GetCompanies()})
@@ -119,5 +122,8 @@ func Login(c *gin.Context) {
 		c.HTML(400, "login.html", gin.H{"error": err.Error()})
 		return
 	}
-	c.Redirect(302, "/login")
+	session := sessions.Default(c)
+	session.Set(userkey, loginForm.Username)
+	session.Save()
+	c.Redirect(302, "/")
 }
