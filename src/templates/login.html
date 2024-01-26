@@ -1,0 +1,26 @@
+{{ template "top" . }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h2>Отрезки</h2>
+            {{ if .error }}
+            <div class="alert alert-danger" role="alert">
+                {{ .error }}
+            </div>
+            {{ end }}
+            <form action="/login" method="post">
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Войти</button>
+            </form>
+        </div>
+    </div>
+</div>
+{{ template "scripts" . }}
+{{ template "bottom" . }}
