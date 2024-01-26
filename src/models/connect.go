@@ -40,6 +40,7 @@ func ConnectDb() {
 			&Rack{},
 			&OrderNumber{},
 			&Segment{},
+			&User{},
 		)
 	}
 	DB = db
