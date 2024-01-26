@@ -79,3 +79,21 @@ func ActivateSegment(c *gin.Context) {
 	models.ActivateSegment(segmentId)
 	c.JSON(200, gin.H{})
 }
+
+func RemoveSegment(c *gin.Context) {
+	// TODO: check if segment belongs to the company
+	segmentId, err := strconv.Atoi(c.Param("segment_id"))
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+	var removeForm models.RemoveForm
+	c.Bind(&removeForm)
+	formErr := models.ValidateRemoveForm(removeForm)
+	if formErr != nil {
+		c.JSON(400, gin.H{"error": formErr.Error()})
+		return
+	}
+	models.RemoveSegment(segmentId, removeForm)
+	c.JSON(200, gin.H{})
+}

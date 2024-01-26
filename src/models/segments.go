@@ -39,6 +39,12 @@ func (Segment) TableName() string {
 	return "segments_segment"
 }
 
+func GetOrderNumber(orderNumber string) OrderNumber {
+	var order OrderNumber
+	DB.Where(&OrderNumber{Name: orderNumber}).First(&order)
+	return order
+}
+
 type SearchForm struct {
 	ColorType   string `form:"color_type"`
 	Color       string `form:"color"`
@@ -241,5 +247,48 @@ func ActivateSegment(segmentId int) {
 	segment.Active = true
 	segment.OrderNumberID = nil
 	segment.Description = ""
+	DB.Save(&segment)
+}
+
+type RemoveForm struct {
+	OrderNumber string `form:"order_number"`
+	Defect      string `form:"defect"`
+	Description string `form:"description"`
+}
+
+func ValidateRemoveForm(RemoveForm RemoveForm) error {
+	isDefect := RemoveForm.Defect == "on"
+	if RemoveForm.OrderNumber == "" && !isDefect {
+		return errors.New("Для удаления отрезка нужно указать или номер заказа или указать дефект")
+	}
+	if RemoveForm.OrderNumber == "" {
+		if isDefect && RemoveForm.Description == "" {
+			return errors.New("При указании дефекта нужно указать описание")
+		}
+	}
+	if RemoveForm.OrderNumber != "" && GetOrderNumber(RemoveForm.OrderNumber).ID != 0 {
+		// TODO: order number should be unique within company
+		return errors.New("Такой номер заказа уже есть в базе")
+	}
+	if RemoveForm.OrderNumber == "" && !isDefect {
+		return errors.New("no order number or defect")
+	}
+	return nil
+}
+
+func RemoveSegment(segmentId int, RemoveForm RemoveForm) {
+	var segment Segment
+	segment = GetSegment(segmentId)
+	segment.Active = false
+	if RemoveForm.OrderNumber != "" {
+		var orderNumber OrderNumber
+		orderNumber.Name = RemoveForm.OrderNumber
+		DB.Create(&orderNumber)
+		segment.OrderNumberID = &orderNumber.ID
+	}
+	if RemoveForm.Defect == "on" {
+		segment.Defect = true
+		segment.Description = RemoveForm.Description
+	}
 	DB.Save(&segment)
 }

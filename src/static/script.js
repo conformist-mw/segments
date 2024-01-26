@@ -94,20 +94,18 @@ $('.remove-toggle').click(function(){
 });
 $('.removeSegment').click(function(e){
   e.preventDefault();
-  const csrftoken = Cookies.get('csrftoken');
   const parent = $(this).parents('div.parent');
   const segmentId = $(this).val();
   const form = $(this).parents('form');
   $.ajax({
-    headers: { 'X-CSRFToken': csrftoken },
-    url: `${window.location.pathname}remove/${segmentId}`,
+    url: `${window.location.pathname}/remove/${segmentId}`,
     data: form.serialize(),
     type: 'post',
     success: function(result){
       parent.remove();
     },
     error: function(error){
-      form.find('small').text(error.responseJSON.message);
+      form.find('small').text(error.responseJSON.error);
     }
   });
 });
