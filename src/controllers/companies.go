@@ -97,3 +97,12 @@ func RemoveSegment(c *gin.Context) {
 	models.RemoveSegment(segmentId, removeForm)
 	c.JSON(200, gin.H{})
 }
+
+func PrintSegments(c *gin.Context) {
+	var PrintForm models.PrintForm
+	c.Bind(&PrintForm)
+	segments := models.GetPrintSegments(c.Param("section"), c.Param("company"), PrintForm)
+	c.HTML(200, "table.html", gin.H{
+		"Segments": segments,
+	})
+}

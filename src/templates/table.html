@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Segments</title>
+<style type="text/css">
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    tr:nth-of-type(odd) {
+        background: #eee;
+    }
+    th {
+        background: #333;
+        color: white;
+        font-weight: bold;
+    }
+    td, th {
+        padding: 6px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+    a#print {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        font-size: 3em;
+        color: red;
+        text-decoration: none;
+    }
+    a#print:hover {
+        text-decoration: none;
+    }
+</style>
+</head>
+<body>
+    <a href="#" id="print" onclick="printPage()">&#9113;</a>
+<table>
+    <tr>
+        <th>Тип</th>
+        <th>Цвет</th>
+        <th>Ширина</th>
+        <th>Высота</th>
+        <th>Площадь</th>
+        <th>Расположение</th>
+    </tr>
+    {{ range .Segments }}
+    <tr>
+        <td>{{ .Color.Type.Name }}</td>
+        <td>{{ .Color.Name }}</td>
+        <td>{{ .Width }}</td>
+        <td>{{ .Height }}</td>
+        <td>{{ .Square }}</td>
+        <td>{{ .Rack.Name }}</td>
+    </tr>
+    {{ end }}
+</table>
+</body>
+<script>
+    function printPage() {
+        var printBtn = document.getElementById('print');
+        printBtn.style.visibility = 'hidden';
+        window.print();
+        printBtn.style.visibility = 'visible';
+    }
+</script>
+</html>

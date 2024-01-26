@@ -75,6 +75,7 @@ func main() {
 	router.GET("/:company", controllers.GetSections)
 	router.GET("/:company/:section", controllers.GetSegments)
 	router.POST("/:company/:section/add", controllers.AddSegment)
+	router.POST("/:company/:section/print", controllers.PrintSegments)
 	router.POST("/:company/:section/move/:segment_id", controllers.MoveSegment)
 	router.POST("/:company/:section/activate/:segment_id", controllers.ActivateSegment)
 	router.POST("/:company/:section/remove/:segment_id", controllers.RemoveSegment)

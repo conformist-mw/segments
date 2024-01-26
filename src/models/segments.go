@@ -292,3 +292,25 @@ func RemoveSegment(segmentId int, RemoveForm RemoveForm) {
 	}
 	DB.Save(&segment)
 }
+
+type PrintForm struct {
+	PrintRack int `form:"print_rack"`
+}
+
+func GetPrintSegments(sectionSlug string, companySlug string, PrintForm PrintForm) []Segment {
+	var segments []Segment
+	db := DB.Preload("Color").
+		Preload("Color.Type").
+		Preload("Rack").
+		Joins("JOIN segments_rack on segments_rack.id = segments_segment.rack_id").
+		Joins("JOIN segments_section on segments_section.id = segments_rack.section_id").
+		Joins("JOIN segments_company on segments_company.id = segments_section.company_id").
+		Where("segments_section.slug = ? AND segments_company.slug = ?", sectionSlug, companySlug).
+		Order("created desc")
+
+	if PrintForm.PrintRack != 0 {
+		db = db.Where("segments_rack.id = ?", PrintForm.PrintRack)
+	}
+	db.Find(&segments)
+	return segments
+}

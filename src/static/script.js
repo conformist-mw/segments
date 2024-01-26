@@ -69,12 +69,10 @@ $('a.print').on('click', function() {
 });
 $('#print-form').on('submit', function(e) {
     e.preventDefault();
-    const csrftoken = Cookies.get('csrftoken');
     const form = $(this);
     $.ajax({
-        headers: { 'X-CSRFToken': csrftoken },
         type: 'POST',
-        url: `${window.location.pathname}print/`,
+        url: `${window.location.pathname}/print/`,
         data: form.serialize(),
         success: function(result){
             const new_window = window.open('', 'new_window', 'status=1');
