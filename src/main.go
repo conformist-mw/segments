@@ -103,6 +103,7 @@ func main() {
 		auth.POST("/:company/:section/move/:segment_id", controllers.MoveSegment)
 		auth.POST("/:company/:section/activate/:segment_id", controllers.ActivateSegment)
 		auth.POST("/:company/:section/remove/:segment_id", controllers.RemoveSegment)
+		auth.POST("/logout", controllers.Logout)
 
 	}
 

@@ -23,8 +23,13 @@
     </div>
     <div class="navbar-brand navbar-right">
       <span class="username">
-        <span class="glyphicon glyphicon-user"></span> request.user.username
+        <span class="glyphicon glyphicon-user"></span> {{ .Username }}
       </span>
+      <form action="/logout" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-link" style="padding:0;">
+          <span class="glyphicon glyphicon-log-out"></span>
+        </button>
+      </form>
     </div>
   </div>
 </nav>

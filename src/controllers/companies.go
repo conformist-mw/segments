@@ -10,13 +10,20 @@ import (
 
 const userkey = "user"
 
+func render(c *gin.Context, templateName string, data gin.H) {
+	if data == nil {
+		data = gin.H{}
+	}
+	data["Username"] = c.Keys["User"]
+	c.HTML(200, templateName, data)
+}
+
 func GetCompanies(c *gin.Context) {
-	c.HTML(200, "companies.html", gin.H{"Companies": models.GetCompanies()})
+	render(c, "companies.html", gin.H{"Companies": models.GetCompanies()})
 }
 
 func GetSections(c *gin.Context) {
-
-	c.HTML(200, "sections.html", gin.H{
+	render(c, "sections.html", gin.H{
 		"Sections": models.GetSections(c.Param("company")),
 		"Company":  models.GetCompany(c.Param("company")),
 	})
@@ -27,7 +34,7 @@ func GetSegments(c *gin.Context) {
 	c.Bind(&SearchForm)
 	section := models.GetSection(c.Param("section"))
 	segments, paginator := models.GetSegments(c.Param("section"), c.Param("company"), SearchForm)
-	c.HTML(200, "segments.html", gin.H{
+	render(c, "segments.html", gin.H{
 		"Segments":   segments,
 		"Section":    section,
 		"Company":    models.GetCompany(c.Param("company")),
@@ -126,4 +133,16 @@ func Login(c *gin.Context) {
 	session.Set(userkey, loginForm.Username)
 	session.Save()
 	c.Redirect(302, "/")
+}
+
+func Logout(c *gin.Context) {
+	session := sessions.Default(c)
+	user := session.Get(userkey)
+	if user == nil {
+		c.Redirect(302, "/login")
+		return
+	}
+	session.Delete(userkey)
+	session.Save()
+	c.Redirect(302, "/login")
 }
