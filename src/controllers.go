@@ -1,4 +1,4 @@
-package controllers
+package main
 
 import (
 	"strconv"
@@ -7,8 +7,6 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
-
-const userkey = "user"
 
 func render(c *gin.Context, templateName string, data gin.H) {
 	if data == nil {

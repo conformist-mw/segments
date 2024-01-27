@@ -12,7 +12,6 @@ import (
 	"github.com/gin-contrib/sessions"
 	gormsessions "github.com/gin-contrib/sessions/gorm"
 
-	"github.com/conformist-mw/segments/controllers"
 	"github.com/conformist-mw/segments/models"
 	"github.com/gin-gonic/gin"
 )
@@ -95,19 +94,19 @@ func main() {
 	auth := router.Group("/")
 	auth.Use(AuthRequired)
 	{
-		auth.GET("/", controllers.GetCompanies)
-		auth.GET("/:company", controllers.GetSections)
-		auth.GET("/:company/:section", controllers.GetSegments)
-		auth.POST("/:company/:section/add", controllers.AddSegment)
-		auth.POST("/:company/:section/print", controllers.PrintSegments)
-		auth.POST("/:company/:section/move/:segment_id", controllers.MoveSegment)
-		auth.POST("/:company/:section/activate/:segment_id", controllers.ActivateSegment)
-		auth.POST("/:company/:section/remove/:segment_id", controllers.RemoveSegment)
-		auth.POST("/logout", controllers.Logout)
+		auth.GET("/", GetCompanies)
+		auth.GET("/:company", GetSections)
+		auth.GET("/:company/:section", GetSegments)
+		auth.POST("/:company/:section/add", AddSegment)
+		auth.POST("/:company/:section/print", PrintSegments)
+		auth.POST("/:company/:section/move/:segment_id", MoveSegment)
+		auth.POST("/:company/:section/activate/:segment_id", ActivateSegment)
+		auth.POST("/:company/:section/remove/:segment_id", RemoveSegment)
+		auth.POST("/logout", Logout)
 
 	}
 
-	router.GET("/login", controllers.LoginForm)
-	router.POST("/login", controllers.Login)
+	router.GET("/login", LoginForm)
+	router.POST("/login", Login)
 	router.Run()
 }
