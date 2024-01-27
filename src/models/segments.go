@@ -1,10 +1,6 @@
 package models
 
 import (
-	"errors"
-	"math"
-	"net/url"
-	"strconv"
 	"time"
 )
 
@@ -43,100 +39,6 @@ func GetOrderNumber(orderNumber string) OrderNumber {
 	var order OrderNumber
 	DB.Where(&OrderNumber{Name: orderNumber}).First(&order)
 	return order
-}
-
-type SearchForm struct {
-	ColorType   string `form:"color_type"`
-	Color       string `form:"color"`
-	Width       int    `form:"width"`
-	Height      int    `form:"height"`
-	OrderNumber string `form:"order_number"`
-	Deleted     string `form:"deleted"`
-	Page        int    `form:"page"`
-}
-
-func (s SearchForm) GetPage() int {
-	if s.Page <= 0 {
-		return 1
-	}
-	return s.Page
-}
-
-type AddForm struct {
-	Width     int    `form:"width" binding:"required"`
-	Height    int    `form:"height" binding:"required"`
-	Color     string `form:"color" binding:"required"`
-	ColorType string `form:"color_type" binding:"required"`
-	RackID    int    `form:"rack_id" binding:"required"`
-}
-
-type Paginator struct {
-	TotalItems int64
-	Current    int
-	Next       int
-	Previous   int
-	SearchForm SearchForm
-}
-
-func (p Paginator) GetOffset() int {
-	return 10 * (p.Current - 1)
-}
-
-func (p Paginator) GetLimit() int {
-	return 10
-}
-
-func (p Paginator) GetTotalPages() int {
-	return int(math.Ceil(float64(p.TotalItems) / float64(p.GetLimit())))
-}
-
-func (p Paginator) HasPrevious() bool {
-	return p.Current > 1
-}
-
-func (p Paginator) GetPrevious() int {
-	if p.HasPrevious() {
-		return p.Current - 1
-	}
-	return p.Current
-}
-
-func (p Paginator) HasNext() bool {
-	return p.Current < p.GetTotalPages()
-}
-
-func (p Paginator) GetNext() int {
-	if p.HasNext() {
-		return p.Current + 1
-	}
-	return p.Current
-}
-
-func (p Paginator) Start() int {
-	start := p.Current - 6
-	if start < 1 {
-		start = 1
-	}
-	return start
-}
-
-func (p Paginator) End() int {
-	end := p.Current + 6
-	if end > p.GetTotalPages() {
-		end = p.GetTotalPages()
-	}
-	return end
-}
-
-func (p Paginator) PageUrl() string {
-	params := make(url.Values)
-	params.Set("color", p.SearchForm.Color)
-	params.Set("color_type", p.SearchForm.ColorType)
-	params.Set("deleted", p.SearchForm.Deleted)
-	params.Set("height", strconv.Itoa(p.SearchForm.Height))
-	params.Set("width", strconv.Itoa(p.SearchForm.Width))
-	params.Set("page", "__page_number__")
-	return "?" + params.Encode()
 }
 
 func GetSegment(segmentId int) Segment {
@@ -192,31 +94,6 @@ func GetSegments(sectionSlug string, companySlug string, SearchForm SearchForm) 
 	return segments, paginator
 }
 
-func ValidateColor(colorSlug, colorTypeSlug string) error {
-	var color Color
-	var colorType ColorType
-	DB.Where("slug = ?", colorSlug).First(&color)
-	DB.Where("slug = ?", colorTypeSlug).First(&colorType)
-	if color.ID == 0 {
-		return errors.New("color not found")
-	}
-	if colorType.ID == 0 {
-		return errors.New("color type not found")
-	}
-	if color.TypeID != colorType.ID {
-		return errors.New("color type mismatch")
-	}
-	return nil
-}
-
-func ValidateRack(companySlug, sectionSlug string, rackId int) error {
-	rack := GetRack(companySlug, sectionSlug, rackId)
-	if rack.ID == 0 {
-		return errors.New("rack not found")
-	}
-	return nil
-}
-
 func AddSegment(sectionSlug string, companySlug string, AddForm AddForm) {
 	var segment Segment
 	color := GetColor(AddForm.Color)
@@ -228,10 +105,6 @@ func AddSegment(sectionSlug string, companySlug string, AddForm AddForm) {
 	segment.RackID = uint(AddForm.RackID)
 
 	DB.Create(&segment)
-}
-
-type MoveForm struct {
-	Rack int `form:"rack" binding:"required"`
 }
 
 func MoveSegment(segmentId int, MoveForm MoveForm) {
@@ -250,32 +123,6 @@ func ActivateSegment(segmentId int) {
 	DB.Save(&segment)
 }
 
-type RemoveForm struct {
-	OrderNumber string `form:"order_number"`
-	Defect      string `form:"defect"`
-	Description string `form:"description"`
-}
-
-func ValidateRemoveForm(RemoveForm RemoveForm) error {
-	isDefect := RemoveForm.Defect == "on"
-	if RemoveForm.OrderNumber == "" && !isDefect {
-		return errors.New("Для удаления отрезка нужно указать или номер заказа или указать дефект")
-	}
-	if RemoveForm.OrderNumber == "" {
-		if isDefect && RemoveForm.Description == "" {
-			return errors.New("При указании дефекта нужно указать описание")
-		}
-	}
-	if RemoveForm.OrderNumber != "" && GetOrderNumber(RemoveForm.OrderNumber).ID != 0 {
-		// TODO: order number should be unique within company
-		return errors.New("Такой номер заказа уже есть в базе")
-	}
-	if RemoveForm.OrderNumber == "" && !isDefect {
-		return errors.New("no order number or defect")
-	}
-	return nil
-}
-
 func RemoveSegment(segmentId int, RemoveForm RemoveForm) {
 	var segment Segment
 	segment = GetSegment(segmentId)
@@ -291,10 +138,6 @@ func RemoveSegment(segmentId int, RemoveForm RemoveForm) {
 		segment.Description = RemoveForm.Description
 	}
 	DB.Save(&segment)
-}
-
-type PrintForm struct {
-	PrintRack int `form:"print_rack"`
 }
 
 func GetPrintSegments(sectionSlug string, companySlug string, PrintForm PrintForm) []Segment {
