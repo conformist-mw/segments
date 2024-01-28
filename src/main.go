@@ -8,6 +8,7 @@ import (
 	"strings"
 	"text/template"
 	"time"
+	_ "time/tzdata"
 
 	"github.com/gin-contrib/sessions"
 	gormsessions "github.com/gin-contrib/sessions/gorm"
