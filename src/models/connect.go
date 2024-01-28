@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -16,13 +17,17 @@ type Tabler interface {
 var DB *gorm.DB
 
 func ConnectDb() {
+	logLevel := logger.Info
+	if gin.Mode() == gin.ReleaseMode {
+		logLevel = logger.Silent
+	}
 	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		log.New(os.Stdout, "\r\n", log.LstdFlags),
 		logger.Config{
-			LogLevel:                  logger.Info, // Log level
-			IgnoreRecordNotFoundError: true,        // Ignore ErrRecordNotFound error for logger
-			ParameterizedQueries:      true,        // Don't include params in the SQL log
-			Colorful:                  true,        // Disable color
+			LogLevel:                  logLevel,
+			IgnoreRecordNotFoundError: true,
+			ParameterizedQueries:      true,
+			Colorful:                  true,
 		},
 	)
 	db, err := gorm.Open(sqlite.Open("segments.db"), &gorm.Config{
