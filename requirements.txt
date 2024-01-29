@@ -1,8 +1,0 @@
-awesome-slugify==1.6.5
-Django==4.1.13
-django-environ==0.9.0
-django-filter==22.1
-django-widget-tweaks==1.4.12
-gunicorn==20.1.0
-Pillow==10.0.1
-whitenoise==6.3.0
