@@ -1,0 +1,82 @@
+{{ template "top" . }}
+
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Отрезы</a>
+    </div>
+    <div class="navbar-brand navbar-right">
+      <a class="print" href="#"><span class="glyphicon glyphicon-print"></span> Печать</a>
+      <div class="print-form well">
+        <form class="form" id="print-form">
+          <label for="id_print_rack">Расположение:</label>
+            <select name="print_rack" id="id_print_rack">
+              <option value="" selected="">Все</option>
+              {{ range .Racks }}
+                <option value="{{ .ID }}">{{ .Name }}</option>
+              {{ end }}
+            </select>
+          <button type="submit" class="btn btn-info pull-right">Печать</button>
+        </form>
+      </div>
+      <span class="username"><span class="glyphicon glyphicon-user"></span> {{ .Username }}</span>
+      <form action="/logout" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-link" style="padding:0;">
+          <span class="glyphicon glyphicon-log-out"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <ol class="breadcrumb">
+      <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+      <li><a href="/{{ .Company.Slug }}">{{ .Company.Name }}</a></li>
+      <li class="active">{{ .Section.Name }}</li>
+    </ol>
+    <div class="col-lg-12">
+      <div class="row">
+        <div class="col-lg-4">
+          {{ template "search_form" (dict "ColorTypes" .ColorTypes "Colors" .Colors "SearchForm" .SearchForm) }}
+          {{ template "add_form" (dict "Racks" .Racks "ColorTypes" .ColorTypes "Colors" .Colors) }}
+        </div>
+        <div class="col-lg-8">
+          <div class="panel panel-default">
+            {{ if gt (len .Segments) 0 }}
+              {{ range .Segments }}
+                {{ template "segment_tpl" (dict "Segment" . "Racks" $.Racks) }}
+              {{ end }}
+            {{ else }}
+              <h3 class="text-center">Таких отрезков нет</h3>
+            {{ end }}
+            <div class="panel-body">
+              <div class="clearfix">
+                {{ if gt (len .Segments) 0 }}
+                  {{ template "pagination" .Paginator}}
+                {{ end }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ template "scripts" . }}
+<script>
+  window.onload = function(){
+    if ($('#id_deleted').is(':checked')) {
+      $('#id_order_number').show();
+    }
+  }
+  $('#id_create-color_type, #id_color_type').on('change', filterColors);
+  $('#id_create-color, #id_color').on('change', setColorType);
+
+  $('#id_deleted').click(function(){
+    $('#id_order_number')[this.checked ? 'show': 'hide']();
+  });
+</script>
+
+{{ template "bottom" . }}

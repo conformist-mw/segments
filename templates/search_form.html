@@ -1,0 +1,87 @@
+{{ define "search_form" }}
+<form class="panel panel-default" method="GET">
+  <div class="panel-body">
+    <h4>Поиск</h4>
+    <div class="form-group colors">
+      <div class="col-lg-6">
+        <p><strong>Фактура:</strong></p>
+        <select name="color_type" class="form-control" id="id_color_type">
+          <option value="" {{ if eq .SearchForm.ColorType "" }}selected{{ end }}>Все</option>
+          {{ $colorType := .SearchForm.ColorType }}
+          {{ range .ColorTypes }}
+            <option value="{{ .Slug }}" {{ if eq .Slug $colorType }}selected{{ end }}>{{ .Name }}</option>
+          {{ end }}
+        </select>
+      </div>
+      <div class="col-lg-6">
+        <p><strong>Цвет:</strong></p>
+        <select name="color" class="form-control" label="color" id="id_color">
+          <option data-type="" value="" {{ if eq .SearchForm.Color "" }}selected{{ end }}>Все</option>
+          {{ $color := .SearchForm.Color }}
+          {{ range .Colors }}
+            <option data-type="{{ .Type.Slug }}" value="{{ .Slug }}" {{ if eq .Slug $color }}selected{{ end }}>{{ .Name }}</option>
+          {{ end }}
+        </select>
+      </div>
+    </div>
+    <div class="form-group ">
+    </div>
+    <p><strong>Размеры</strong></p>
+    <div class="form-group ">
+      <div class="input-group">
+        <span class="input-group-addon">ширина</span>
+        <input
+          type="number"
+          name="width"
+          placeholder="введите значение"
+          class="form-control js-price-format"
+          autocomplete="off"
+          id="id_width"
+          {{ if .SearchForm.Width }}
+            value="{{ .SearchForm.Width }}"
+          {{ end }}
+        >
+        <span class="input-group-addon">см</span>
+      </div>
+    </div>
+    <div class="form-group ">
+      <div class="input-group">
+        <span class="input-group-addon">длина</span>
+        <input
+          type="number"
+          name="height"
+          placeholder="введите значение"
+          class="form-control js-price-format"
+          autocomplete="off"
+          id="id_height"
+          {{ if .SearchForm.Height }}
+            value="{{ .SearchForm.Height }}"
+          {{ end }}
+        >
+        <span class="input-group-addon">см</span>
+      </div>
+    </div>
+    <div class="form-group ">
+      <label for="id_deleted">
+        <input type="checkbox" name="deleted" id="id_deleted" {{ if eq .SearchForm.Deleted "on" }}checked{{ end }}>
+        Удалённые
+      </label>
+      <p>
+        <input
+          type="text"
+          name="order_number"
+          style="display: none;"
+          placeholder="номер заказа"
+          id="id_order_number"
+          class="form-control"
+          {{ if .SearchForm.OrderNumber }}
+            value="{{ .SearchForm.OrderNumber }}"
+          {{ end }}
+        >
+      </p>
+    </div>
+    <button type="submit" class="btn btn-success" name="search">Показать</button>
+    <a href="#" id="reset-form" class="btn btn-danger pull-right">Сбросить</a>
+  </div>
+</form>
+{{ end }}

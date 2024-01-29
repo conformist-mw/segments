@@ -1,0 +1,23 @@
+{{ template "top" . }}
+{{ template "navbar" . }}
+<div class="container">
+  <div class="row">
+    <ol class="breadcrumb">
+        <li class="active"><span class="glyphicon glyphicon-home"></span></li>
+    </ol>
+    <div class="col-lg-12">
+      <div class="row">
+        {{ range .Companies }}
+          <div class="col-lg-6 text-center" style="">
+            <a href="/{{ .Slug }}">
+              <h2>{{ .Name }}</h2>
+              <img src="{{ .ImageUrl }}" class="img-thumbnail" alt="{{ .Name }}">
+            </a>
+          </div>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</div>
+{{ template "scripts" . }}
+{{ template "bottom" . }}

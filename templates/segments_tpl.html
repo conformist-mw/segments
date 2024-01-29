@@ -1,0 +1,98 @@
+{{ define "segment_tpl" }}
+  <div class="panel-body parent">
+    <div class="row">
+
+      <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-7">
+              <p>
+                Фактура:<strong>{{ .Segment.Color.Type.Name }}</strong>
+                Цвет: <strong>{{ .Segment.Color.Name }}</strong>
+              </p>
+            </div>
+            <div class="col-sm-5">
+              <p class="text-right">Площадь: <strong class="label label-default">{{ .Segment.Square }} м²</strong></p>
+            </div>
+            <div class="col-sm-12">
+              <div>Расположение:
+                <span class="rack">
+                  <strong>{{ .Segment.Rack.Name }}</strong>
+                  <button class="edit">&#9998;</button>
+                </span>
+              </div>
+              <form class="move-segment" style="display:none;">
+                {{ range .Racks }}
+                  <div class="radio">
+                    <label><input type="radio" name="rack" value="{{ .ID }}" required>{{ .Name }}</label>
+                  </div>
+                {{ end }}
+                <button type="submit" class="move" value="{{ .Segment.ID }}">✔</button>
+              </form>
+            </div>
+          </div>
+      </div>
+
+      <div class="col-sm-12">
+        <p>
+          <span class="label label-success">ширина: {{ .Segment.Width }} см</span>
+          <span class="label label-primary">длина: {{ .Segment.Height }} см</span>
+        </p>
+      </div>
+      <div class="col-sm-12">
+      </div>
+      <div class="col-sm-6">
+        <p class="text-muted">Добавлено: {{ .Segment.Created | formatInLocation }}</p>
+      </div>
+      {{ if not .Segment.Active }}
+        <div class="col-sm-6">
+          <p class="text-muted">Удалено: {{ .Segment.Deleted | formatInLocation }}</p>
+          {{ if .Segment.Description }}
+            <p class="text-muted">Причина: {{ .Segment.Description }}</p>
+          {{ end }}
+        </div>
+        <div class="col-sm-6">
+          <p class="text-muted">Номер заказа: <span style="color: red;"><b>{{ .Segment.OrderNumber.Name }}</b></span></p>
+        </div>
+        <div class="col-sm-6 text-right">
+          <button class="btn btn-warning activate" value="{{ .Segment.ID }}">Вернуть</button>
+        </div>
+      {{ end }}
+      {{ if .Segment.Active }}
+        <div class="col-sm-6 text-right">
+          <button class="btn btn-info remove-toggle" value="{{ .Segment.ID }}">Удалить</button>
+        </div>
+      {{ end }}
+
+      <div class="col-sm-10 col-sm-offset-1 remove-form" data-toggle="{{ .Segment.ID }}" style="display: none">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <form class="form">
+              <p>Подтверждение:</p>
+              <div class="form-group">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  class="form-control order"
+                  name="order_number"
+                  placeholder="Введите номер заказа"
+                >
+              </div>
+              <div class="checkbox">
+                <label><input type="checkbox" name="defect" autocomplete="off">Есть дефект?</label>
+              </div>
+              <div class="form-group">
+                <input type="text" name="description" class="form-control description" placeholder="Описание отреза">
+              </div>
+              <small class="text-danger"></small>
+              <div class="text-right">
+                <button class="btn btn-default btn-danger removeSegment" value="{{ .Segment.ID }}">Удалить</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <hr>
+  </div>
+{{ end }}

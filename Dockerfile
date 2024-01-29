@@ -1,7 +1,20 @@
-FROM python:3.10-bullseye
+FROM golang:1.21-alpine AS builder
 
-COPY requirements.txt /tmp/
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+RUN apk update && apk add gcc libc-dev
 
-COPY code /code/
-WORKDIR /code
+WORKDIR /app
+COPY . .
+RUN go mod download
+RUN CGO_ENABLED=1 CGO_CFLAGS="-D_LARGEFILE64_SOURCE" go build -o /app/segments
+
+FROM alpine:latest
+
+WORKDIR /app
+COPY --from=builder /app/segments /app/segments
+COPY templates /app/templates
+COPY static /app/static
+
+ENV GIN_MODE=release
+ENV PORT=8080
+EXPOSE 8080
+CMD ["./segments"]
