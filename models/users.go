@@ -17,3 +17,9 @@ type User struct {
 func (User) TableName() string {
 	return "auth_user"
 }
+
+func GetUser(username string) User {
+	var user User
+	DB.Where(&User{Username: username}).First(&user)
+	return user
+}

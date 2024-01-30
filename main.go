@@ -13,6 +13,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	gormsessions "github.com/gin-contrib/sessions/gorm"
 
+	"github.com/conformist-mw/segments/admin"
 	"github.com/conformist-mw/segments/models"
 	"github.com/gin-gonic/gin"
 )
@@ -65,6 +66,26 @@ func add(a, b int) int {
 	return a + b
 }
 
+func SuperuserRequired(c *gin.Context) {
+	session := sessions.Default(c)
+	username := session.Get(userkey)
+	if username == nil {
+		c.Redirect(http.StatusFound, "/login")
+		return
+	}
+
+	user := models.GetUser(username.(string))
+	if user.ID == 0 {
+		c.Redirect(http.StatusFound, "/login")
+		return
+	}
+	if !user.IsSuperuser {
+		c.Redirect(http.StatusFound, "/")
+		return
+	}
+	c.Next()
+}
+
 func AuthRequired(c *gin.Context) {
 	session := sessions.Default(c)
 	user := session.Get(userkey)
@@ -72,7 +93,7 @@ func AuthRequired(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/login")
 		return
 	}
-	c.Keys["User"] = user
+	c.Keys["User"] = models.GetUser(user.(string))
 	c.Next()
 }
 
@@ -105,6 +126,12 @@ func main() {
 		auth.POST("/:company/:section/remove/:segment_id", RemoveSegment)
 		auth.POST("/logout", Logout)
 
+	}
+
+	adminRouter := router.Group("/admin")
+	adminRouter.Use(SuperuserRequired)
+	{
+		adminRouter.GET("", admin.AdminIndex)
 	}
 
 	router.GET("/login", LoginForm)
