@@ -103,6 +103,7 @@ func AddSegment(sectionSlug string, companySlug string, AddForm AddForm) {
 	segment.Square = float64(AddForm.Width*AddForm.Height) / 10000
 	segment.ColorID = color.ID
 	segment.RackID = uint(AddForm.RackID)
+	segment.Created = time.Now()
 
 	DB.Create(&segment)
 }
