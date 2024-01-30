@@ -12,7 +12,7 @@ func render(c *gin.Context, templateName string, data gin.H) {
 	if data == nil {
 		data = gin.H{}
 	}
-	data["Username"] = c.Keys["User"]
+	data["User"] = c.Keys["User"]
 	c.HTML(200, templateName, data)
 }
 

@@ -1,0 +1,27 @@
+{{ template "admin_top" }}
+{{ template "admin_nav" }}
+<table>
+  <thead>
+    <tr>
+      <th class="col">ID</th>
+      <th class="col">Name</th>
+      <th class="col">Usename</th>
+      <th class="col">Email</th>
+      <th class="col">Is Superuser</th>
+      <th class="col">Is Active</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .Users }}
+    <tr>
+      <td>{{ .ID }}</td>
+      <td>{{ .Name }}</td>
+      <td>{{ .Username }}</td>
+      <td>{{ .Email }}</td>
+      <td>{{ .IsSuperuser }}</td>
+      <td>{{ .IsActive }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ template "admin_bottom" }}

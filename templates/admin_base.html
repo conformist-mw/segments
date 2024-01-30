@@ -1,0 +1,30 @@
+{{ define "admin_top"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin</title>
+  <link rel="stylesheet" href="/static/pico.min.css">
+</head>
+
+<body>
+<div class="container">
+{{ end }}
+{{ define "admin_nav" }}
+  <nav>
+    <ul>
+      <li><a href="/admin"><strong>Админ</strong></a></li>
+      <li><a href="/">Отрезки</a></li>
+    </ul>
+    <ul>
+      <li><a href="#" role="button">Log Out</a></li>
+    </ul>
+  </nav>
+{{ end}}
+
+{{ define "admin_bottom" }}
+</div>
+<script src="/static/htmx.min.js"></script>
+</body>
+</html>
+{{ end }}
