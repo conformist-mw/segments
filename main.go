@@ -117,13 +117,13 @@ func main() {
 	auth.Use(AuthRequired)
 	{
 		auth.GET("/", GetCompanies)
-		auth.GET("/:company", GetSections)
-		auth.GET("/:company/:section", GetSegments)
-		auth.POST("/:company/:section/add", AddSegment)
-		auth.POST("/:company/:section/print", PrintSegments)
-		auth.POST("/:company/:section/move/:segment_id", MoveSegment)
-		auth.POST("/:company/:section/activate/:segment_id", ActivateSegment)
-		auth.POST("/:company/:section/remove/:segment_id", RemoveSegment)
+		auth.GET("/companies/:company", GetSections)
+		auth.GET("/companies/:company/:section", GetSegments)
+		auth.POST("/companies/:company/:section/add", AddSegment)
+		auth.POST("/companies/:company/:section/print", PrintSegments)
+		auth.POST("/companies/:company/:section/move/:segment_id", MoveSegment)
+		auth.POST("/companies/:company/:section/activate/:segment_id", ActivateSegment)
+		auth.POST("/companies/:company/:section/remove/:segment_id", RemoveSegment)
 		auth.POST("/logout", Logout)
 
 	}

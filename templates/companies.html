@@ -9,7 +9,7 @@
       <div class="row">
         {{ range .Companies }}
           <div class="col-lg-6 text-center" style="">
-            <a href="/{{ .Slug }}">
+            <a href="/companies/{{ .Slug }}">
               <h2>{{ .Name }}</h2>
               <img src="{{ .ImageUrl }}" class="img-thumbnail" alt="{{ .Name }}">
             </a>
