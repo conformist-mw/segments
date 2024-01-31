@@ -2,28 +2,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
   <title>Admin</title>
-  <link rel="stylesheet" href="/static/pico.min.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/bootstrap5.min.css">
+  <link rel="stylesheet" href="/static/bootstrap-icons.min.css">
+  <link rel="icon" href="/static/favicon.ico">
 </head>
 
 <body>
 <div class="container">
 {{ end }}
 {{ define "admin_nav" }}
-  <nav>
-    <ul>
-      <li><a href="/admin"><strong>Админ</strong></a></li>
-      <li><a href="/">Отрезки</a></li>
-    </ul>
-    <ul>
-      <li><a href="#" role="button">Log Out</a></li>
-    </ul>
-  </nav>
+<nav class="navbar navbar-expand-lg bg-dark border-bottom border-body mb-3" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Отрезы</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/admin">Admin</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
 {{ end}}
 
 {{ define "admin_bottom" }}
 </div>
+<script src="/static/bootstrap5.min.js"></script>
 <script src="/static/htmx.min.js"></script>
 </body>
 </html>

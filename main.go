@@ -131,7 +131,9 @@ func main() {
 	adminRouter := router.Group("/admin")
 	adminRouter.Use(SuperuserRequired)
 	{
-		adminRouter.GET("", admin.AdminIndex)
+		adminRouter.GET("", admin.Index)
+		adminRouter.GET("/users", admin.Users)
+		adminRouter.GET("/users/:username/edit", admin.GetUserEditForm)
 	}
 
 	router.GET("/login", LoginForm)

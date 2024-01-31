@@ -23,3 +23,9 @@ func GetUser(username string) User {
 	DB.Where(&User{Username: username}).First(&user)
 	return user
 }
+
+func GetUsers() []User {
+	var users []User
+	DB.Find(&users)
+	return users
+}
