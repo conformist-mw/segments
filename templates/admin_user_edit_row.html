@@ -1,0 +1,23 @@
+<tr hx-trigger="cancel" class="editing" hx-get="/admin/users/{{ .User.ID }}">
+  <td>{{ .User.ID }}</div>
+  <td><input type="text" class="form-control" name="username" value="{{ .User.Username }}"></td>
+  <td><input type="email" class="form-control" name="email" value="{{ .User.Email }}"></td>
+  <td><input type="text" class="form-control" name="first_name" value="{{ .User.FirstName }}"></td>
+  <td><input type="text" class="form-control" name="last_name" value="{{ .User.LastName }}"></td>
+  <td>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="is_superuser" {{ if .User.IsSuperuser }}checked{{ end }}>
+    </div>
+  </td>
+  <td>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="is_active" {{ if .User.IsActive }}checked{{ end }}>
+    </div>
+  </td>
+  <td>
+    <div class="btn-group">
+      <button class="btn btn-secondary" ht-patch="/admin/users/{{ .User.ID }}/edit"><i class="bi bi-floppy"></i></button>
+      <button class="btn btn-warning" hx-get="/admin/users/{{ .User.ID }}"><i class="bi bi-x-square"></i></button>
+    </div>
+  </td>
+</tr>

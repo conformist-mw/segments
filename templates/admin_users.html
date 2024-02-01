@@ -1,32 +1,37 @@
 {{ template "admin_top" }}
 {{ template "admin_nav" }}
 <div class="container">
-  <div class="row bg-light text-dark">
-    <div class="col">ID</div>
-    <div class="col">Username</div>
-    <div class="col">Email</div>
-    <div class="col">First Name</div>
-    <div class="col">Last Name</div>
-    <div class="col">Is Superuser</div>
-    <div class="col">Is Active</div>
-    <div class="col">Actions</div>
-  </div>
-  {{ range .Users }}
-  <div class="row border-top" hx-target="this" hx-swap="outerHTML">
-    <div class="col">{{ .ID }}</div>
-    <div class="col">{{ .Username }}</div>
-    <div class="col">{{ .Email }}</div>
-    <div class="col">{{ .FirstName }}</div>
-    <div class="col">{{ .LastName }}</div>
-    <div class="col">{{ if .IsSuperuser }}✅{{ else }}❌{{ end }}</div>
-    <div class="col">{{ if .IsActive }}✅{{ else }}❌{{ end }}</div>
-    <div class="col">
-      <div class="btn-group" role="group">
-        <button hx-get="/admin/users/{{ .Username }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
-        <button hx-delete="/admin/users/{{ .Username }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-      </div>
-    </div>
-  </div>
-  {{ end }}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Is Superuser</th>
+        <th scope="col">Is Active</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody hx-target="closest tr" hx-swap="outerHTML">
+      {{ range .Users }}
+      <tr>
+        <th scope="row">{{ .ID }}</th>
+        <td>{{ .Username }}</td>
+        <td>{{ .Email }}</td>
+        <td>{{ .FirstName }}</td>
+        <td>{{ .LastName }}</td>
+        <td>{{ if .IsSuperuser }}✅{{ else }}❌{{ end }}</td>
+        <td>{{ if .IsActive }}✅{{ else }}❌{{ end }}</td>
+        <td>
+          <div class="btn-group" role="group">
+            <button hx-get="/admin/users/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
+            <button hx-delete="/admin/users/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+      {{ end }}
+    </tbody>
 </div>
 {{ template "admin_bottom" }}
