@@ -117,14 +117,18 @@ func main() {
 	auth.Use(AuthRequired)
 	{
 		auth.GET("/", GetCompanies)
-		auth.GET("/companies/:company", GetSections)
-		auth.GET("/companies/:company/:section", GetSegments)
-		auth.POST("/companies/:company/:section/add", AddSegment)
-		auth.POST("/companies/:company/:section/print", PrintSegments)
-		auth.POST("/companies/:company/:section/move/:segment_id", MoveSegment)
-		auth.POST("/companies/:company/:section/activate/:segment_id", ActivateSegment)
-		auth.POST("/companies/:company/:section/remove/:segment_id", RemoveSegment)
 		auth.POST("/logout", Logout)
+		companiesRouter := auth.Group("/companies")
+		{
+			companiesRouter.GET("/:company", GetSections)
+			companiesRouter.GET("/:company/:section", GetSegments)
+			companiesRouter.POST("/:company/:section/add", AddSegment)
+			companiesRouter.POST("/:company/:section/print", PrintSegments)
+			companiesRouter.POST("/:company/:section/move/:segment_id", MoveSegment)
+			companiesRouter.POST("/:company/:section/activate/:segment_id", ActivateSegment)
+			companiesRouter.POST("/:company/:section/remove/:segment_id", RemoveSegment)
+
+		}
 
 	}
 
@@ -133,7 +137,8 @@ func main() {
 	{
 		adminRouter.GET("", admin.Index)
 		adminRouter.GET("/users", admin.Users)
-		adminRouter.GET("/users/:username/edit", admin.GetUserEditForm)
+		adminRouter.GET("/users/:id", admin.GetUserViewRow)
+		adminRouter.GET("/users/:id/edit", admin.GetUserEditRow)
 	}
 
 	router.GET("/login", LoginForm)
