@@ -97,6 +97,21 @@ func AuthRequired(c *gin.Context) {
 	c.Next()
 }
 
+func UsersAdminRequired(c *gin.Context) {
+	userId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.AbortWithStatus(400)
+		return
+	}
+	user := models.GetUserById(uint(userId))
+	if user.ID == 0 {
+		c.AbortWithStatus(400)
+		return
+	}
+	c.Keys["CurrentUser"] = user
+	c.Next()
+}
+
 func main() {
 	models.ConnectDb()
 	store := gormsessions.NewStore(models.DB, true, []byte("secret"))
@@ -137,8 +152,13 @@ func main() {
 	{
 		adminRouter.GET("", admin.Index)
 		adminRouter.GET("/users", admin.Users)
-		adminRouter.GET("/users/:id", admin.GetUserViewRow)
-		adminRouter.GET("/users/:id/edit", admin.GetUserEditRow)
+		adminUsersRouter := adminRouter.Group("users")
+		adminUsersRouter.Use(UsersAdminRequired)
+		{
+			adminUsersRouter.GET("/:id", admin.GetUserViewRow)
+			adminUsersRouter.GET("/:id/edit", admin.GetUserEditRow)
+			adminUsersRouter.PATCH("/:id", admin.UpdateUserRow)
+		}
 	}
 
 	router.GET("/login", LoginForm)

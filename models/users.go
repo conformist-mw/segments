@@ -35,3 +35,39 @@ func GetUsers() []User {
 	DB.Find(&users)
 	return users
 }
+
+type UserUpdateForm struct {
+	Email       string `form:"email"`
+	Username    string `form:"username"`
+	FirstName   string `form:"first_name"`
+	LastName    string `form:"last_name"`
+	IsSuperuser string `form:"is_superuser"`
+	IsActive    string `form:"is_active"`
+}
+
+func UpdateUser(user User, form UserUpdateForm) User {
+	if form.Email != "" {
+		user.Email = form.Email
+	}
+	if form.Username != "" {
+		user.Username = form.Username
+	}
+	if form.FirstName != "" {
+		user.FirstName = form.FirstName
+	}
+	if form.LastName != "" {
+		user.LastName = form.LastName
+	}
+	if form.IsSuperuser == "on" {
+		user.IsSuperuser = true
+	} else {
+		user.IsSuperuser = false
+	}
+	if form.IsActive == "on" {
+		user.IsActive = true
+	} else {
+		user.IsActive = false
+	}
+	DB.Save(&user)
+	return user
+}

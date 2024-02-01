@@ -16,7 +16,7 @@
   </td>
   <td>
     <div class="btn-group">
-      <button class="btn btn-secondary" ht-patch="/admin/users/{{ .User.ID }}/edit"><i class="bi bi-floppy"></i></button>
+      <button class="btn btn-secondary" hx-patch="/admin/users/{{ .User.ID }}" hx-include="closest tr"><i class="bi bi-floppy"></i></button>
       <button class="btn btn-warning" hx-get="/admin/users/{{ .User.ID }}"><i class="bi bi-x-square"></i></button>
     </div>
   </td>

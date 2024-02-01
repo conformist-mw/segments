@@ -4,8 +4,8 @@
   <td>{{ .User.Email }}</td>
   <td>{{ .User.FirstName }}</td>
   <td>{{ .User.LastName }}</td>
-  <td>{{ if .IsSuperuser }}✅{{ else }}❌{{ end }}</td>
-  <td>{{ if .IsActive }}✅{{ else }}❌{{ end }}</td>
+  <td>{{ if .User.IsSuperuser }}✅{{ else }}❌{{ end }}</td>
+  <td>{{ if .User.IsActive }}✅{{ else }}❌{{ end }}</td>
   <td>
     <div class="btn-group" role="group">
       <button hx-get="/admin/users/{{ .User.ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
