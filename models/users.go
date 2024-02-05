@@ -1,5 +1,17 @@
 package models
 
+import (
+	"crypto/rand"
+	"crypto/sha256"
+	"encoding/base64"
+	"fmt"
+
+	"golang.org/x/crypto/pbkdf2"
+)
+
+const Iterations = 390000
+const SaltSize = 22
+
 type User struct {
 	ID          uint   `gorm:"primarykey;not null" json:"id"`
 	Email       string `gorm:"type:varchar(254);not null" json:"email"`
@@ -34,6 +46,53 @@ func GetUsers() []User {
 	var users []User
 	DB.Find(&users)
 	return users
+}
+
+func GenerateRandomSalt() string {
+	salt := make([]byte, SaltSize)
+	_, err := rand.Read(salt)
+	if err != nil {
+		panic(err)
+	}
+	return base64.StdEncoding.EncodeToString(salt)[:SaltSize]
+}
+
+func GeneratePasswordHash(password string) string {
+	salt := GenerateRandomSalt()
+	hash := pbkdf2.Key([]byte(password), []byte(salt), Iterations, sha256.Size, sha256.New)
+	passwordHash := base64.StdEncoding.EncodeToString(hash)
+
+	return fmt.Sprintf("pbkdf2_sha256$%d$%s$%s", Iterations, salt, passwordHash)
+}
+
+type CreateUserForm struct {
+	Username    string `form:"username" binding:"required"`
+	Password    string `form:"password" binding:"required"`
+	Email       string `form:"email"`
+	FirstName   string `form:"first_name"`
+	LastName    string `form:"last_name"`
+	IsActive    string `form:"is_active"`
+	IsSuperuser string `form:"is_superuser"`
+}
+
+func CreateUser(form CreateUserForm) User {
+	var user User
+	user.Username = form.Username
+	user.Email = form.Email
+	user.FirstName = form.FirstName
+	user.LastName = form.LastName
+	user.IsSuperuser = false
+	user.IsStaff = false
+	user.IsActive = false
+	if form.IsActive == "on" {
+		user.IsActive = true
+	}
+	if form.IsSuperuser == "on" {
+		user.IsSuperuser = true
+	}
+	user.Password = GeneratePasswordHash(form.Password)
+	DB.Create(&user)
+	return user
 }
 
 type UserUpdateForm struct {

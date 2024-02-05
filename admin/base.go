@@ -10,7 +10,20 @@ func Index(c *gin.Context) {
 }
 
 func Users(c *gin.Context) {
-	c.HTML(200, "admin_users.html", gin.H{"Users": models.GetUsers()})
+	form := models.CreateUserForm{}
+	c.HTML(200, "admin_users.html", gin.H{"Users": models.GetUsers(), "Form": form})
+}
+
+func CreateUser(c *gin.Context) {
+	var form models.CreateUserForm
+	c.Bind(&form)
+	err := models.ValidateCreateUserForm(form)
+	if err != nil {
+		c.HTML(400, "admin_users.html", gin.H{"User": c.Keys["CurrentUser"], "Error": err, "Form": form, "Users": models.GetUsers()})
+		return
+	}
+	models.CreateUser(form)
+	c.Redirect(302, "/admin/users")
 }
 
 func GetUserEditRow(c *gin.Context) {

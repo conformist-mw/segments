@@ -152,6 +152,7 @@ func main() {
 	{
 		adminRouter.GET("", admin.Index)
 		adminRouter.GET("/users", admin.Users)
+		adminRouter.POST("/users", admin.CreateUser)
 		adminUsersRouter := adminRouter.Group("users")
 		adminUsersRouter.Use(UsersAdminRequired)
 		{

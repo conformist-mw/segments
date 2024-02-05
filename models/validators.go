@@ -4,6 +4,8 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"errors"
+	"net/mail"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -83,4 +85,23 @@ func CheckLogin(userForm LoginForm) (User, error) {
 	}
 
 	return User{}, errors.New("Неправильное имя пользователя или пароль")
+}
+
+func ValidateCreateUserForm(form CreateUserForm) error {
+	match, _ := regexp.MatchString("^[a-z.]{2,}$", form.Username)
+	if !match {
+		return errors.New("Username must only contain ASCII lowercase letters and dots, and be at least 2 characters long")
+	}
+
+	if len(form.Password) < 5 {
+		return errors.New("Password must be at least 5 characters long")
+	}
+
+	if form.Email != "" {
+		_, err := mail.ParseAddress(form.Email)
+		if err != nil {
+			return errors.New("Email is not valid")
+		}
+	}
+	return nil
 }
