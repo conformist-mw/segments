@@ -17,7 +17,7 @@
     <tbody hx-target="closest tr" hx-swap="outerHTML">
       {{ range .Users }}
       <tr>
-        <th scope="row">{{ .ID }}</th>
+        <th scope="row">{ bnbvbntYGH678uKdfv gb{ .ID }}</th>
         <td>{{ .Username }}</td>
         <td>{{ .Email }}</td>
         <td>{{ .FirstName }}</td>
@@ -33,5 +33,42 @@
       </tr>
       {{ end }}
     </tbody>
+  </table>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <form method="post">
+        <legend>Create new user</legend>
+        <div class="mb-3">
+          <input class="form-control" type="text" name="username" placeholder="username" id="username" minlength="2" required value="{{ .Form.Username }}">
+        </div>
+        <div class="mb-3">
+          <input class="form-control" type="password" name="password" placeholder="password" id="password" minlength="5" required>
+        </div>
+        <div class="mb-3">
+          <input class="form-control" type="email" name="email" placeholder="email" id="email" value="{{ .Form.Email }}">
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" name="first_name" placeholder="first name" class="form-control" id="first_name" value="{{ .Form.FirstName }}">
+          <input type="text" name="last_name" placeholder="last name" class="form-control" id="last_name" value="{{ .Form.LastName }}">
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="is_superuser" id="is_superuser" {{ if .Form.IsSuperuser }}checked{{ end }}>
+          <label class="form-check-label" for="is_superuser">Is Superuser</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="is_active" id="is_active" {{ if .Form.IsActive }}checked{{ end }}>
+          <label class="form-check-label" for="is_active">Is Active</label>
+        </div>
+        {{ if .Error }}
+        <div class="m-3 p-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
+          {{ .Error }}
+        </div>
+        {{ end }}
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="submit" class="btn btn-outline-primary">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {{ template "admin_bottom" }}
