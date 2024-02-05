@@ -17,7 +17,7 @@
     <tbody hx-target="closest tr" hx-swap="outerHTML">
       {{ range .Users }}
       <tr>
-        <th scope="row">{ bnbvbntYGH678uKdfv gb{ .ID }}</th>
+        <th scope="row">{{ .ID }}</th>
         <td>{{ .Username }}</td>
         <td>{{ .Email }}</td>
         <td>{{ .FirstName }}</td>
