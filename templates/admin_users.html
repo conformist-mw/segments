@@ -16,21 +16,7 @@
     </thead>
     <tbody hx-target="closest tr" hx-swap="outerHTML">
       {{ range .Users }}
-      <tr>
-        <th scope="row">{{ .ID }}</th>
-        <td>{{ .Username }}</td>
-        <td>{{ .Email }}</td>
-        <td>{{ .FirstName }}</td>
-        <td>{{ .LastName }}</td>
-        <td>{{ if .IsSuperuser }}✅{{ else }}❌{{ end }}</td>
-        <td>{{ if .IsActive }}✅{{ else }}❌{{ end }}</td>
-        <td>
-          <div class="btn-group" role="group">
-            <button hx-get="/admin/users/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
-            <button hx-delete="/admin/users/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-          </div>
-        </td>
-      </tr>
+        {{ template "admin_user_row" . }}
       {{ end }}
     </tbody>
   </table>

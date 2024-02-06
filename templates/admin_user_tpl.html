@@ -1,0 +1,44 @@
+{{ define "admin_user_row" }}
+<tr>
+  <th scope="row">{{ .ID }}</th>
+  <td>{{ .Username }}</td>
+  <td>{{ .Email }}</td>
+  <td>{{ .FirstName }}</td>
+  <td>{{ .LastName }}</td>
+  <td>{{ if .IsSuperuser }}<i class="bi bi-check"></i>{{ else }}<i class="bi bi-x"></i>{{ end }}</td>
+  <td>{{ if .IsActive }}<i class="bi bi-check"></i>{{ else }}<i class="bi bi-x"></i>{{ end }}</td>
+  <td>
+    <div class="btn-group" role="group">
+      <button title="edit" hx-get="/admin/users/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
+            <button title="change password" class="btn btn-secondary"><i class="bi bi-key"></i></button>
+            <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/users/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+    </div>
+  </td>
+</tr>
+{{ end }}
+
+{{ define "admin_user_edit_row" }}
+<tr hx-trigger="cancel" class="editing" hx-get="/admin/users/{{ .ID }}">
+  <td>{{ .ID }}</div>
+  <td><input type="text" class="form-control" name="username" value="{{ .Username }}"></td>
+  <td><input type="email" class="form-control" name="email" value="{{ .Email }}"></td>
+  <td><input type="text" class="form-control" name="first_name" value="{{ .FirstName }}"></td>
+  <td><input type="text" class="form-control" name="last_name" value="{{ .LastName }}"></td>
+  <td>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="is_superuser" {{ if .IsSuperuser }}checked{{ end }}>
+    </div>
+  </td>
+  <td>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="is_active" {{ if .IsActive }}checked{{ end }}>
+    </div>
+  </td>
+  <td>
+    <div class="btn-group">
+      <button class="btn btn-secondary" hx-patch="/admin/users/{{ .ID }}" hx-include="closest tr"><i class="bi bi-floppy"></i></button>
+      <button class="btn btn-warning" hx-get="/admin/users/{{ .ID }}"><i class="bi bi-x-square"></i></button>
+    </div>
+  </td>
+</tr>
+{{ end }}
