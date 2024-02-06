@@ -10,8 +10,8 @@
   <td>
     <div class="btn-group" role="group">
       <button title="edit" hx-get="/admin/users/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
-            <button title="change password" class="btn btn-secondary"><i class="bi bi-key"></i></button>
-            <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/users/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+      <button title="change password" class="btn btn-secondary"><i class="bi bi-key"></i></button>
+      <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/users/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
     </div>
   </td>
 </tr>
