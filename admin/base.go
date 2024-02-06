@@ -31,7 +31,7 @@ func GetUserEditRow(c *gin.Context) {
 }
 
 func GetUserViewRow(c *gin.Context) {
-	c.HTML(200, "admin_user_view_row.html", gin.H{"User": c.Keys["CurrentUser"]})
+	c.HTML(200, "admin_user_row.html", gin.H{"User": c.Keys["CurrentUser"]})
 }
 
 func UpdateUserRow(c *gin.Context) {
@@ -40,5 +40,11 @@ func UpdateUserRow(c *gin.Context) {
 	c.Bind(&form)
 	user = c.Keys["CurrentUser"].(models.User)
 	user = models.UpdateUser(user, form)
-	c.HTML(200, "admin_user_view_row.html", gin.H{"User": user})
+	c.HTML(200, "admin_user_row.html", gin.H{"User": user})
+}
+
+func DeleteUser(c *gin.Context) {
+	user := c.Keys["CurrentUser"].(models.User)
+	models.DeleteUser(user)
+	c.JSON(200, gin.H{})
 }

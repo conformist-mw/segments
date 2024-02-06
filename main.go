@@ -159,6 +159,7 @@ func main() {
 			adminUsersRouter.GET("/:id", admin.GetUserViewRow)
 			adminUsersRouter.GET("/:id/edit", admin.GetUserEditRow)
 			adminUsersRouter.PATCH("/:id", admin.UpdateUserRow)
+			adminUsersRouter.DELETE("/:id", admin.DeleteUser)
 		}
 	}
 

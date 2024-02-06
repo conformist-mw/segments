@@ -130,3 +130,7 @@ func UpdateUser(user User, form UserUpdateForm) User {
 	DB.Save(&user)
 	return user
 }
+
+func DeleteUser(user User) {
+	DB.Delete(&user)
+}
