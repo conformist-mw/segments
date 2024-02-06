@@ -46,5 +46,5 @@ func UpdateUserRow(c *gin.Context) {
 func DeleteUser(c *gin.Context) {
 	user := c.Keys["CurrentUser"].(models.User)
 	models.DeleteUser(user)
-	c.JSON(200, gin.H{})
+	c.Status(200)
 }
