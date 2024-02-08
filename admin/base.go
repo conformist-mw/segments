@@ -61,3 +61,7 @@ func DeleteUser(c *gin.Context) {
 	models.DeleteUser(user)
 	c.Status(200)
 }
+
+func GetColorTypes(c *gin.Context) {
+	c.HTML(200, "admin_color_types.html", gin.H{"ColorTypes": models.GetColorTypes()})
+}

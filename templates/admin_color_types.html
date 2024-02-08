@@ -1,0 +1,51 @@
+{{ template "admin_top" }}
+{{ template "admin_nav" }}
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Slug</th>
+        <th class="text-center" scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody hx-target="closest tr" hx-swap="outerHTML">
+      {{ range .ColorTypes }}
+      <tr>
+        <th scope="row">{{ .ID }}</th>
+        <td>{{ .Name }}</td>
+        <td>{{ .Slug }}</td>
+        <td class="text-center">
+          <div class="btn-group" role="group">
+            <button title="edit" hx-get="/admin/users/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
+            <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/users/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+      {{ end }}
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <form method="post">
+        <legend>Create new color type</legend>
+        <div class="mb-3">
+          <input class="form-control" type="text" name="name" placeholder="name" minlength="2" required value="{{ .Form.Name }}">
+        </div>
+        <div class="mb-3">
+          <input class="form-control" type="text" name="slug" placeholder="slug" value="{{ .Form.Slug }}" required>
+        </div>
+        {{ if .Error }}
+        <div class="m-3 p-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
+          {{ .Error }}
+        </div>
+        {{ end }}
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="submit" class="btn btn-outline-primary">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{{ template "admin_bottom" }}

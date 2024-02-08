@@ -163,6 +163,8 @@ func main() {
 			adminUsersRouter.GET("/:id/change-password", admin.GetUserPasswordRow)
 			adminUsersRouter.POST("/:id/change-password", admin.ChangeUserPassword)
 		}
+
+		adminRouter.GET("/color-types", admin.GetColorTypes)
 	}
 
 	router.GET("/login", LoginForm)
