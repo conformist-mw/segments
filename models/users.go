@@ -131,6 +131,16 @@ func UpdateUser(user User, form UserUpdateForm) User {
 	return user
 }
 
+type ChangePasswordForm struct {
+	Password string `form:"password" binding:"required"`
+}
+
+func ChangePassword(user User, form ChangePasswordForm) User {
+	user.Password = GeneratePasswordHash(form.Password)
+	DB.Save(&user)
+	return user
+}
+
 func DeleteUser(user User) {
 	DB.Delete(&user)
 }
