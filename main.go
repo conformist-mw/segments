@@ -160,6 +160,8 @@ func main() {
 			adminUsersRouter.GET("/:id/edit", admin.GetUserEditRow)
 			adminUsersRouter.PATCH("/:id", admin.UpdateUserRow)
 			adminUsersRouter.DELETE("/:id", admin.DeleteUser)
+			adminUsersRouter.GET("/:id/change-password", admin.GetUserPasswordRow)
+			adminUsersRouter.POST("/:id/change-password", admin.ChangeUserPassword)
 		}
 	}
 
