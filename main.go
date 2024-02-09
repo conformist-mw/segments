@@ -126,7 +126,7 @@ func main() {
 		"add":              add,
 	})
 	router.Static("/static", "./static")
-	router.LoadHTMLGlob("templates/*")
+	router.LoadHTMLGlob("templates/**/*")
 
 	auth := router.Group("/")
 	auth.Use(AuthRequired)
