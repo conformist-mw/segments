@@ -27,11 +27,11 @@ func CreateUser(c *gin.Context) {
 }
 
 func GetUserEditRow(c *gin.Context) {
-	c.HTML(200, "admin_user_edit_row.html", gin.H{"User": c.Keys["CurrentUser"]})
+	c.HTML(200, "admin_user_edit_row", c.Keys["CurrentUser"])
 }
 
 func GetUserViewRow(c *gin.Context) {
-	c.HTML(200, "admin_user_row.html", gin.H{"User": c.Keys["CurrentUser"]})
+	c.HTML(200, "admin_user_row", c.Keys["CurrentUser"])
 }
 
 func UpdateUserRow(c *gin.Context) {
@@ -40,11 +40,11 @@ func UpdateUserRow(c *gin.Context) {
 	c.Bind(&form)
 	user = c.Keys["CurrentUser"].(models.User)
 	user = models.UpdateUser(user, form)
-	c.HTML(200, "admin_user_row.html", gin.H{"User": user})
+	c.HTML(200, "admin_user_row", user)
 }
 
 func GetUserPasswordRow(c *gin.Context) {
-	c.HTML(200, "admin_user_change_password_row.html", gin.H{"User": c.Keys["CurrentUser"]})
+	c.HTML(200, "admin_user_change_password_row", c.Keys["CurrentUser"])
 }
 
 func ChangeUserPassword(c *gin.Context) {
@@ -53,7 +53,7 @@ func ChangeUserPassword(c *gin.Context) {
 	c.ShouldBind(&form)
 	user = c.Keys["CurrentUser"].(models.User)
 	user = models.ChangePassword(user, form)
-	c.HTML(200, "admin_user_row.html", gin.H{"User": user})
+	c.HTML(200, "admin_user_row", user)
 }
 
 func DeleteUser(c *gin.Context) {
