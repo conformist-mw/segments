@@ -31,10 +31,27 @@
       <form method="post">
         <legend>Create new color type</legend>
         <div class="mb-3">
-          <input class="form-control" type="text" name="name" placeholder="name" minlength="2" required value="{{ .Form.Name }}">
+          <input
+            id="slug-source"
+            class="form-control"
+            type="text"
+            name="name"
+            placeholder="name"
+            minlength="2"
+            value="{{ .Form.Name }}"
+            required
+          >
         </div>
         <div class="mb-3">
-          <input class="form-control" type="text" name="slug" placeholder="slug" value="{{ .Form.Slug }}" required>
+          <input
+            id="slug-target"
+            class="form-control"
+            type="text"
+            name="slug"
+            placeholder="slug"
+            value="{{ .Form.Slug }}"
+            required
+          >
         </div>
         {{ if .Error }}
         <div class="m-3 p-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">

@@ -51,6 +51,34 @@
 </div>
 <script src="/static/bootstrap5.min.js"></script>
 <script src="/static/htmx.min.js"></script>
+<script>
+  function rus_to_latin ( str ) {
+    
+    var ru = {
+        'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 
+        'е': 'e', 'ё': 'e', 'ж': 'j', 'з': 'z', 'и': 'i', 
+        'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 
+        'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 
+        'ф': 'f', 'х': 'h', 'ц': 'c', 'ч': 'ch', 'ш': 'sh', 
+        'щ': 'shch', 'ы': 'y', 'э': 'e', 'ю': 'u', 'я': 'ya',
+        '1': '1', '2': '2', '3': '3', '4': '4', '5': '5',
+        '6': '6', '7': '7', '8': '8', '9': '9', '0': '0',
+    }, n_str = [];
+    
+    str = str.replace(/[ъь]+/g, '').replace(/й/g, 'i').replace(/[^\p{Script=Cyrillic}a-zA-Z0-9-_]/gu, '-');
+    
+    for ( var i = 0; i < str.length; ++i ) {
+      let c = str[i].toLowerCase();
+       n_str.push(ru[c] || ru[c] == undefined && str[i].toLowerCase());
+    }
+    
+    return n_str.join('');
+}
+document.getElementById('slug-source').addEventListener('input', function (e) {
+  document.getElementById('slug-target').value = rus_to_latin(e.target.value);
+});
+
+</script>
 </body>
 </html>
 {{ end }}
