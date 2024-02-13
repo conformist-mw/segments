@@ -6,12 +6,12 @@ import (
 )
 
 func Index(c *gin.Context) {
-	c.HTML(200, "admin_index.html", gin.H{})
+	c.HTML(200, "admin/index.html", gin.H{})
 }
 
 func Users(c *gin.Context) {
 	form := models.CreateUserForm{}
-	c.HTML(200, "admin_users.html", gin.H{"Users": models.GetUsers(), "Form": form})
+	c.HTML(200, "admin/users.html", gin.H{"Users": models.GetUsers(), "Form": form})
 }
 
 func CreateUser(c *gin.Context) {
@@ -19,7 +19,7 @@ func CreateUser(c *gin.Context) {
 	c.Bind(&form)
 	err := models.ValidateCreateUserForm(form)
 	if err != nil {
-		c.HTML(400, "admin_users.html", gin.H{"User": c.Keys["CurrentUser"], "Error": err, "Form": form, "Users": models.GetUsers()})
+		c.HTML(400, "admin/users.html", gin.H{"User": c.Keys["CurrentUser"], "Error": err, "Form": form, "Users": models.GetUsers()})
 		return
 	}
 	models.CreateUser(form)
@@ -63,5 +63,9 @@ func DeleteUser(c *gin.Context) {
 }
 
 func GetColorTypes(c *gin.Context) {
-	c.HTML(200, "admin_color_types.html", gin.H{"ColorTypes": models.GetColorTypes()})
+	c.HTML(200, "admin/color_types.html", gin.H{"ColorTypes": models.GetColorTypes()})
+}
+
+func GetColors(c *gin.Context) {
+	c.HTML(200, "admin/colors.html", gin.H{"Colors": models.GetColors()})
 }
