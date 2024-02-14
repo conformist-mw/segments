@@ -74,9 +74,12 @@
 
     return n_str.join('');
 }
-document.getElementById('slug-source').addEventListener('input', function (e) {
+let target = document.getElementById('slug-source');
+if (target !== null) {
+  target.addEventListener('input', function (e) {
   document.getElementById('slug-target').value = rus_to_latin(e.target.value);
 });
+}
 
 </script>
 </body>
