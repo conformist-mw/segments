@@ -166,6 +166,7 @@ func main() {
 
 		adminRouter.GET("/color-types", admin.GetColorTypes)
 		adminRouter.GET("/colors", admin.GetColors)
+		adminRouter.GET("/segments", admin.GetSegments)
 	}
 
 	router.GET("/login", LoginForm)

@@ -69,3 +69,12 @@ func GetColorTypes(c *gin.Context) {
 func GetColors(c *gin.Context) {
 	c.HTML(200, "admin/colors.html", gin.H{"Colors": models.GetColors()})
 }
+
+func GetSegments(c *gin.Context) {
+	c.HTML(200, "admin/segments.html", gin.H{
+		"Segments":  models.GetAdminSegments(),
+		"Companies": models.GetCompanies(),
+		"Sections":  models.GetAdminSections(),
+		"Racks":     models.GetAdminRacks(),
+	})
+}

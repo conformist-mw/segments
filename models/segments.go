@@ -158,3 +158,13 @@ func GetPrintSegments(sectionSlug string, companySlug string, PrintForm PrintFor
 	db.Find(&segments)
 	return segments
 }
+
+func GetAdminSegments() []Segment {
+	var segments []Segment
+	DB.Preload("Color").
+		Preload("Color.Type").
+		Preload("OrderNumber").
+		Preload("Rack").
+		Find(&segments)
+	return segments
+}

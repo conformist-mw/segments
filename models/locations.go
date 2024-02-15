@@ -17,6 +17,7 @@ type Section struct {
 	Slug      string `gorm:"type:varchar(50);not null" json:"slug"`
 	CompanyID uint   `gorm:"foreignkey:CompanyID;references:ID;not null;uniqueIndex:idx_section_name_company_uniq" json:"company"`
 	Racks     []Rack `gorm:"foreignKey:SectionID" json:"racks"`
+	Company   Company
 }
 
 func (Section) TableName() string {
@@ -27,6 +28,7 @@ type Rack struct {
 	ID        uint   `gorm:"primarykey;not null" json:"id"`
 	Name      string `gorm:"type:varchar(30);not null;uniqueIndex:idx_rack_name_section_uniq" json:"name"`
 	SectionID uint   `gorm:"foreignkey:SectionID;references:ID;not null;uniqueIndex:idx_rack_name_section_uniq" json:"section"`
+	Section   Section
 }
 
 func (Rack) TableName() string {
@@ -78,6 +80,18 @@ func GetSections(companySlug string) []SectionWithAmount {
 		Scan(&sections)
 
 	return sections
+}
+
+func GetAdminSections() []Section {
+	var sections []Section
+	DB.Preload("Company").Find(&sections)
+	return sections
+}
+
+func GetAdminRacks() []Rack {
+	var racks []Rack
+	DB.Preload("Section").Find(&racks)
+	return racks
 }
 
 func GetRack(companySlug, sectionSlug string, rackId int) Rack {
