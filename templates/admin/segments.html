@@ -1,0 +1,88 @@
+{{ define "admin/segments.html" }}
+{{ template "admin_top" }}
+{{ template "admin_nav" }}
+<div class="container">
+  <h3>Отрезки</h3>
+  <div class="row">
+    <div class="col-9">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">W x H = S</th>
+            <th scope="col">Description</th>
+            <th scope="col">Color</th>
+            <th scope="col">Rack</th>
+            <th scope="col">Order</th>
+            <th class="text-center" scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody hx-target="closest tr" hx-swap="outerHTML">
+          {{ range .Segments }}
+          <tr>
+            <th scope="row">{{ .ID }}</th>
+            <td>{{ .Width }} x {{ .Height }} = {{ .Square }}</td>
+            <td>{{ .Description }}</td>
+            <td>{{ .Color.Name }}</td>
+            <td>{{ .Rack.Name }}</td>
+            <td>{{ .OrderNumber.Name }}</td>
+            <td class="text-center">
+              <div class="btn-group" role="group">
+                <button title="edit" hx-get="/admin/users/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
+                <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/users/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-3">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>by company</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range .Companies }}
+          <tr>
+            <td><a href="/admin/segments?company={{ .ID }}">{{ .Name }}</a></td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>by section</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range .Sections }}
+          <tr>
+            <td><a href="/admin/segments?section={{ .ID }}">{{ .Name }} - {{ .Company.Name }}</a></td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>by rack</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range .Racks }}
+          <tr>
+            <td><a href="/admin/segments?rack={{ .ID }}">{{ .Name }} - {{ .Section.Name }}</a></td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+</div>
+{{ template "admin_bottom" }}
+{{ end }}
