@@ -1,6 +1,8 @@
 package admin
 
 import (
+	"errors"
+
 	"github.com/conformist-mw/segments/models"
 	"github.com/gin-gonic/gin"
 )
@@ -63,7 +65,23 @@ func DeleteUser(c *gin.Context) {
 }
 
 func GetColorTypes(c *gin.Context) {
-	c.HTML(200, "admin/color_types.html", gin.H{"ColorTypes": models.GetColorTypes()})
+	c.HTML(200, "admin/color_types.html", gin.H{"ColorTypes": models.GetColorTypes(), "Form": models.ColorTypeForm{}})
+}
+
+func CreateColorType(c *gin.Context) {
+	var form models.ColorTypeForm
+	err := c.ShouldBind(&form)
+	if err != nil {
+		err = errors.New("form is not valid")
+		c.HTML(400, "admin/color_types.html", gin.H{"Error": err.Error(), "Form": form, "ColorTypes": models.GetColorTypes()})
+		return
+	}
+	_, err = models.CreateColorType(form)
+	if err != nil {
+		c.HTML(400, "admin/color_types.html", gin.H{"Error": err.Error(), "Form": form, "ColorTypes": models.GetColorTypes()})
+		return
+	}
+	c.Redirect(302, "/admin/color-types")
 }
 
 func GetColors(c *gin.Context) {

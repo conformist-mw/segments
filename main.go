@@ -2,8 +2,10 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"text/template"
@@ -12,13 +14,16 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	gormsessions "github.com/gin-contrib/sessions/gorm"
+	"github.com/go-playground/validator/v10"
 
 	"github.com/conformist-mw/segments/admin"
 	"github.com/conformist-mw/segments/models"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 var location *time.Location
+var validate *validator.Validate
 
 const userkey = "user"
 
@@ -112,7 +117,16 @@ func UsersAdminRequired(c *gin.Context) {
 	c.Next()
 }
 
+func validateSlug(fl validator.FieldLevel) bool {
+	fmt.Println(">>>>>>>", fl)
+	matched, _ := regexp.MatchString(`^[a-z0-9-]+$`, fl.Field().String())
+	return matched
+}
+
 func main() {
+	validate = validator.New()
+	validate.RegisterValidation("slug", validateSlug)
+
 	models.ConnectDb()
 	store := gormsessions.NewStore(models.DB, true, []byte("secret"))
 
@@ -127,6 +141,10 @@ func main() {
 	})
 	router.Static("/static", "./static")
 	router.LoadHTMLGlob("templates/**/*")
+
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		v.RegisterValidation("slug", validateSlug)
+	}
 
 	auth := router.Group("/")
 	auth.Use(AuthRequired)
@@ -165,6 +183,10 @@ func main() {
 		}
 
 		adminRouter.GET("/color-types", admin.GetColorTypes)
+		colorTypeRouter := adminRouter.Group("/color-types")
+		{
+			colorTypeRouter.POST("", admin.CreateColorType)
+		}
 		adminRouter.GET("/colors", admin.GetColors)
 		adminRouter.GET("/segments", admin.GetSegments)
 	}

@@ -1,9 +1,15 @@
 package models
 
+import (
+	"errors"
+	"fmt"
+)
+
 type ColorType struct {
-	ID   uint   `gorm:"primarykey;not null" json:"id"`
-	Name string `gorm:"type:varchar(15);unique;not null" json:"name"`
-	Slug string `gorm:"type:varchar(25);unique;not null" json:"slug"`
+	ID     uint    `gorm:"primarykey;not null" json:"id"`
+	Name   string  `gorm:"type:varchar(15);unique;not null" json:"name"`
+	Slug   string  `gorm:"type:varchar(25);unique;not null" json:"slug"`
+	Colors []Color `gorm:"foreignKey:TypeID" json:"colors"`
 }
 
 func (ColorType) TableName() string {
@@ -44,4 +50,49 @@ func GetColorType(slug string) ColorType {
 	var colorType ColorType
 	DB.Where(&ColorType{Slug: slug}).First(&colorType)
 	return colorType
+}
+
+type ColorTypeForm struct {
+	Name string `form:"name" binding:"required"`
+	Slug string `form:"slug" binding:"required,slug"`
+}
+
+func CreateColorType(form ColorTypeForm) (ColorType, error) {
+	colorType := ColorType{
+		Name: form.Name,
+		Slug: form.Slug,
+	}
+	result := DB.Create(&colorType)
+	if result.Error != nil {
+		return ColorType{}, result.Error
+	}
+	return colorType, nil
+}
+
+func UpdateColorType(slug string, form ColorTypeForm) (ColorType, error) {
+	colorType := ColorType{
+		Name: form.Name,
+		Slug: form.Slug,
+	}
+	result := DB.Where(&ColorType{Slug: slug}).Updates(&colorType)
+	if result.Error != nil {
+		return ColorType{}, result.Error
+	}
+	return colorType, nil
+}
+
+func DeleteColorType(slug string) error {
+	colorType := ColorType{}
+	DB.Preload("Colors").Where(&ColorType{Slug: slug}).First(&colorType)
+	if colorType.ID == 0 {
+		return fmt.Errorf("Color type with slug %s not found", slug)
+	}
+	if len(colorType.Colors) > 0 {
+		return errors.New("Color type has colors")
+	}
+	result := DB.Delete(&colorType)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
