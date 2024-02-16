@@ -26,6 +26,22 @@
         </td>
       </tr>
       {{ end }}
+      <tr>
+        <th scope="row">555</th>
+        <td>ColorName</td>
+        <td>ColorSlug</td>
+        <td class="text-center">
+          <div class="btn-group" role="group">
+            <button title="edit" hx-get="/admin/users/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
+            <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/users/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <div class="error text-center">hey, pidor</div>
+        </td>
+      </tr>
     </tbody>
   </table>
   <div class="row">
@@ -52,11 +68,10 @@
             name="slug"
             placeholder="slug"
             value="{{ .Form.Slug }}"
-            disabled
           >
         </div>
         {{ if .Error }}
-        <div class="m-3 p-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
+        <div class="m-3 p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">
           {{ .Error }}
         </div>
         {{ end }}
