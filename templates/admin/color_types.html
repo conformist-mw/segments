@@ -70,9 +70,13 @@
             value="{{ .Form.Slug }}"
           >
         </div>
-        {{ if .Error }}
+        {{ if .Errors }}
         <div class="m-3 p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">
-          {{ .Error }}
+          <ul>
+            {{ range .Errors }}
+            <li><b>{{ .Field }}</b> {{ .Message }}</li>
+            {{ end }}
+          </ul>
         </div>
         {{ end }}
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
