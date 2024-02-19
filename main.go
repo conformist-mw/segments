@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"os"
 	"regexp"
@@ -118,7 +117,6 @@ func UsersAdminRequired(c *gin.Context) {
 }
 
 func validateSlug(fl validator.FieldLevel) bool {
-	fmt.Println(">>>>>>>", fl)
 	matched, _ := regexp.MatchString(`^[a-z0-9-]+$`, fl.Field().String())
 	return matched
 }

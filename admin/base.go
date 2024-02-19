@@ -5,7 +5,26 @@ import (
 
 	"github.com/conformist-mw/segments/models"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
+
+type FormError struct {
+	Field   string
+	Message string
+}
+
+func GetFormErrors(form interface{}, c *gin.Context) (errs []FormError) {
+	if formErr := c.ShouldBind(form); formErr != nil {
+		var ve validator.ValidationErrors
+		if errors.As(formErr, &ve) {
+			for _, e := range ve {
+				errs = append(errs, FormError{Field: e.Field(), Message: MessageForTag(e.Tag())})
+			}
+		}
+		return errs
+	}
+	return nil
+}
 
 func Index(c *gin.Context) {
 	c.HTML(200, "admin/index.html", gin.H{})
@@ -68,15 +87,25 @@ func GetColorTypes(c *gin.Context) {
 	c.HTML(200, "admin/color_types.html", gin.H{"ColorTypes": models.GetColorTypes(), "Form": models.ColorTypeForm{}})
 }
 
+func MessageForTag(tag string) string {
+	switch tag {
+	case "required":
+		return "This field is required"
+	case "slug":
+		return "Is invalid (only letters, numbers, and dashes)"
+	default:
+		return "This field is invalid"
+	}
+}
+
 func CreateColorType(c *gin.Context) {
 	var form models.ColorTypeForm
-	err := c.ShouldBind(&form)
-	if err != nil {
-		err = errors.New("form is not valid")
-		c.HTML(400, "admin/color_types.html", gin.H{"Error": err.Error(), "Form": form, "ColorTypes": models.GetColorTypes()})
+
+	if errs := GetFormErrors(&form, c); errs != nil {
+		c.HTML(400, "admin/color_types.html", gin.H{"Errors": errs, "Form": form, "ColorTypes": models.GetColorTypes()})
 		return
 	}
-	_, err = models.CreateColorType(form)
+	_, err := models.CreateColorType(form)
 	if err != nil {
 		c.HTML(400, "admin/color_types.html", gin.H{"Error": err.Error(), "Form": form, "ColorTypes": models.GetColorTypes()})
 		return
