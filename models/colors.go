@@ -81,11 +81,11 @@ func UpdateColorType(slug string, form ColorTypeForm) (ColorType, error) {
 	return colorType, nil
 }
 
-func DeleteColorType(slug string) error {
+func DeleteColorType(id uint) error {
 	colorType := ColorType{}
-	DB.Preload("Colors").Where(&ColorType{Slug: slug}).First(&colorType)
+	DB.Preload("Colors").Where(&ColorType{ID: id}).First(&colorType)
 	if colorType.ID == 0 {
-		return fmt.Errorf("Color type with slug %s not found", slug)
+		return fmt.Errorf("Color type with id %d not found", id)
 	}
 	if len(colorType.Colors) > 0 {
 		return errors.New("Color type has colors")

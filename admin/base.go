@@ -2,6 +2,7 @@ package admin
 
 import (
 	"errors"
+	"strconv"
 
 	"github.com/conformist-mw/segments/models"
 	"github.com/gin-gonic/gin"
@@ -24,6 +25,14 @@ func GetFormErrors(form interface{}, c *gin.Context) (errs []FormError) {
 		return errs
 	}
 	return nil
+}
+
+func GetUintId(c *gin.Context) (uint, error) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return 0, err
+	}
+	return uint(id), nil
 }
 
 func Index(c *gin.Context) {
@@ -111,6 +120,20 @@ func CreateColorType(c *gin.Context) {
 		return
 	}
 	c.Redirect(302, "/admin/color-types")
+}
+
+func DeleteColorType(c *gin.Context) {
+	id, err := GetUintId(c)
+	if err != nil {
+		c.Status(400)
+		return
+	}
+	errs := models.DeleteColorType(id)
+	if errs != nil {
+		c.Status(400)
+		return
+	}
+	c.Status(200)
 }
 
 func GetColors(c *gin.Context) {
