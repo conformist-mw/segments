@@ -117,7 +117,7 @@ func UsersAdminRequired(c *gin.Context) {
 }
 
 func validateSlug(fl validator.FieldLevel) bool {
-	matched, _ := regexp.MatchString(`^[a-z0-9-]+$`, fl.Field().String())
+	matched, _ := regexp.MatchString(`^[a-z0-9-_]+$`, fl.Field().String())
 	return matched
 }
 
@@ -184,6 +184,7 @@ func main() {
 		colorTypeRouter := adminRouter.Group("/color-types")
 		{
 			colorTypeRouter.POST("", admin.CreateColorType)
+			colorTypeRouter.DELETE("/:id", admin.DeleteColorType)
 		}
 		adminRouter.GET("/colors", admin.GetColors)
 		adminRouter.GET("/segments", admin.GetSegments)
