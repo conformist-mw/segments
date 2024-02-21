@@ -158,7 +158,6 @@ func main() {
 			companiesRouter.POST("/:company/:section/move/:segment_id", MoveSegment)
 			companiesRouter.POST("/:company/:section/activate/:segment_id", ActivateSegment)
 			companiesRouter.POST("/:company/:section/remove/:segment_id", RemoveSegment)
-
 		}
 
 	}
