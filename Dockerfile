@@ -7,7 +7,7 @@ COPY . .
 RUN go mod download
 RUN GOOS=linux GOARCH=arm64 CGO_ENABLED=1 CGO_CFLAGS="-D_LARGEFILE64_SOURCE" CC=aarch64-linux-gnu-gcc go build -o /app/segments
 
-FROM alpine:latest
+FROM golang:1-bookworm
 
 WORKDIR /app
 COPY --from=builder /app/segments /app/segments
