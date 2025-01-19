@@ -1,11 +1,11 @@
-FROM golang:1.21-alpine AS builder
+FROM golang:1.21 AS builder
 
-RUN apk update && apk add gcc libc-dev
+RUN apt update && apt install -y gcc-aarch64-linux-gnu
 
 WORKDIR /app
 COPY . .
 RUN go mod download
-RUN CGO_ENABLED=1 CGO_CFLAGS="-D_LARGEFILE64_SOURCE" go build -o /app/segments
+RUN GOOS=linux GOARCH=arm64 CGO_ENABLED=1 CGO_CFLAGS="-D_LARGEFILE64_SOURCE" CC=aarch64-linux-gnu-gcc go build -o /app/segments
 
 FROM alpine:latest
 
