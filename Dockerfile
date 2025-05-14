@@ -1,13 +1,15 @@
-FROM golang:1.21 AS builder
+FROM golang:1.24-alpine AS builder
 
-RUN apt update && apt install -y gcc-aarch64-linux-gnu
+RUN apk add --no-cache git
 
 WORKDIR /app
 COPY . .
-RUN go mod download
-RUN GOOS=linux GOARCH=arm64 CGO_ENABLED=1 CGO_CFLAGS="-D_LARGEFILE64_SOURCE" CC=aarch64-linux-gnu-gcc go build -o /app/segments
 
-FROM golang:1-bookworm
+ENV CGO_ENABLED=0
+RUN go mod download
+RUN go build -o /app/segments
+
+FROM scratch
 
 WORKDIR /app
 COPY --from=builder /app/segments /app/segments
