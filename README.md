@@ -4,10 +4,20 @@ This project allows you doing segments (rectangles) accounting by size, type or 
 
 ## Installation
 
+To build and run the application locally use Go:
+
 ```shell
-pyhton -m venv venv
-. venv/bin/activate
-pip install -r requirements.txt
+go build -o segments
+./segments
+```
+
+### Docker
+
+The application can also be built and run with Docker:
+
+```shell
+docker build -t segments .
+docker run -p 8080:8080 segments
 ```
 
 ## Regular users
