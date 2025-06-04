@@ -68,7 +68,7 @@ func GetSections(companySlug string) []SectionWithAmount {
 			"segments_section.*, "+
 				"count(distinct segments_rack.id) as racks_count, "+
 				"count(distinct segments_segment.id) as segments_count, "+
-				"sum(distinct segments_segment.square) as square_sum").
+				"sum(segments_segment.square) as square_sum").
 		Joins(
 			"join segments_company "+
 				"on segments_company.id = segments_section.company_id "+
