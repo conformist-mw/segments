@@ -43,3 +43,9 @@ type LoginForm struct {
 	Username string `form:"username" binding:"required"`
 	Password string `form:"password" binding:"required"`
 }
+
+type ColorForm struct {
+	Name      string `form:"name" binding:"required"`
+	Slug      string `form:"slug" binding:"required,slug"`
+	ColorType string `form:"color_type" binding:"required"`
+}
