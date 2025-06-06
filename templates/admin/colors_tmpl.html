@@ -1,0 +1,36 @@
+{{ define "admin_color_row" }}
+<tr>
+  <th scope="row">{{ .ID }}</th>
+  <td>{{ .Name }}</td>
+  <td>{{ .Slug }}</td>
+  <td>{{ .Type.Name }}</td>
+  <td class="text-center">
+    <div class="btn-group" role="group">
+      <button title="edit" hx-get="/admin/colors/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
+      <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/colors/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+    </div>
+  </td>
+</tr>
+{{ end }}
+
+{{ define "admin_color_edit_row" }}
+<tr hx-trigger="cancel" class="editing" hx-get="/admin/colors/{{ .Color.ID }}">
+  <td>{{ .Color.ID }}</td>
+  <td><input type="text" class="form-control" name="name" value="{{ .Color.Name }}"></td>
+  <td><input type="text" class="form-control" name="slug" value="{{ .Color.Slug }}"></td>
+  <td>
+    <select name="color_type" class="form-select">
+      {{ $ct := .Color.Type.Slug }}
+      {{ range .ColorTypes }}
+        <option value="{{ .Slug }}" {{ if eq .Slug $ct }}selected{{ end }}>{{ .Name }}</option>
+      {{ end }}
+    </select>
+  </td>
+  <td class="text-center">
+    <div class="btn-group">
+      <button class="btn btn-secondary" hx-patch="/admin/colors/{{ .Color.ID }}" hx-include="closest tr"><i class="bi bi-floppy"></i></button>
+      <button class="btn btn-warning" hx-get="/admin/colors/{{ .Color.ID }}"><i class="bi bi-x-square"></i></button>
+    </div>
+  </td>
+</tr>
+{{ end }}

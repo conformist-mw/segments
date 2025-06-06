@@ -137,7 +137,96 @@ func DeleteColorType(c *gin.Context) {
 }
 
 func GetColors(c *gin.Context) {
-	c.HTML(200, "admin/colors.html", gin.H{"Colors": models.GetColors()})
+	c.HTML(200, "admin/colors.html", gin.H{
+		"Colors":     models.GetColors(),
+		"ColorTypes": models.GetColorTypes(),
+		"Form":       models.ColorForm{},
+	})
+}
+
+func CreateColor(c *gin.Context) {
+	var form models.ColorForm
+	if errs := GetFormErrors(&form, c); errs != nil {
+		c.HTML(400, "admin/colors.html", gin.H{
+			"Errors":     errs,
+			"Form":       form,
+			"Colors":     models.GetColors(),
+			"ColorTypes": models.GetColorTypes(),
+		})
+		return
+	}
+	_, err := models.CreateColor(form)
+	if err != nil {
+		c.HTML(400, "admin/colors.html", gin.H{
+			"Error":      err.Error(),
+			"Form":       form,
+			"Colors":     models.GetColors(),
+			"ColorTypes": models.GetColorTypes(),
+		})
+		return
+	}
+	c.Redirect(302, "/admin/colors")
+}
+
+func GetColorEditRow(c *gin.Context) {
+	id, err := GetUintId(c)
+	if err != nil {
+		c.Status(400)
+		return
+	}
+	color := models.GetColorById(id)
+	if color.ID == 0 {
+		c.Status(400)
+		return
+	}
+	c.HTML(200, "admin_color_edit_row", gin.H{
+		"Color":      color,
+		"ColorTypes": models.GetColorTypes(),
+	})
+}
+
+func GetColorViewRow(c *gin.Context) {
+	id, err := GetUintId(c)
+	if err != nil {
+		c.Status(400)
+		return
+	}
+	color := models.GetColorById(id)
+	if color.ID == 0 {
+		c.Status(400)
+		return
+	}
+	c.HTML(200, "admin_color_row", color)
+}
+
+func UpdateColorRow(c *gin.Context) {
+	id, err := GetUintId(c)
+	if err != nil {
+		c.Status(400)
+		return
+	}
+	var form models.ColorForm
+	c.Bind(&form)
+	color, err := models.UpdateColor(id, form)
+	if err != nil {
+		c.Status(400)
+		return
+	}
+	c.HTML(200, "admin_color_row", color)
+}
+
+func DeleteColor(c *gin.Context) {
+	id, err := GetUintId(c)
+	if err != nil {
+		c.Status(400)
+		return
+	}
+	err = models.DeleteColor(id)
+	if err != nil {
+		c.Status(400)
+		return
+	}
+	c.Status(200)
 }
 
 func GetSegments(c *gin.Context) {

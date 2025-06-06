@@ -96,3 +96,63 @@ func DeleteColorType(id uint) error {
 	}
 	return nil
 }
+
+func GetColorById(id uint) Color {
+	var color Color
+	DB.Preload("Type").Where(&Color{ID: id}).First(&color)
+	return color
+}
+
+func CreateColor(form ColorForm) (Color, error) {
+	colorType := GetColorType(form.ColorType)
+	if colorType.ID == 0 {
+		return Color{}, fmt.Errorf("color type not found")
+	}
+	color := Color{
+		Name:   form.Name,
+		Slug:   form.Slug,
+		TypeID: colorType.ID,
+	}
+	result := DB.Create(&color)
+	if result.Error != nil {
+		return Color{}, result.Error
+	}
+	DB.Preload("Type").First(&color, color.ID)
+	return color, nil
+}
+
+func UpdateColor(id uint, form ColorForm) (Color, error) {
+	color := GetColorById(id)
+	if color.ID == 0 {
+		return Color{}, fmt.Errorf("color not found")
+	}
+	if form.Name != "" {
+		color.Name = form.Name
+	}
+	if form.Slug != "" {
+		color.Slug = form.Slug
+	}
+	if form.ColorType != "" {
+		colorType := GetColorType(form.ColorType)
+		if colorType.ID == 0 {
+			return Color{}, fmt.Errorf("color type not found")
+		}
+		color.TypeID = colorType.ID
+	}
+	result := DB.Save(&color)
+	if result.Error != nil {
+		return Color{}, result.Error
+	}
+	DB.Preload("Type").First(&color, color.ID)
+	return color, nil
+}
+
+func DeleteColor(id uint) error {
+	var count int64
+	DB.Model(&Segment{}).Where(&Segment{ColorID: id}).Count(&count)
+	if count > 0 {
+		return errors.New("color has segments")
+	}
+	result := DB.Delete(&Color{}, id)
+	return result.Error
+}

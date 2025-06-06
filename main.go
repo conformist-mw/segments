@@ -186,6 +186,14 @@ func main() {
 			colorTypeRouter.DELETE("/:id", admin.DeleteColorType)
 		}
 		adminRouter.GET("/colors", admin.GetColors)
+		colorsRouter := adminRouter.Group("/colors")
+		{
+			colorsRouter.POST("", admin.CreateColor)
+			colorsRouter.GET("/:id", admin.GetColorViewRow)
+			colorsRouter.GET("/:id/edit", admin.GetColorEditRow)
+			colorsRouter.PATCH("/:id", admin.UpdateColorRow)
+			colorsRouter.DELETE("/:id", admin.DeleteColor)
+		}
 		adminRouter.GET("/segments", admin.GetSegments)
 	}
 
