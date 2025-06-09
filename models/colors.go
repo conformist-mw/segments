@@ -69,12 +69,24 @@ func CreateColorType(form ColorTypeForm) (ColorType, error) {
 	return colorType, nil
 }
 
-func UpdateColorType(slug string, form ColorTypeForm) (ColorType, error) {
-	colorType := ColorType{
-		Name: form.Name,
-		Slug: form.Slug,
+func GetColorTypeById(id uint) ColorType {
+	var colorType ColorType
+	DB.Where(&ColorType{ID: id}).First(&colorType)
+	return colorType
+}
+
+func UpdateColorType(id uint, form ColorTypeForm) (ColorType, error) {
+	colorType := GetColorTypeById(id)
+	if colorType.ID == 0 {
+		return ColorType{}, fmt.Errorf("color type not found")
 	}
-	result := DB.Where(&ColorType{Slug: slug}).Updates(&colorType)
+	if form.Name != "" {
+		colorType.Name = form.Name
+	}
+	if form.Slug != "" {
+		colorType.Slug = form.Slug
+	}
+	result := DB.Save(&colorType)
 	if result.Error != nil {
 		return ColorType{}, result.Error
 	}

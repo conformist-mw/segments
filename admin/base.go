@@ -136,6 +136,36 @@ func DeleteColorType(c *gin.Context) {
 	c.Status(200)
 }
 
+func GetColorTypeEditRow(c *gin.Context) {
+	id, err := GetUintId(c)
+	if err != nil {
+		c.Status(400)
+		return
+	}
+	colorType := models.GetColorTypeById(id)
+	if colorType.ID == 0 {
+		c.Status(400)
+		return
+	}
+	c.HTML(200, "admin_color_type_edit_row", colorType)
+}
+
+func UpdateColorTypeRow(c *gin.Context) {
+	id, err := GetUintId(c)
+	if err != nil {
+		c.Status(400)
+		return
+	}
+	var form models.ColorTypeForm
+	c.Bind(&form)
+	colorType, err := models.UpdateColorType(id, form)
+	if err != nil {
+		c.Status(400)
+		return
+	}
+	c.HTML(200, "admin_color_type_row", colorType)
+}
+
 func GetColors(c *gin.Context) {
 	c.HTML(200, "admin/colors.html", gin.H{
 		"Colors":     models.GetColors(),
