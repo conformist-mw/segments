@@ -1,0 +1,27 @@
+{{ define "admin_color_type_row" }}
+<tr>
+  <th scope="row">{{ .ID }}</th>
+  <td>{{ .Name }}</td>
+  <td>{{ .Slug }}</td>
+  <td class="text-center">
+    <div class="btn-group" role="group">
+      <button title="edit" hx-get="/admin/color-types/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
+      <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/color-types/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+    </div>
+  </td>
+</tr>
+{{ end }}
+
+{{ define "admin_color_type_edit_row" }}
+<tr hx-trigger="cancel" class="editing" hx-get="/admin/color-types/{{ .ID }}">
+  <td>{{ .ID }}</td>
+  <td><input type="text" class="form-control" name="name" value="{{ .Name }}"></td>
+  <td><input type="text" class="form-control" name="slug" value="{{ .Slug }}"></td>
+  <td class="text-center">
+    <div class="btn-group">
+      <button class="btn btn-secondary" hx-patch="/admin/color-types/{{ .ID }}" hx-include="closest tr"><i class="bi bi-floppy"></i></button>
+      <button class="btn btn-warning" hx-get="/admin/color-types/{{ .ID }}"><i class="bi bi-x-square"></i></button>
+    </div>
+  </td>
+</tr>
+{{ end }}

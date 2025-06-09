@@ -14,17 +14,7 @@
     </thead>
     <tbody hx-target="closest tr" hx-swap="outerHTML swap:1s">
       {{ range .ColorTypes }}
-      <tr>
-        <th scope="row">{{ .ID }}</th>
-        <td>{{ .Name }}</td>
-        <td>{{ .Slug }}</td>
-        <td class="text-center">
-          <div class="btn-group" role="group">
-            <button title="edit" hx-get="/admin/color-types/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
-            <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/color-types/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-          </div>
-        </td>
-      </tr>
+        {{ template "admin_color_type_row" . }}
       {{ end }}
     </tbody>
   </table>

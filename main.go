@@ -183,6 +183,8 @@ func main() {
 		colorTypeRouter := adminRouter.Group("/color-types")
 		{
 			colorTypeRouter.POST("", admin.CreateColorType)
+			colorTypeRouter.GET("/:id/edit", admin.GetColorTypeEditRow)
+			colorTypeRouter.PATCH("/:id", admin.UpdateColorTypeRow)
 			colorTypeRouter.DELETE("/:id", admin.DeleteColorType)
 		}
 		adminRouter.GET("/colors", admin.GetColors)
