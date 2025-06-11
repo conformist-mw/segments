@@ -28,8 +28,8 @@
             <td>{{ .OrderNumber.Name }}</td>
             <td class="text-center">
               <div class="btn-group" role="group">
-                <button title="edit" hx-get="/admin/users/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
-                <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/users/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                <button title="edit" hx-get="/admin/segments/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
+                <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/segments/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
               </div>
             </td>
           </tr>
