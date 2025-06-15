@@ -1,6 +1,6 @@
 module github.com/conformist-mw/segments
 
-go 1.21.4
+go 1.24
 
 require (
 	github.com/gin-contrib/sessions v0.0.5
