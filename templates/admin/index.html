@@ -1,26 +1,53 @@
 {{ define "admin/index.html" }}
 {{ template "admin_top" }}
 {{ template "admin_nav" }}
-<table class="table">
-  <thead>
-    <tr>
-      <th class="col">Имя</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><a href="/admin/users" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Пользователи</a></td>
-    </tr>
-    <tr>
-      <td><a href="/admin/color-types" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Фактуры</a></td>
-    </tr>
-    <tr>
-      <td><a href="/admin/colors" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Цвета</a></td>
-    </tr>
-    <tr>
-      <td><a href="/admin/segments" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Отрезки</a></td>
-    </tr>
-  </tbody>
-</table>
+
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-xl font-semibold text-gray-900">Админ-панель</h1>
+      <p class="mt-2 text-sm text-gray-700">Выберите раздел для управления</p>
+    </div>
+  </div>
+
+  <div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Имя</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              <tr>
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                  <a href="/admin/users" class="text-indigo-600 hover:text-indigo-900">Пользователи</a>
+                </td>
+              </tr>
+              <tr>
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                  <a href="/admin/color-types" class="text-indigo-600 hover:text-indigo-900">Фактуры</a>
+                </td>
+              </tr>
+              <tr>
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                  <a href="/admin/colors" class="text-indigo-600 hover:text-indigo-900">Цвета</a>
+                </td>
+              </tr>
+              <tr>
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                  <a href="/admin/segments" class="text-indigo-600 hover:text-indigo-900">Отрезки</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 {{ template "admin_bottom" }}
 {{ end }}

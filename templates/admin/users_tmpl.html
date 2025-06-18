@@ -1,17 +1,50 @@
 {{ define "admin_user_row" }}
 <tr>
-  <th scope="row">{{ .ID }}</th>
-  <td>{{ .Username }}</td>
-  <td>{{ .Email }}</td>
-  <td>{{ .FirstName }}</td>
-  <td>{{ .LastName }}</td>
-  <td class="text-center">{{ if .IsSuperuser }}<i class="bi bi-check"></i>{{ else }}<i class="bi bi-x"></i>{{ end }}</td>
-  <td class="text-center">{{ if .IsActive }}<i class="bi bi-check"></i>{{ else }}<i class="bi bi-x"></i>{{ end }}</td>
-  <td class="text-center">
-    <div class="btn-group" role="group">
-      <button title="edit" hx-get="/admin/users/{{ .ID }}/edit" class="btn btn-light"><i class="bi bi-pencil"></i></button>
-      <button title="change password" hx-get="/admin/users/{{ .ID }}/change-password" class="btn btn-secondary"><i class="bi bi-key"></i></button>
-      <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/users/{{ .ID }}" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ .ID }}</td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .Username }}</td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .Email }}</td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .FirstName }}</td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .LastName }}</td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-center">
+    {{ if .IsSuperuser }}
+    <svg class="h-5 w-5 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+    </svg>
+    {{ else }}
+    <svg class="h-5 w-5 text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+    </svg>
+    {{ end }}
+  </td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-center">
+    {{ if .IsActive }}
+    <svg class="h-5 w-5 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+    </svg>
+    {{ else }}
+    <svg class="h-5 w-5 text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+    </svg>
+    {{ end }}
+  </td>
+  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+    <div class="flex justify-end space-x-2">
+      <button title="edit" hx-get="/admin/users/{{ .ID }}/edit" class="text-indigo-600 hover:text-indigo-900">
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
+          <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
+        </svg>
+      </button>
+      <button title="change password" hx-get="/admin/users/{{ .ID }}/change-password" class="text-gray-600 hover:text-gray-900">
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/users/{{ .ID }}" class="text-red-600 hover:text-red-900">
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
+        </svg>
+      </button>
     </div>
   </td>
 </tr>
@@ -19,25 +52,43 @@
 
 {{ define "admin_user_edit_row" }}
 <tr hx-trigger="cancel" class="editing" hx-get="/admin/users/{{ .ID }}">
-  <td>{{ .ID }}</div>
-  <td><input type="text" class="form-control" name="username" value="{{ .Username }}"></td>
-  <td><input type="email" class="form-control" name="email" value="{{ .Email }}"></td>
-  <td><input type="text" class="form-control" name="first_name" value="{{ .FirstName }}"></td>
-  <td><input type="text" class="form-control" name="last_name" value="{{ .LastName }}"></td>
-  <td>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" name="is_superuser" {{ if .IsSuperuser }}checked{{ end }}>
-    </div>
+  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ .ID }}</td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+    <input type="text" name="username" value="{{ .Username }}"
+      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
   </td>
-  <td>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" name="is_active" {{ if .IsActive }}checked{{ end }}>
-    </div>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+    <input type="email" name="email" value="{{ .Email }}"
+      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
   </td>
-  <td class="text-center">
-    <div class="btn-group">
-      <button class="btn btn-secondary" hx-patch="/admin/users/{{ .ID }}" hx-include="closest tr"><i class="bi bi-floppy"></i></button>
-      <button class="btn btn-warning" hx-get="/admin/users/{{ .ID }}"><i class="bi bi-x-square"></i></button>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+    <input type="text" name="first_name" value="{{ .FirstName }}"
+      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+  </td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+    <input type="text" name="last_name" value="{{ .LastName }}"
+      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+  </td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-center">
+    <input type="checkbox" name="is_superuser" {{ if .IsSuperuser }}checked{{ end }}
+      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+  </td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-center">
+    <input type="checkbox" name="is_active" {{ if .IsActive }}checked{{ end }}
+      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+  </td>
+  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+    <div class="flex justify-end space-x-2">
+      <button hx-patch="/admin/users/{{ .ID }}" hx-include="closest tr" class="text-indigo-600 hover:text-indigo-900">
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <button hx-get="/admin/users/{{ .ID }}" class="text-gray-600 hover:text-gray-900">
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </button>
     </div>
   </td>
 </tr>
@@ -45,22 +96,27 @@
 
 {{ define "admin_user_change_password_row" }}
 <tr>
-  <th scope="row">{{ .ID }}</th>
-  <td>{{ .Username }}</td>
-  <td>{{ .Email }}</td>
-  <td>New password:</td>
-  <td colspan="3"><input class="form-control" name="password" type="password" placeholder="password"></td>
-  <td class="text-center">
-    <div class="btn-group" role="group">
-      <button 
-        class="btn btn-secondary"
-        hx-confirm="Are you sure?"
-        hx-post="/admin/users/{{ .ID }}/change-password"
-        hx-include="closest tr"
-      >
-        <i class="bi bi-floppy"></i>
+  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ .ID }}</td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .Username }}</td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .Email }}</td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">New password:</td>
+  <td colspan="3" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+    <input type="password" name="password" placeholder="password"
+      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+  </td>
+  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+    <div class="flex justify-end space-x-2">
+      <button hx-confirm="Are you sure?" hx-post="/admin/users/{{ .ID }}/change-password" hx-include="closest tr"
+        class="text-indigo-600 hover:text-indigo-900">
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+        </svg>
       </button>
-      <button class="btn btn-warning" hx-get="/admin/users/{{ .ID }}"><i class="bi bi-x-square"></i></button>
+      <button hx-get="/admin/users/{{ .ID }}" class="text-gray-600 hover:text-gray-900">
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </button>
     </div>
   </td>
 </tr>
