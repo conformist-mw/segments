@@ -1,64 +1,103 @@
 {{ define "admin/color_types.html" }}
 {{ template "admin_top" }}
 {{ template "admin_nav" }}
-<div class="container">
-  <h3>Фактуры</h3>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Name</th>
-        <th scope="col">Slug</th>
-        <th class="text-center" scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody hx-target="closest tr" hx-swap="outerHTML swap:1s">
-      {{ range .ColorTypes }}
-        {{ template "admin_color_type_row" . }}
-      {{ end }}
-    </tbody>
-  </table>
-  <div class="row">
-    <div class="col-md-6 offset-md-3">
-      <form method="post">
-        <legend>Create new color type</legend>
-        <div class="mb-3">
-          <input
-            id="slug-source"
-            class="form-control"
-            type="text"
-            name="name"
-            placeholder="name"
-            minlength="2"
-            value="{{ .Form.Name }}"
-            required
-          >
-        </div>
-        <div class="mb-3">
-          <input
-            id="slug-target"
-            class="form-control"
-            type="text"
-            name="slug"
-            placeholder="slug"
-            value="{{ .Form.Slug }}"
-          >
-        </div>
-        {{ if .Errors }}
-        <div class="m-3 p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">
-          <ul>
-            {{ range .Errors }}
-            <li><b>{{ .Field }}</b> {{ .Message }}</li>
+
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-xl font-semibold text-gray-900">Фактуры</h1>
+    </div>
+  </div>
+
+  <div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <table class="min-w-full divide-y divide-gray-300">
+          <thead>
+            <tr>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">ID</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Slug</th>
+              <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                <span class="sr-only">Actions</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200" hx-target="closest tr" hx-swap="outerHTML swap:1s">
+            {{ range .ColorTypes }}
+              {{ template "admin_color_type_row" . }}
             {{ end }}
-          </ul>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="mx-auto max-w-2xl">
+      <form method="post" class="space-y-6 bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
+        <div class="px-4 py-6 sm:p-8">
+          <div class="max-w-2xl">
+            <h2 class="text-base font-semibold leading-7 text-gray-900">Create new color type</h2>
+          </div>
+
+          <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="sm:col-span-4">
+              <label for="slug-source" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
+              <div class="mt-2">
+                <input
+                  id="slug-source"
+                  type="text"
+                  name="name"
+                  placeholder="name"
+                  minlength="2"
+                  value="{{ .Form.Name }}"
+                  required
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                >
+              </div>
+            </div>
+
+            <div class="sm:col-span-4">
+              <label for="slug-target" class="block text-sm font-medium leading-6 text-gray-900">Slug</label>
+              <div class="mt-2">
+                <input
+                  id="slug-target"
+                  type="text"
+                  name="slug"
+                  placeholder="slug"
+                  value="{{ .Form.Slug }}"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                >
+              </div>
+            </div>
+          </div>
+
+          {{ if .Errors }}
+          <div class="mt-6 rounded-md bg-red-50 p-4">
+            <div class="flex">
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800">There were errors with your submission</h3>
+                <div class="mt-2 text-sm text-red-700">
+                  <ul role="list" class="list-disc space-y-1 pl-5">
+                    {{ range .Errors }}
+                    <li><b>{{ .Field }}</b> {{ .Message }}</li>
+                    {{ end }}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{ end }}
         </div>
-        {{ end }}
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button type="submit" class="btn btn-outline-primary">Create</button>
+
+        <div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+          <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>
         </div>
       </form>
     </div>
   </div>
 </div>
+
 {{ template "admin_bottom" }}
 {{ end }}
