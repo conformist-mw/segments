@@ -121,6 +121,31 @@ func validateSlug(fl validator.FieldLevel) bool {
 	return matched
 }
 
+func AdminContext(c *gin.Context) {
+	// Определяем текущую страницу на основе URL
+	path := c.Request.URL.Path
+	var currentPage string
+
+	switch path {
+	case "/admin":
+		currentPage = "dashboard"
+	case "/admin/users":
+		currentPage = "users"
+	case "/admin/color-types":
+		currentPage = "color-types"
+	case "/admin/colors":
+		currentPage = "colors"
+	case "/admin/segments":
+		currentPage = "segments"
+	default:
+		currentPage = ""
+	}
+
+	// Добавляем в контекст
+	c.Set("CurrentPage", currentPage)
+	c.Next()
+}
+
 func main() {
 	validate = validator.New()
 	validate.RegisterValidation("slug", validateSlug)
@@ -163,7 +188,7 @@ func main() {
 	}
 
 	adminRouter := router.Group("/admin")
-	adminRouter.Use(SuperuserRequired)
+	adminRouter.Use(SuperuserRequired, AdminContext)
 	{
 		adminRouter.GET("", admin.Index)
 		adminRouter.GET("/users", admin.Users)
