@@ -27,15 +27,15 @@
   <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ .Color.ID }}</td>
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
     <input type="text" name="name" value="{{ .Color.Name }}"
-      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      class="admin-input block w-full">
   </td>
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
     <input type="text" name="slug" value="{{ .Color.Slug }}"
-      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      class="admin-input block w-full">
   </td>
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
     <select name="color_type"
-      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      class="admin-input block w-full">
       {{ $ct := .Color.Type.Slug }}
       {{ range .ColorTypes }}
         <option value="{{ .Slug }}" {{ if eq .Slug $ct }}selected{{ end }}>{{ .Name }}</option>

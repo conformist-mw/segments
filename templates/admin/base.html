@@ -17,6 +17,61 @@
       opacity: 0;
       transition: opacity 1s ease-out;
     }
+    
+    /* Admin-specific input styles - only for admin pages */
+    .admin-input {
+      padding: 0.75rem 1rem !important;
+      min-height: 2.75rem !important;
+      line-height: 1.25rem !important;
+      border-radius: 0.5rem !important;
+      font-size: 0.875rem !important;
+      background-color: #ffffff !important;
+      color: #374151 !important;
+      border: 1px solid #d1d5db !important;
+      transition: all 0.15s ease-in-out !important;
+    }
+    
+    .admin-input:focus {
+      outline: none !important;
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+      background-color: #ffffff !important;
+    }
+    
+    .admin-input:hover {
+      border-color: #9ca3af !important;
+    }
+    
+    .admin-input::placeholder {
+      color: #9ca3af !important;
+      opacity: 1 !important;
+    }
+    
+    /* Admin-specific button styles */
+    .admin-btn {
+      padding: 0.75rem 1.5rem !important;
+      min-height: 2.75rem !important;
+      border-radius: 0.5rem !important;
+      font-size: 0.875rem !important;
+      font-weight: 500 !important;
+      transition: all 0.15s ease-in-out !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    
+    .admin-btn:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Admin-specific checkbox styles */
+    .admin-checkbox {
+      width: 1.25rem !important;
+      height: 1.25rem !important;
+      border-radius: 0.25rem !important;
+      cursor: pointer !important;
+    }
   </style>
 </head>
 
@@ -141,6 +196,8 @@
       });
     }
   </script>
+  
+  {{ template "admin_form_scripts" . }}
 </body>
 </html>
 {{ end }}
