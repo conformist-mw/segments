@@ -2,6 +2,7 @@ package admin
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 
 	"github.com/conformist-mw/segments/models"
@@ -12,6 +13,29 @@ import (
 type FormError struct {
 	Field   string
 	Message string
+}
+
+func renderAdmin(c *gin.Context, templateName string, data gin.H) {
+	if data == nil {
+		data = gin.H{}
+	}
+	data["User"] = c.Keys["User"]
+	if contextPage, exists := c.Get("CurrentPage"); exists {
+		data["CurrentPage"] = contextPage
+	}
+	fmt.Printf("Rendering admin page: %s, CurrentPage: %s\n", templateName, data["CurrentPage"])
+	c.HTML(200, templateName, data)
+}
+
+func renderAdminError(c *gin.Context, templateName string, data gin.H) {
+	if data == nil {
+		data = gin.H{}
+	}
+	data["User"] = c.Keys["User"]
+	if contextPage, exists := c.Get("CurrentPage"); exists {
+		data["CurrentPage"] = contextPage
+	}
+	c.HTML(400, templateName, data)
 }
 
 func GetFormErrors(form interface{}, c *gin.Context) (errs []FormError) {
@@ -36,12 +60,12 @@ func GetUintId(c *gin.Context) (uint, error) {
 }
 
 func Index(c *gin.Context) {
-	c.HTML(200, "admin/index.html", gin.H{})
+	renderAdmin(c, "admin/index.html", gin.H{})
 }
 
 func Users(c *gin.Context) {
 	form := models.CreateUserForm{}
-	c.HTML(200, "admin/users.html", gin.H{"Users": models.GetUsers(), "Form": form})
+	renderAdmin(c, "admin/users.html", gin.H{"Users": models.GetUsers(), "Form": form})
 }
 
 func CreateUser(c *gin.Context) {
@@ -49,7 +73,7 @@ func CreateUser(c *gin.Context) {
 	c.Bind(&form)
 	err := models.ValidateCreateUserForm(form)
 	if err != nil {
-		c.HTML(400, "admin/users.html", gin.H{"User": c.Keys["CurrentUser"], "Error": err, "Form": form, "Users": models.GetUsers()})
+		renderAdminError(c, "admin/users.html", gin.H{"User": c.Keys["CurrentUser"], "Error": err, "Form": form, "Users": models.GetUsers()})
 		return
 	}
 	models.CreateUser(form)
@@ -93,7 +117,7 @@ func DeleteUser(c *gin.Context) {
 }
 
 func GetColorTypes(c *gin.Context) {
-	c.HTML(200, "admin/color_types.html", gin.H{"ColorTypes": models.GetColorTypes(), "Form": models.ColorTypeForm{}})
+	renderAdmin(c, "admin/color_types.html", gin.H{"ColorTypes": models.GetColorTypes(), "Form": models.ColorTypeForm{}})
 }
 
 func MessageForTag(tag string) string {
@@ -111,12 +135,12 @@ func CreateColorType(c *gin.Context) {
 	var form models.ColorTypeForm
 
 	if errs := GetFormErrors(&form, c); errs != nil {
-		c.HTML(400, "admin/color_types.html", gin.H{"Errors": errs, "Form": form, "ColorTypes": models.GetColorTypes()})
+		renderAdminError(c, "admin/color_types.html", gin.H{"Errors": errs, "Form": form, "ColorTypes": models.GetColorTypes()})
 		return
 	}
 	_, err := models.CreateColorType(form)
 	if err != nil {
-		c.HTML(400, "admin/color_types.html", gin.H{"Error": err.Error(), "Form": form, "ColorTypes": models.GetColorTypes()})
+		renderAdminError(c, "admin/color_types.html", gin.H{"Error": err.Error(), "Form": form, "ColorTypes": models.GetColorTypes()})
 		return
 	}
 	c.Redirect(302, "/admin/color-types")
@@ -167,7 +191,7 @@ func UpdateColorTypeRow(c *gin.Context) {
 }
 
 func GetColors(c *gin.Context) {
-	c.HTML(200, "admin/colors.html", gin.H{
+	renderAdmin(c, "admin/colors.html", gin.H{
 		"Colors":     models.GetColors(),
 		"ColorTypes": models.GetColorTypes(),
 		"Form":       models.ColorForm{},
@@ -177,7 +201,7 @@ func GetColors(c *gin.Context) {
 func CreateColor(c *gin.Context) {
 	var form models.ColorForm
 	if errs := GetFormErrors(&form, c); errs != nil {
-		c.HTML(400, "admin/colors.html", gin.H{
+		renderAdminError(c, "admin/colors.html", gin.H{
 			"Errors":     errs,
 			"Form":       form,
 			"Colors":     models.GetColors(),
@@ -187,7 +211,7 @@ func CreateColor(c *gin.Context) {
 	}
 	_, err := models.CreateColor(form)
 	if err != nil {
-		c.HTML(400, "admin/colors.html", gin.H{
+		renderAdminError(c, "admin/colors.html", gin.H{
 			"Error":      err.Error(),
 			"Form":       form,
 			"Colors":     models.GetColors(),
@@ -260,7 +284,7 @@ func DeleteColor(c *gin.Context) {
 }
 
 func GetSegments(c *gin.Context) {
-	c.HTML(200, "admin/segments.html", gin.H{
+	renderAdmin(c, "admin/segments.html", gin.H{
 		"Segments":  models.GetAdminSegments(),
 		"Companies": models.GetCompanies(),
 		"Sections":  models.GetAdminSections(),

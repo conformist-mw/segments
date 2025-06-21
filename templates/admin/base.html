@@ -17,6 +17,61 @@
       opacity: 0;
       transition: opacity 1s ease-out;
     }
+    
+    /* Admin-specific input styles - only for admin pages */
+    .admin-input {
+      padding: 0.75rem 1rem !important;
+      min-height: 2.75rem !important;
+      line-height: 1.25rem !important;
+      border-radius: 0.5rem !important;
+      font-size: 0.875rem !important;
+      background-color: #ffffff !important;
+      color: #374151 !important;
+      border: 1px solid #d1d5db !important;
+      transition: all 0.15s ease-in-out !important;
+    }
+    
+    .admin-input:focus {
+      outline: none !important;
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+      background-color: #ffffff !important;
+    }
+    
+    .admin-input:hover {
+      border-color: #9ca3af !important;
+    }
+    
+    .admin-input::placeholder {
+      color: #9ca3af !important;
+      opacity: 1 !important;
+    }
+    
+    /* Admin-specific button styles */
+    .admin-btn {
+      padding: 0.75rem 1.5rem !important;
+      min-height: 2.75rem !important;
+      border-radius: 0.5rem !important;
+      font-size: 0.875rem !important;
+      font-weight: 500 !important;
+      transition: all 0.15s ease-in-out !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    
+    .admin-btn:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Admin-specific checkbox styles */
+    .admin-checkbox {
+      width: 1.25rem !important;
+      height: 1.25rem !important;
+      border-radius: 0.25rem !important;
+      cursor: pointer !important;
+    }
   </style>
 </head>
 
@@ -38,32 +93,32 @@
                 </svg>
                 Основной сайт
               </a>
-              <a href="/admin" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
-                <svg class="mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <a href="/admin" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ if eq .CurrentPage "dashboard" }}bg-gray-900 text-white{{ else }}text-gray-300 hover:bg-gray-700 hover:text-white{{ end }}">
+                <svg class="mr-3 h-6 w-6 {{ if eq .CurrentPage "dashboard" }}text-gray-300{{ else }}text-gray-400 group-hover:text-gray-300{{ end }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
                 Dashboard
               </a>
-              <a href="/admin/users" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
-                <svg class="mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <a href="/admin/users" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ if eq .CurrentPage "users" }}bg-gray-900 text-white{{ else }}text-gray-300 hover:bg-gray-700 hover:text-white{{ end }}">
+                <svg class="mr-3 h-6 w-6 {{ if eq .CurrentPage "users" }}text-gray-300{{ else }}text-gray-400 group-hover:text-gray-300{{ end }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
                 Пользователи
               </a>
-              <a href="/admin/color-types" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
-                <svg class="mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <a href="/admin/color-types" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ if eq .CurrentPage "color-types" }}bg-gray-900 text-white{{ else }}text-gray-300 hover:bg-gray-700 hover:text-white{{ end }}">
+                <svg class="mr-3 h-6 w-6 {{ if eq .CurrentPage "color-types" }}text-gray-300{{ else }}text-gray-400 group-hover:text-gray-300{{ end }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
                 </svg>
                 Фактуры
               </a>
-              <a href="/admin/colors" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
-                <svg class="mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <a href="/admin/colors" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ if eq .CurrentPage "colors" }}bg-gray-900 text-white{{ else }}text-gray-300 hover:bg-gray-700 hover:text-white{{ end }}">
+                <svg class="mr-3 h-6 w-6 {{ if eq .CurrentPage "colors" }}text-gray-300{{ else }}text-gray-400 group-hover:text-gray-300{{ end }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
                 </svg>
                 Цвета
               </a>
-              <a href="/admin/segments" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
-                <svg class="mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <a href="/admin/segments" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ if eq .CurrentPage "segments" }}bg-gray-900 text-white{{ else }}text-gray-300 hover:bg-gray-700 hover:text-white{{ end }}">
+                <svg class="mr-3 h-6 w-6 {{ if eq .CurrentPage "segments" }}text-gray-300{{ else }}text-gray-400 group-hover:text-gray-300{{ end }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                 </svg>
                 Отрезки
@@ -141,6 +196,8 @@
       });
     }
   </script>
+  
+  {{ template "admin_form_scripts" . }}
 </body>
 </html>
 {{ end }}

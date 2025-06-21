@@ -55,27 +55,27 @@
   <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ .ID }}</td>
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
     <input type="text" name="username" value="{{ .Username }}"
-      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      class="admin-input block w-full">
   </td>
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
     <input type="email" name="email" value="{{ .Email }}"
-      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      class="admin-input block w-full">
   </td>
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
     <input type="text" name="first_name" value="{{ .FirstName }}"
-      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      class="admin-input block w-full">
   </td>
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
     <input type="text" name="last_name" value="{{ .LastName }}"
-      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      class="admin-input block w-full">
   </td>
   <td class="whitespace-nowrap px-3 py-4 text-sm text-center">
     <input type="checkbox" name="is_superuser" {{ if .IsSuperuser }}checked{{ end }}
-      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+      class="admin-checkbox border-gray-300 text-indigo-600 focus:ring-indigo-500">
   </td>
   <td class="whitespace-nowrap px-3 py-4 text-sm text-center">
     <input type="checkbox" name="is_active" {{ if .IsActive }}checked{{ end }}
-      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+      class="admin-checkbox border-gray-300 text-indigo-600 focus:ring-indigo-500">
   </td>
   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
     <div class="flex justify-end space-x-2">
@@ -102,7 +102,7 @@
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">New password:</td>
   <td colspan="3" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
     <input type="password" name="password" placeholder="password"
-      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      class="admin-input block w-full">
   </td>
   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
     <div class="flex justify-end space-x-2">
