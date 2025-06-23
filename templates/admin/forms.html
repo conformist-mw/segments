@@ -296,53 +296,34 @@
 
 {{ define "admin_form_scripts" }}
 <script>
-console.log('Admin form scripts loaded');
-
 function showForm() {
-  console.log('showForm() called');
   const container = document.getElementById('form-container');
   const addButton = document.querySelector('button[onclick="showForm()"]');
   
-  console.log('Container found:', container);
-  console.log('Add button found:', addButton);
-  
   if (container) {
     container.style.display = 'block';
-    console.log('Form shown');
   }
   
   if (addButton) {
     addButton.style.setProperty('display', 'none', 'important');
-    console.log('Add button hidden');
-  } else {
-    console.log('Add button not found!');
   }
 }
 
 function hideForm() {
-  console.log('hideForm() called');
   const container = document.getElementById('form-container');
   const addButton = document.querySelector('button[onclick="showForm()"]');
   
-  console.log('Container found:', container);
-  console.log('Add button found:', addButton);
-  
   if (container) {
     container.style.display = 'none';
-    console.log('Form hidden');
   }
   
   if (addButton) {
     addButton.style.setProperty('display', 'inline-flex', 'important');
-    console.log('Add button shown');
-  } else {
-    console.log('Add button not found!');
   }
 }
 
 // Auto-hide form on successful submission
 document.addEventListener('htmx:afterRequest', function(evt) {
-  console.log('HTMX afterRequest event:', evt.detail);
   if (evt.detail.successful && evt.detail.xhr.status === 200) {
     hideForm();
   }
