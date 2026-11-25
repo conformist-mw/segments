@@ -3,26 +3,47 @@
 {{ template "admin_nav" }}
 
 <div class="space-y-6">
-  <div class="md:flex md:items-center md:justify-between">
+  <div class="md:flex md:items-end md:justify-between">
     <div class="min-w-0 flex-1">
       <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Отрезки</h2>
-    </div>
-    <div class="mt-4 flex md:ml-4 md:mt-0">
-      {{ template "admin_add_button" . }}
+      <p class="mt-1 text-sm text-gray-500">Найдено: {{ .Total }}{{ if gt .TotalPages 1 }} · страница {{ .Page }} из {{ .TotalPages }}{{ end }}</p>
     </div>
   </div>
 
-  <!-- Form container -->
-  <div id="form-container" class="mb-6" style="display: none;">
-    <div class="bg-white shadow sm:rounded-lg">
-      <div class="px-4 py-5 sm:px-6">
-        <h3 class="text-base font-semibold leading-6 text-gray-900">Create new segment</h3>
-      </div>
-      <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
-        <p class="text-sm text-gray-600">Форма добавления отрезков будет добавлена позже.</p>
-      </div>
+  <form method="get" action="/admin/segments" class="bg-white shadow sm:rounded-lg px-4 py-4 sm:px-6 grid grid-cols-1 gap-4 sm:grid-cols-5 sm:items-end">
+    <label class="block text-sm font-medium text-gray-700">Компания
+      <select name="company" class="admin-input mt-1 block w-full">
+        <option value="">Все</option>
+        {{ range .Companies }}<option value="{{ .ID }}" {{ if eq .ID $.Filter.Company }}selected{{ end }}>{{ .Name }}</option>{{ end }}
+      </select>
+    </label>
+    <label class="block text-sm font-medium text-gray-700">Цех
+      <select name="section" class="admin-input mt-1 block w-full">
+        <option value="">Все</option>
+        {{ range .Sections }}<option value="{{ .ID }}" {{ if eq .ID $.Filter.Section }}selected{{ end }}>{{ .Company.Name }} — {{ .Name }}</option>{{ end }}
+      </select>
+    </label>
+    <label class="block text-sm font-medium text-gray-700">Статус
+      <select name="status" class="admin-input mt-1 block w-full">
+        <option value="" {{ if eq .Filter.Status "" }}selected{{ end }}>Все</option>
+        <option value="active" {{ if eq .Filter.Status "active" }}selected{{ end }}>В наличии</option>
+        <option value="removed" {{ if eq .Filter.Status "removed" }}selected{{ end }}>Ушли в заказ</option>
+        <option value="defect" {{ if eq .Filter.Status "defect" }}selected{{ end }}>Брак</option>
+      </select>
+    </label>
+    <label class="block text-sm font-medium text-gray-700">Сортировка
+      <select name="sort" class="admin-input mt-1 block w-full">
+        <option value="" {{ if eq .Filter.Sort "" }}selected{{ end }}>Сначала новые</option>
+        <option value="created" {{ if eq .Filter.Sort "created" }}selected{{ end }}>Сначала старые</option>
+        <option value="-deleted" {{ if eq .Filter.Sort "-deleted" }}selected{{ end }}>Недавно удалённые</option>
+        <option value="-square" {{ if eq .Filter.Sort "-square" }}selected{{ end }}>Самые большие</option>
+      </select>
+    </label>
+    <div class="flex gap-2">
+      <button type="submit" class="admin-btn bg-indigo-600 text-white hover:bg-indigo-500 flex-1">Показать</button>
+      <a href="/admin/segments" class="admin-btn bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Сброс</a>
     </div>
-  </div>
+  </form>
 
   <div class="overflow-hidden bg-white shadow sm:rounded-lg">
     <div class="overflow-x-auto">
@@ -30,46 +51,51 @@
         <thead class="bg-gray-100">
           <tr>
             <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">ID</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">W x H = S</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Color</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Rack</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Order</th>
-            <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-              <span class="sr-only">Actions</span>
-            </th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Размер, см</th>
+            <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">м²</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Цвет</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Где</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Статус</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Добавлен</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:pr-6">Удалён</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200 bg-white" hx-target="closest tr" hx-swap="outerHTML">
+        <tbody class="divide-y divide-gray-200 bg-white">
           {{ range .Segments }}
-          <tr>
-            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ .ID }}</td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .Width }} x {{ .Height }} = {{ .Square }}</td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .Description }}</td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .Color.Name }}</td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .Rack.Name }}</td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .OrderNumber.Name }}</td>
-            <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-              <div class="flex justify-end space-x-2">
-                <button title="edit" hx-get="/admin/segments/{{ .ID }}/edit" class="text-indigo-600 hover:text-indigo-900">
-                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
-                    <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
-                  </svg>
-                </button>
-                <button title="delete" hx-confirm="Are you sure?" hx-delete="/admin/segments/{{ .ID }}" class="text-red-600 hover:text-red-900">
-                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
-                  </svg>
-                </button>
-              </div>
+          <tr class="{{ if not .Active }}bg-gray-50{{ end }}">
+            <td class="whitespace-nowrap py-3 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ .ID }}</td>
+            <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-700">{{ .Width }} × {{ .Height }}</td>
+            <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-700 text-right tabular-nums">{{ printf "%.2f" .Square }}</td>
+            <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-700">{{ .Color.Type.Name }} · {{ .Color.Name }}</td>
+            <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">{{ .Rack.Section.Company.Name }} / {{ .Rack.Section.Name }} / {{ .Rack.Name }}</td>
+            <td class="px-3 py-3 text-sm">
+              {{ if .Active }}
+                <span class="inline-flex rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">в наличии</span>
+              {{ else if .Defect }}
+                <span class="inline-flex rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">брак</span>
+                {{ if .Description }}<div class="mt-1 text-xs text-gray-500 max-w-xs">{{ .Description }}</div>{{ end }}
+              {{ else }}
+                <span class="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-500/20">заказ {{ .OrderNumber.Name }}</span>
+              {{ end }}
             </td>
+            <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500 tabular-nums">{{ .Created | formatInLocation }}</td>
+            <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500 tabular-nums sm:pr-6">{{ if not .Active }}{{ .Deleted | formatInLocation }}{{ end }}</td>
           </tr>
+          {{ else }}
+          <tr><td colspan="8" class="px-6 py-8 text-center text-sm text-gray-500">Ничего не найдено</td></tr>
           {{ end }}
         </tbody>
       </table>
     </div>
   </div>
+
+  {{ if gt .TotalPages 1 }}
+  <nav class="flex items-center justify-between">
+    {{ if gt .Page 1 }}<a href="{{ .PrevURL }}" class="admin-btn bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">← Назад</a>{{ else }}<span></span>{{ end }}
+    <span class="text-sm text-gray-500">{{ .Page }} / {{ .TotalPages }}</span>
+    {{ if lt .Page .TotalPages }}<a href="{{ .NextURL }}" class="admin-btn bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Вперёд →</a>{{ else }}<span></span>{{ end }}
+  </nav>
+  {{ end }}
 </div>
 
 {{ template "admin_bottom" }}

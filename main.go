@@ -36,6 +36,9 @@ func init() {
 }
 
 func FormatInLocation(t time.Time) string {
+	if t.IsZero() {
+		return "—"
+	}
 	return t.In(location).Format("02.01.06 | 15:04")
 }
 
@@ -70,34 +73,45 @@ func add(a, b int) int {
 	return a + b
 }
 
-func SuperuserRequired(c *gin.Context) {
-	session := sessions.Default(c)
-	username := session.Get(userkey)
-	if username == nil {
-		c.Redirect(http.StatusFound, "/login")
-		return
+// currentUser resolves the session to an active user. Every redirect below is
+// paired with Abort: gin keeps running the chain after c.Redirect, so without it
+// the protected handler still executes for an anonymous request.
+func currentUser(c *gin.Context) (models.User, bool) {
+	username, ok := sessions.Default(c).Get(userkey).(string)
+	if !ok {
+		return models.User{}, false
 	}
+	user := models.GetUser(username)
+	if user.ID == 0 || !user.IsActive {
+		return models.User{}, false
+	}
+	return user, true
+}
 
-	user := models.GetUser(username.(string))
-	if user.ID == 0 {
+func SuperuserRequired(c *gin.Context) {
+	user, ok := currentUser(c)
+	if !ok {
 		c.Redirect(http.StatusFound, "/login")
+		c.Abort()
 		return
 	}
 	if !user.IsSuperuser {
 		c.Redirect(http.StatusFound, "/")
+		c.Abort()
 		return
 	}
+	c.Set("User", user)
 	c.Next()
 }
 
 func AuthRequired(c *gin.Context) {
-	session := sessions.Default(c)
-	user := session.Get(userkey)
-	if user == nil {
+	user, ok := currentUser(c)
+	if !ok {
 		c.Redirect(http.StatusFound, "/login")
+		c.Abort()
 		return
 	}
-	c.Keys["User"] = models.GetUser(user.(string))
+	c.Set("User", user)
 	c.Next()
 }
 
@@ -112,7 +126,7 @@ func UsersAdminRequired(c *gin.Context) {
 		c.AbortWithStatus(400)
 		return
 	}
-	c.Keys["CurrentUser"] = user
+	c.Set("CurrentUser", user)
 	c.Next()
 }
 
@@ -157,6 +171,7 @@ func main() {
 	router.Use(sessions.Sessions("session", store))
 	router.SetFuncMap(template.FuncMap{
 		"formatInLocation": FormatInLocation,
+		"formatDBTime":     models.FormatDBTime,
 		"dict":             dict,
 		"seq":              seq,
 		"replace":          replace,

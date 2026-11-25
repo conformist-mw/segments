@@ -5,6 +5,8 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
+	"time"
+	_ "time/tzdata" // the image is FROM scratch: no system zoneinfo
 
 	"golang.org/x/crypto/pbkdf2"
 )
@@ -44,8 +46,32 @@ func GetUserById(id uint) User {
 
 func GetUsers() []User {
 	var users []User
-	DB.Find(&users)
+	DB.Order("id").Find(&users)
 	return users
+}
+
+var kyiv, _ = time.LoadLocation("Europe/Kyiv")
+
+// Django's datetime text format, so rows written here read the same as the old ones.
+const dbTimeLayout = "2006-01-02 15:04:05.000000"
+
+func TouchLastLogin(user User) {
+	DB.Model(&user).Update("last_login", time.Now().UTC().Format(dbTimeLayout))
+}
+
+// FormatDBTime renders a stored datetime string in Kyiv time, "—" when unset.
+func FormatDBTime(value string) string {
+	if value == "" {
+		return "—"
+	}
+	// The sqlite driver hands datetime columns back as RFC3339 text; the Django
+	// layouts cover anything read some other way.
+	for _, layout := range []string{time.RFC3339Nano, dbTimeLayout, "2006-01-02 15:04:05"} {
+		if t, err := time.Parse(layout, value); err == nil {
+			return t.In(kyiv).Format("02.01.06 | 15:04")
+		}
+	}
+	return value
 }
 
 func GenerateRandomSalt() string {
@@ -91,6 +117,7 @@ func CreateUser(form CreateUserForm) User {
 		user.IsSuperuser = true
 	}
 	user.Password = GeneratePasswordHash(form.Password)
+	user.DateJoined = time.Now().UTC().Format(dbTimeLayout)
 	DB.Create(&user)
 	return user
 }

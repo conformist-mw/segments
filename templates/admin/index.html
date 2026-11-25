@@ -10,6 +10,29 @@
     </div>
   </div>
 
+  {{ with .Stats }}
+  <dl class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+      <dt class="text-sm font-medium text-gray-500">В наличии</dt>
+      <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900 tabular-nums">{{ .Active }}</dd>
+      <dd class="mt-1 text-sm text-gray-500 tabular-nums">{{ printf "%.1f" .ActiveSquare }} м²</dd>
+    </div>
+    <div class="rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+      <dt class="text-sm font-medium text-gray-500">Добавлено за 30 дней</dt>
+      <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900 tabular-nums">{{ .Added30d }}</dd>
+    </div>
+    <div class="rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+      <dt class="text-sm font-medium text-gray-500">Удалено за 30 дней</dt>
+      <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900 tabular-nums">{{ .Removed30d }}</dd>
+    </div>
+    <div class="rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+      <dt class="text-sm font-medium text-gray-500">Последняя активность</dt>
+      <dd class="mt-1 text-sm text-gray-900 tabular-nums">добавлен: {{ .LastAdded | formatInLocation }}</dd>
+      <dd class="mt-1 text-sm text-gray-900 tabular-nums">удалён: {{ .LastRemoved | formatInLocation }}</dd>
+    </div>
+  </dl>
+  {{ end }}
+
   <div class="mt-8 flow-root">
     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">

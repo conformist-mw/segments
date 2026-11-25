@@ -46,3 +46,17 @@ func TestCheckLogin_NonexistentUser(t *testing.T) {
 		t.Fatalf("expected error %q, got %v", expected, err)
 	}
 }
+
+func TestFormatDBTime(t *testing.T) {
+	cases := map[string]string{
+		"":                           "—",
+		"2026-11-25T16:51:07.76957Z": "25.11.26 | 18:51",
+		"2024-01-27 10:58:18.446950": "27.01.24 | 12:58",
+		"2021-01-25 08:12:37":        "25.01.21 | 10:12",
+	}
+	for in, want := range cases {
+		if got := FormatDBTime(in); got != want {
+			t.Errorf("FormatDBTime(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
