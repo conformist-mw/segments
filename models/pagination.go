@@ -71,6 +71,7 @@ func (p Paginator) PageUrl() string {
 	params.Set("deleted", p.SearchForm.Deleted)
 	params.Set("height", strconv.Itoa(p.SearchForm.Height))
 	params.Set("width", strconv.Itoa(p.SearchForm.Width))
+	params.Set("order_number", p.SearchForm.OrderNumber)
 	params.Set("page", "__page_number__")
 	return "?" + params.Encode()
 }

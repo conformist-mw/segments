@@ -30,7 +30,10 @@ func (Color) TableName() string {
 
 func GetColors() []Color {
 	var colors []Color
-	DB.Preload("Type").Find(&colors)
+	DB.Preload("Type").
+		Joins("JOIN segments_colortype ON segments_colortype.id = segments_color.type_id").
+		Order("segments_colortype.name, segments_color.name").
+		Find(&colors)
 	return colors
 }
 
@@ -42,7 +45,7 @@ func GetColor(slug string) Color {
 
 func GetColorTypes() []ColorType {
 	var colorTypes []ColorType
-	DB.Find(&colorTypes)
+	DB.Order("name").Find(&colorTypes)
 	return colorTypes
 }
 

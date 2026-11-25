@@ -122,11 +122,12 @@ func LoginForm(c *gin.Context) {
 func Login(c *gin.Context) {
 	var loginForm models.LoginForm
 	c.Bind(&loginForm)
-	_, err := models.CheckLogin(loginForm)
+	user, err := models.CheckLogin(loginForm)
 	if err != nil {
 		c.HTML(400, "login.html", gin.H{"error": err.Error()})
 		return
 	}
+	models.TouchLastLogin(user)
 	session := sessions.Default(c)
 	session.Set(userkey, loginForm.Username)
 	session.Save()

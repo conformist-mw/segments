@@ -27,6 +27,8 @@
     </svg>
     {{ end }}
   </td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 tabular-nums">{{ .DateJoined | formatDBTime }}</td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 tabular-nums">{{ .LastLogin | formatDBTime }}</td>
   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
     <div class="flex justify-end space-x-2">
       <button title="edit" hx-get="/admin/users/{{ .ID }}/edit" class="text-indigo-600 hover:text-indigo-900">
@@ -77,6 +79,8 @@
     <input type="checkbox" name="is_active" {{ if .IsActive }}checked{{ end }}
       class="admin-checkbox border-gray-300 text-indigo-600 focus:ring-indigo-500">
   </td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 tabular-nums">{{ .DateJoined | formatDBTime }}</td>
+  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 tabular-nums">{{ .LastLogin | formatDBTime }}</td>
   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
     <div class="flex justify-end space-x-2">
       <button hx-patch="/admin/users/{{ .ID }}" hx-include="closest tr" class="text-indigo-600 hover:text-indigo-900">
@@ -100,7 +104,7 @@
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .Username }}</td>
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ .Email }}</td>
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">New password:</td>
-  <td colspan="3" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+  <td colspan="5" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
     <input type="password" name="password" placeholder="password"
       class="admin-input block w-full">
   </td>

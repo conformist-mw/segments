@@ -81,6 +81,9 @@ func CheckLogin(userForm LoginForm) (User, error) {
 
 	// Compare the hashed password with the Django password
 	if goHash == djangoHash {
+		if !user.IsActive {
+			return User{}, errors.New("Пользователь отключён")
+		}
 		return user, nil
 	}
 

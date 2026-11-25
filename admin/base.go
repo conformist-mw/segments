@@ -2,7 +2,7 @@ package admin
 
 import (
 	"errors"
-	"fmt"
+	"net/url"
 	"strconv"
 
 	"github.com/conformist-mw/segments/models"
@@ -23,7 +23,6 @@ func renderAdmin(c *gin.Context, templateName string, data gin.H) {
 	if contextPage, exists := c.Get("CurrentPage"); exists {
 		data["CurrentPage"] = contextPage
 	}
-	fmt.Printf("Rendering admin page: %s, CurrentPage: %s\n", templateName, data["CurrentPage"])
 	c.HTML(200, templateName, data)
 }
 
@@ -60,7 +59,7 @@ func GetUintId(c *gin.Context) (uint, error) {
 }
 
 func Index(c *gin.Context) {
-	renderAdmin(c, "admin/index.html", gin.H{})
+	renderAdmin(c, "admin/index.html", gin.H{"Stats": models.GetSegmentStats()})
 }
 
 func Users(c *gin.Context) {
@@ -73,7 +72,7 @@ func CreateUser(c *gin.Context) {
 	c.Bind(&form)
 	err := models.ValidateCreateUserForm(form)
 	if err != nil {
-		renderAdminError(c, "admin/users.html", gin.H{"User": c.Keys["CurrentUser"], "Error": err, "Form": form, "Users": models.GetUsers()})
+		renderAdminError(c, "admin/users.html", gin.H{"Error": err, "Form": form, "Users": models.GetUsers()})
 		return
 	}
 	models.CreateUser(form)
@@ -284,10 +283,42 @@ func DeleteColor(c *gin.Context) {
 }
 
 func GetSegments(c *gin.Context) {
+	var filter models.AdminSegmentsFilter
+	c.ShouldBindQuery(&filter)
+	if filter.Page < 1 {
+		filter.Page = 1
+	}
+	segments, total := models.GetAdminSegments(filter)
+	totalPages := int((total + models.AdminSegmentsPerPage - 1) / models.AdminSegmentsPerPage)
 	renderAdmin(c, "admin/segments.html", gin.H{
-		"Segments":  models.GetAdminSegments(),
-		"Companies": models.GetCompanies(),
-		"Sections":  models.GetAdminSections(),
-		"Racks":     models.GetAdminRacks(),
+		"Segments":   segments,
+		"Total":      total,
+		"Filter":     filter,
+		"Page":       filter.Page,
+		"TotalPages": totalPages,
+		"PrevURL":    segmentsPageURL(filter, filter.Page-1),
+		"NextURL":    segmentsPageURL(filter, filter.Page+1),
+		"Companies":  models.GetCompanies(),
+		"Sections":   models.GetAdminSections(),
 	})
+}
+
+func segmentsPageURL(f models.AdminSegmentsFilter, page int) string {
+	q := url.Values{}
+	if f.Company != 0 {
+		q.Set("company", strconv.FormatUint(uint64(f.Company), 10))
+	}
+	if f.Section != 0 {
+		q.Set("section", strconv.FormatUint(uint64(f.Section), 10))
+	}
+	if f.Status != "" {
+		q.Set("status", f.Status)
+	}
+	if f.Sort != "" {
+		q.Set("sort", f.Sort)
+	}
+	if page > 1 {
+		q.Set("page", strconv.Itoa(page))
+	}
+	return "/admin/segments?" + q.Encode()
 }

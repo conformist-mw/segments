@@ -37,7 +37,7 @@ func (Rack) TableName() string {
 
 func GetCompanies() []Company {
 	var companies []Company
-	DB.Find(&companies)
+	DB.Order("name").Find(&companies)
 	return companies
 }
 
@@ -75,7 +75,7 @@ func GetSections(companySlug string) []SectionWithAmount {
 				"AND segments_company.slug = ?",
 			companySlug).
 		Joins("left join segments_rack on segments_rack.section_id = segments_section.id").
-		Joins("left join segments_segment on segments_segment.rack_id = segments_rack.id").
+		Joins("left join segments_segment on segments_segment.rack_id = segments_rack.id AND segments_segment.active IS TRUE").
 		Group("segments_section.id").
 		Scan(&sections)
 
@@ -84,14 +84,8 @@ func GetSections(companySlug string) []SectionWithAmount {
 
 func GetAdminSections() []Section {
 	var sections []Section
-	DB.Preload("Company").Find(&sections)
+	DB.Preload("Company").Order("company_id, name").Find(&sections)
 	return sections
-}
-
-func GetAdminRacks() []Rack {
-	var racks []Rack
-	DB.Preload("Section").Find(&racks)
-	return racks
 }
 
 func GetRack(companySlug, sectionSlug string, rackId int) Rack {
